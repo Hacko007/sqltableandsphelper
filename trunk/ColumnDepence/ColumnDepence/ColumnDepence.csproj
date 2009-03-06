@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C85B72A6-5185-41C4-A313-EBD156822CE4}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ColumnDepence</RootNamespace>
+    <AssemblyName>ColumnDepence</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>Resources\programIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ColumnDependencies.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ColumnDependencies.Designer.cs">
+      <DependentUpon>ColumnDependencies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ColumnFilter.cs" />
+    <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="FormSelectShownColumns.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelectShownColumns.Designer.cs">
+      <DependentUpon>FormSelectShownColumns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormShowOneRow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormShowOneRow.Designer.cs">
+      <DependentUpon>FormShowOneRow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ColumnDependencies.resx">
+      <DependentUpon>ColumnDependencies.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelectShownColumns.resx">
+      <DependentUpon>FormSelectShownColumns.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormShowOneRow.resx">
+      <DependentUpon>FormShowOneRow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlAllTableInfo.resx">
+      <DependentUpon>UserControlAllTableInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlConnection.resx">
+      <DependentUpon>UserControlConnection.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlHistoryList.resx">
+      <DependentUpon>UserControlHistoryList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlSPInfo.resx">
+      <DependentUpon>UserControlSPInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlValues.resx">
+      <DependentUpon>UserControlValues.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="StackSetting.cs" />
+    <Compile Include="UserControlAllTableInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlAllTableInfo.Designer.cs">
+      <DependentUpon>UserControlAllTableInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlConnection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlConnection.Designer.cs">
+      <DependentUpon>UserControlConnection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlHistoryList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlHistoryList.Designer.cs">
+      <DependentUpon>UserControlHistoryList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlSPInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlSPInfo.Designer.cs">
+      <DependentUpon>UserControlSPInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlValues.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlValues.Designer.cs">
+      <DependentUpon>UserControlValues.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Resources\programIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toolStripButton_CloseTab.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toolStripButton_ToolBox.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toolStripButton_LoadDef.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toolStripSplitButton_LoadMain.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toolStripButton_CloseTab.Image1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toolStripButton_LoadDef.Image1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toolStripButton_ToolBox.Image1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toolStripSplitButton_LoadMain.Image1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FilterByColumn.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Filter.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Filter.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
