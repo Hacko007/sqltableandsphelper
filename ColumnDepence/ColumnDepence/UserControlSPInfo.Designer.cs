@@ -154,7 +154,7 @@
 			this.m_showDefinitionToolStripMenuItem.Name = "m_showDefinitionToolStripMenuItem";
 			this.m_showDefinitionToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
 			this.m_showDefinitionToolStripMenuItem.Text = "Show Definition";
-			this.m_showDefinitionToolStripMenuItem.Click += new System.EventHandler(this.m_showDefinitionToolStripMenuItem_Click);
+			this.m_showDefinitionToolStripMenuItem.Click += new System.EventHandler(this.ShowDefinitionToolStripMenuItem_Click);
 			// 
 			// UserControlSPInfo
 			// 

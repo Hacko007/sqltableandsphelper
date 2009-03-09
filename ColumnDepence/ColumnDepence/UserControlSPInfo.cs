@@ -156,7 +156,7 @@ SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECT
 		/// </summary>
 		void FillDependecies()
 		{
-			
+
 			try
 			{
 				if (ConnectionFactory.Instance.State != ConnectionState.Open)
@@ -179,11 +179,11 @@ SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECT
 					{
 
 						DataTable dt = ds.Tables[0];
-						
+
 						dt.Columns.Add("MyUpd", typeof(bool), "IIF(updated = 'yes', 1 , 0)");
 						dt.Columns.Add("MySel", typeof(bool), "IIF(selected = 'yes', 1 , 0)");
 						dt.Columns.Add("MyType", typeof(string), "IIF(type = 'stored procedure', 'SP' , 'TAB')");
-						
+
 						m_dataGridView_DepTables.DataSource = dt;
 						m_dataGridView_DepTables.Columns["type"].Visible = false;
 						m_dataGridView_DepTables.Columns["updated"].Visible = false;
@@ -196,13 +196,17 @@ SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECT
 						m_dataGridView_DepTables.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 						m_dataGridView_DepTables.Columns["name"].ContextMenuStrip = m_ContextMenuStrip_ShowDefinition;
 
-						m_dataGridView_DepTables.Columns["column"].HeaderText= "Column";
+						m_dataGridView_DepTables.Columns["column"].HeaderText = "Column";
 						m_dataGridView_DepTables.Columns["column"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
 
 					}
 				}
-
 			}
+			catch (SqlException sexc)
+			{
+				MessageBox.Show("Checke if " + SPName + " exists in database");
+			}
+			catch { }
 			finally
 			{
 				ConnectionFactory.Instance.Close();
@@ -240,6 +244,9 @@ SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECT
 					return ds;
 				}
 
+			}
+			catch {
+				return null;
 			}
 			finally
 			{
@@ -360,7 +367,7 @@ SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECT
 			
 		}
 
-		private void m_showDefinitionToolStripMenuItem_Click(object sender, EventArgs e)
+		private void ShowDefinitionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			try
 			{
