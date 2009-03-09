@@ -82,11 +82,6 @@
 			// 
 			// m_txtDatabaseNameMsSql
 			// 
-			this.m_txtDatabaseNameMsSql.AutoCompleteCustomSource.AddRange(new string[] {
-            "OmniData_EADS_NS_2",
-            "OmniData_ERM4",
-            "Unittest_EADS_NS_2",
-            "Unittest_ERM4"});
 			this.m_txtDatabaseNameMsSql.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
 			this.m_txtDatabaseNameMsSql.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
 			this.m_txtDatabaseNameMsSql.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ColumnDepence.Properties.Settings.Default, "LastUsedDatabase", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -136,9 +131,6 @@
 			// 
 			// m_txtServerNameMsSql
 			// 
-			this.m_txtServerNameMsSql.AutoCompleteCustomSource.AddRange(new string[] {
-            "KMSRV10",
-            "KMSRV22\\int_2005"});
 			this.m_txtServerNameMsSql.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
 			this.m_txtServerNameMsSql.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
 			this.m_txtServerNameMsSql.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ColumnDepence.Properties.Settings.Default, "LastUsedServer", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));

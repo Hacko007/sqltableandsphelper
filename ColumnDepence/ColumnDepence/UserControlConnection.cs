@@ -50,18 +50,22 @@ namespace ColumnDepence
 		}	
 		
 		private void FillConnectionHistoryList()
-		{			
-			m_toolStripComboBox_ConnectionHistory.Items.Clear();
-			m_toolStripComboBox_ConnectionHistory.Items.AddRange(connectionHistorySetting.DataSource);
+		{
+			try
+			{
+				m_toolStripComboBox_ConnectionHistory.Items.Clear();
+				m_toolStripComboBox_ConnectionHistory.Items.AddRange(connectionHistorySetting.DataSource);
+			}
+			catch { }
 			
 		}
 
 		public bool Connect()
-		{
-			SqlConnection conn = new SqlConnection {ConnectionString = GetConnectionString(5)};
-
+		{			
 			try
 			{
+				SqlConnection conn = new SqlConnection {ConnectionString = GetConnectionString(5)};
+
 				conn.Open();
 
 				ConnectionFactory.ConnectionString = GetConnectionString(10000);
