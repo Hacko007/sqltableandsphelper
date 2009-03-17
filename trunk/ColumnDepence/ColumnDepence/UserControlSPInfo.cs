@@ -72,7 +72,7 @@ namespace ColumnDepence
 		{			
 			string sql_str = "	Declare @id int "
 		+ @"
-SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECTPROPERTY(id, 'IsProcedure') = 1 "
+SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @SPSEARCH AND OBJECTPROPERTY(id, 'IsProcedure') = 1 "
 		+ @"
  SELECT [text]    FROM syscomments     "
 		+ " WHERE id= @id ";
@@ -120,7 +120,7 @@ SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECT
 				}
 				
 			}
-			ConnectionFactory.Instance.Close();
+			ConnectionFactory.CloseConnection();
 			FormMain.StatusInfo1 = "Syntax highligting";			
 			SyntaxHighLight();
 			FormMain.StatusInfo1 = "";
@@ -208,12 +208,9 @@ SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECT
 			}
 			catch { }
 			finally
-			{
-				ConnectionFactory.Instance.Close();
+			{				
+				ConnectionFactory.CloseConnection();
 			}
-
-			
-			
 		}
 
 
@@ -245,12 +242,13 @@ SELECT " + "@id = id     FROM syscomments WHERE [text] LIKE @SPSEARCH AND OBJECT
 				}
 
 			}
-			catch {
+			catch
+			{
 				return null;
 			}
 			finally
 			{
-				ConnectionFactory.Instance.Close();
+				ConnectionFactory.CloseConnection();
 			}
 		}
 
