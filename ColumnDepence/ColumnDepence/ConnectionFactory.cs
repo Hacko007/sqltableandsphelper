@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace ColumnDepence
 {
@@ -42,6 +43,18 @@ namespace ColumnDepence
 				}
 				return m_Instance;
 			}
+		}
+
+		public static void CloseConnection()
+		{
+			try
+			{
+				if (Instance != null && Instance.State != ConnectionState.Closed)
+				{
+					Instance.Close();
+				}
+			}
+			catch { }
 		}
 		#endregion
 
