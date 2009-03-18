@@ -52,6 +52,7 @@
 			this.dataGridView_Columns = new System.Windows.Forms.DataGridView();
 			this.label7 = new System.Windows.Forms.Label();
 			this.splitContainer_left = new System.Windows.Forms.SplitContainer();
+			this.m_userControlValues = new ColumnDepence.UserControlValues();
 			this.dataGridView_ColumnConstrains = new System.Windows.Forms.DataGridView();
 			this.label9 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
@@ -80,7 +81,6 @@
 			this.m_showTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_ContextMenuStrip_ShowDefinition = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.m_toolStripMenuItem_ShowDefinition = new System.Windows.Forms.ToolStripMenuItem();
-			this.m_userControlValues = new ColumnDepence.UserControlValues();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Columns)).BeginInit();
 			this.splitContainer_left.Panel1.SuspendLayout();
 			this.splitContainer_left.Panel2.SuspendLayout();
@@ -183,6 +183,18 @@
 			this.splitContainer_left.SplitterWidth = 8;
 			this.splitContainer_left.TabIndex = 0;
 			// 
+			// m_userControlValues
+			// 
+			this.m_userControlValues.AllColumns = null;
+			this.m_userControlValues.AutoScroll = true;
+			this.m_userControlValues.Location = new System.Drawing.Point(-1, -3);
+			this.m_userControlValues.Name = "m_userControlValues";
+			this.m_userControlValues.ShownColumns = null;
+			this.m_userControlValues.ShownRows = 0;
+			this.m_userControlValues.Size = new System.Drawing.Size(698, 472);
+			this.m_userControlValues.TabIndex = 2;
+			this.m_userControlValues.TableCount = "";
+			// 
 			// dataGridView_ColumnConstrains
 			// 
 			this.dataGridView_ColumnConstrains.AllowUserToAddRows = false;
@@ -280,7 +292,7 @@
 			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.dataGridView_Parent.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
-			this.dataGridView_Parent.Size = new System.Drawing.Size(488, 185);
+			this.dataGridView_Parent.Size = new System.Drawing.Size(488, 169);
 			this.dataGridView_Parent.TabIndex = 1;
 			// 
 			// dataGridView_Child
@@ -320,7 +332,7 @@
 			dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.dataGridView_Child.RowHeadersDefaultCellStyle = dataGridViewCellStyle16;
-			this.dataGridView_Child.Size = new System.Drawing.Size(485, 209);
+			this.dataGridView_Child.Size = new System.Drawing.Size(485, 217);
 			this.dataGridView_Child.TabIndex = 0;
 			// 
 			// label11
@@ -353,7 +365,7 @@
 			this.splitContainer_RightBottom.Panel2.BackColor = System.Drawing.SystemColors.Control;
 			this.splitContainer_RightBottom.Panel2.Controls.Add(this.splitContainer_LeftSpButtom);
 			this.splitContainer_RightBottom.Size = new System.Drawing.Size(494, 668);
-			this.splitContainer_RightBottom.SplitterDistance = 204;
+			this.splitContainer_RightBottom.SplitterDistance = 188;
 			this.splitContainer_RightBottom.SplitterWidth = 8;
 			this.splitContainer_RightBottom.TabIndex = 0;
 			// 
@@ -376,8 +388,8 @@
 			this.splitContainer_LeftSpButtom.Panel2.BackColor = System.Drawing.SystemColors.Control;
 			this.splitContainer_LeftSpButtom.Panel2.Controls.Add(this.dataGridView_Sp);
 			this.splitContainer_LeftSpButtom.Panel2.Controls.Add(this.label_sp);
-			this.splitContainer_LeftSpButtom.Size = new System.Drawing.Size(494, 456);
-			this.splitContainer_LeftSpButtom.SplitterDistance = 228;
+			this.splitContainer_LeftSpButtom.Size = new System.Drawing.Size(494, 472);
+			this.splitContainer_LeftSpButtom.SplitterDistance = 236;
 			this.splitContainer_LeftSpButtom.SplitterWidth = 8;
 			this.splitContainer_LeftSpButtom.TabIndex = 6;
 			// 
@@ -418,7 +430,7 @@
 			dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.dataGridView_Sp.RowHeadersDefaultCellStyle = dataGridViewCellStyle20;
-			this.dataGridView_Sp.Size = new System.Drawing.Size(485, 197);
+			this.dataGridView_Sp.Size = new System.Drawing.Size(485, 205);
 			this.dataGridView_Sp.TabIndex = 1;
 			// 
 			// label_sp
@@ -540,9 +552,12 @@
 			// 
 			// toolStripLabel_TableName
 			// 
+			this.toolStripLabel_TableName.DoubleClickEnabled = true;
 			this.toolStripLabel_TableName.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripLabel_TableName.Name = "toolStripLabel_TableName";
 			this.toolStripLabel_TableName.Size = new System.Drawing.Size(0, 22);
+			this.toolStripLabel_TableName.ToolTipText = "Doubleclick to copy to clipboard";
+			this.toolStripLabel_TableName.DoubleClick += new System.EventHandler(this.ToolStripLabelTableName_DoubleClick);
 			// 
 			// toolStripButton_CloseTab
 			// 
@@ -611,15 +626,6 @@
 			this.m_toolStripMenuItem_ShowDefinition.Size = new System.Drawing.Size(159, 22);
 			this.m_toolStripMenuItem_ShowDefinition.Text = "Show Definition";
 			this.m_toolStripMenuItem_ShowDefinition.Click += new System.EventHandler(this.m_toolStripMenuItem_ShowDefinition_Click);
-			// 
-			// m_userControlValues
-			// 
-			this.m_userControlValues.Location = new System.Drawing.Point(-1, -3);
-			this.m_userControlValues.Name = "m_userControlValues";
-			this.m_userControlValues.ShownRows = 0;
-			this.m_userControlValues.Size = new System.Drawing.Size(698, 472);
-			this.m_userControlValues.TabIndex = 2;
-			this.m_userControlValues.TableCount = "";
 			// 
 			// UserControlAllTableInfo
 			// 

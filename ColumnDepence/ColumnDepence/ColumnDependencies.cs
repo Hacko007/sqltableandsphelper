@@ -135,6 +135,8 @@ namespace ColumnDepence
 
 		public void CreateSPTabPage(string SPName)
 		{
+			m_textBox_SpSearch.Enabled = false;
+
 			if (tabControl_TableInfo.TabPages.ContainsKey(SPName))
 			{
 				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[SPName];
@@ -155,6 +157,7 @@ namespace ColumnDepence
 				m_userControlHistoryList_Sp.AddValue(SPName);
 
 			}
+			m_textBox_SpSearch.Enabled = true;
 		}
 
 		void OpenTableTab(object sender, string tableName, bool isDefinitionShown)
@@ -331,6 +334,43 @@ namespace ColumnDepence
 			}
 
 			return base.ProcessDialogKey(keyData);
+		}
+
+
+		private void TextBoxTableName_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.Shift) return;
+			if ((e.KeyData & Keys.Return) == Keys.Return || (e.KeyData & Keys.Enter) == Keys.Enter)
+			{
+				txtTableName.Enabled = false;
+				button_TabDef.Enabled = false;
+				button_GetAllRows.Enabled = false;
+
+				if (e.Control)
+				{
+					m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
+					CreateTabPageWithValues(TableName);
+				}
+				else
+				{
+					m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
+					CreateTabPageWithDefinition(TableName);
+				}
+
+				txtTableName.Enabled = true;
+				button_TabDef.Enabled = true;
+				button_GetAllRows.Enabled = true;
+
+			}
+		}
+
+		private void TextBoxSpSearch_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.Shift) return;
+			if (e.KeyData == Keys.Return || e.KeyData == Keys.Enter)
+			{
+				CreateSPTabPage(m_textBox_SpSearch.Text.Trim());
+			}
 		}
 	}
 }

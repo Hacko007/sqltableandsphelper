@@ -783,5 +783,11 @@ namespace ColumnDepence
 			return (int) ( dg.Height -
 				((dg.RowTemplate.Height * dg.RowCount)  + dg.ColumnHeadersHeight));
 		}
+
+		private void ToolStripLabelTableName_DoubleClick(object sender, EventArgs e)
+		{
+			Clipboard.SetText(toolStripLabel_TableName.Text);
+		}
+		
 	}
 }
