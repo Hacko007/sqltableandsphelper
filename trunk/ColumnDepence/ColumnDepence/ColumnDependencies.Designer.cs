@@ -31,12 +31,15 @@
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ColumnDependencies));
 			this.groupBox_Search = new System.Windows.Forms.GroupBox();
+			this.m_UserControlConnection = new ColumnDepence.UserControlConnection();
 			this.m_tabControl_Search = new System.Windows.Forms.TabControl();
 			this.m_tabPage_TabSearch = new System.Windows.Forms.TabPage();
+			this.m_userControlHistoryList_Tables = new ColumnDepence.UserControlHistoryList();
 			this.button_TabDef = new System.Windows.Forms.Button();
 			this.button_GetAllRows = new System.Windows.Forms.Button();
 			this.txtTableName = new System.Windows.Forms.TextBox();
 			this.m_tabPage_SpSearch = new System.Windows.Forms.TabPage();
+			this.m_userControlHistoryList_Sp = new ColumnDepence.UserControlHistoryList();
 			this.m_button_SpDef = new System.Windows.Forms.Button();
 			this.m_textBox_SpSearch = new System.Windows.Forms.TextBox();
 			this.tabControl_TableInfo = new System.Windows.Forms.TabControl();
@@ -47,9 +50,6 @@
 			this.m_statusStrip_Main = new System.Windows.Forms.StatusStrip();
 			this.m_toolStripStatusLabel_First = new System.Windows.Forms.ToolStripStatusLabel();
 			this.m_toolStripStatusLabel_Second = new System.Windows.Forms.ToolStripStatusLabel();
-			this.m_userControlHistoryList_Tables = new ColumnDepence.UserControlHistoryList();
-			this.m_userControlHistoryList_Sp = new ColumnDepence.UserControlHistoryList();
-			this.m_UserControlConnection = new ColumnDepence.UserControlConnection();
 			this.groupBox_Search.SuspendLayout();
 			this.m_tabControl_Search.SuspendLayout();
 			this.m_tabPage_TabSearch.SuspendLayout();
@@ -68,6 +68,13 @@
 			this.groupBox_Search.Size = new System.Drawing.Size(1214, 131);
 			this.groupBox_Search.TabIndex = 0;
 			this.groupBox_Search.TabStop = false;
+			// 
+			// m_UserControlConnection
+			// 
+			this.m_UserControlConnection.Location = new System.Drawing.Point(471, 14);
+			this.m_UserControlConnection.Name = "m_UserControlConnection";
+			this.m_UserControlConnection.Size = new System.Drawing.Size(530, 111);
+			this.m_UserControlConnection.TabIndex = 1;
 			// 
 			// m_tabControl_Search
 			// 
@@ -92,6 +99,15 @@
 			this.m_tabPage_TabSearch.TabIndex = 0;
 			this.m_tabPage_TabSearch.Text = "Tables";
 			this.m_tabPage_TabSearch.UseVisualStyleBackColor = true;
+			// 
+			// m_userControlHistoryList_Tables
+			// 
+			this.m_userControlHistoryList_Tables.Location = new System.Drawing.Point(429, 13);
+			this.m_userControlHistoryList_Tables.Name = "m_userControlHistoryList_Tables";
+			this.m_userControlHistoryList_Tables.SettingName = null;
+			this.m_userControlHistoryList_Tables.Size = new System.Drawing.Size(22, 25);
+			this.m_userControlHistoryList_Tables.TabIndex = 3;
+			this.m_userControlHistoryList_Tables.SelectedIndexChanged += new ColumnDepence.UserControlHistoryList.SelectedIndexChangedHandler(this.m_userControlHistoryList_Tables_SelectedIndexChanged);
 			// 
 			// button_TabDef
 			// 
@@ -130,6 +146,7 @@
 			this.txtTableName.Size = new System.Drawing.Size(414, 31);
 			this.txtTableName.TabIndex = 0;
 			this.txtTableName.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedTable;
+			this.txtTableName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxTableName_KeyUp);
 			// 
 			// m_tabPage_SpSearch
 			// 
@@ -143,6 +160,15 @@
 			this.m_tabPage_SpSearch.TabIndex = 1;
 			this.m_tabPage_SpSearch.Text = "Stored Procedures";
 			this.m_tabPage_SpSearch.UseVisualStyleBackColor = true;
+			// 
+			// m_userControlHistoryList_Sp
+			// 
+			this.m_userControlHistoryList_Sp.Location = new System.Drawing.Point(429, 13);
+			this.m_userControlHistoryList_Sp.Name = "m_userControlHistoryList_Sp";
+			this.m_userControlHistoryList_Sp.SettingName = null;
+			this.m_userControlHistoryList_Sp.Size = new System.Drawing.Size(22, 27);
+			this.m_userControlHistoryList_Sp.TabIndex = 2;
+			this.m_userControlHistoryList_Sp.SelectedIndexChanged += new ColumnDepence.UserControlHistoryList.SelectedIndexChangedHandler(this.m_userControlHistoryList_Sp_SelectedIndexChanged);
 			// 
 			// m_button_SpDef
 			// 
@@ -168,6 +194,7 @@
 			this.m_textBox_SpSearch.Size = new System.Drawing.Size(418, 31);
 			this.m_textBox_SpSearch.TabIndex = 0;
 			this.m_textBox_SpSearch.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedSP;
+			this.m_textBox_SpSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSpSearch_KeyUp);
 			// 
 			// tabControl_TableInfo
 			// 
@@ -232,31 +259,6 @@
 			this.m_toolStripStatusLabel_Second.Name = "m_toolStripStatusLabel_Second";
 			this.m_toolStripStatusLabel_Second.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this.m_toolStripStatusLabel_Second.Size = new System.Drawing.Size(10, 17);
-			// 
-			// m_userControlHistoryList_Tables
-			// 
-			this.m_userControlHistoryList_Tables.Location = new System.Drawing.Point(429, 13);
-			this.m_userControlHistoryList_Tables.Name = "m_userControlHistoryList_Tables";
-			this.m_userControlHistoryList_Tables.SettingName = null;
-			this.m_userControlHistoryList_Tables.Size = new System.Drawing.Size(22, 25);
-			this.m_userControlHistoryList_Tables.TabIndex = 3;
-			this.m_userControlHistoryList_Tables.SelectedIndexChanged += new ColumnDepence.UserControlHistoryList.SelectedIndexChangedHandler(this.m_userControlHistoryList_Tables_SelectedIndexChanged);
-			// 
-			// m_userControlHistoryList_Sp
-			// 
-			this.m_userControlHistoryList_Sp.Location = new System.Drawing.Point(429, 13);
-			this.m_userControlHistoryList_Sp.Name = "m_userControlHistoryList_Sp";
-			this.m_userControlHistoryList_Sp.SettingName = null;
-			this.m_userControlHistoryList_Sp.Size = new System.Drawing.Size(22, 27);
-			this.m_userControlHistoryList_Sp.TabIndex = 2;
-			this.m_userControlHistoryList_Sp.SelectedIndexChanged += new ColumnDepence.UserControlHistoryList.SelectedIndexChangedHandler(this.m_userControlHistoryList_Sp_SelectedIndexChanged);
-			// 
-			// userControlConnection1
-			// 
-			this.m_UserControlConnection.Location = new System.Drawing.Point(471, 14);
-			this.m_UserControlConnection.Name = "userControlConnection1";
-			this.m_UserControlConnection.Size = new System.Drawing.Size(530, 111);
-			this.m_UserControlConnection.TabIndex = 1;
 			// 
 			// ColumnDependencies
 			// 
