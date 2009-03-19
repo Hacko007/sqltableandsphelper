@@ -476,7 +476,7 @@ namespace ColumnDepence
 			}
 			finally
 			{
-				ConnectionFactory.Instance.Close();
+				ConnectionFactory.CloseConnection();
 			}
 
 
