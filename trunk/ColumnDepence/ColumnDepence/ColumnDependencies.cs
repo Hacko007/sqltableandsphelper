@@ -36,6 +36,56 @@ namespace ColumnDepence
 		public string TableName { get { return txtTableName.Text.Trim(); } }
 
 
+		public static bool TableExists(string tableName) {
+			try
+			{
+				string sql_str = @"SELECT CASE WHEN EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME LIKE @TableName ) THEN cast(1 as BIT) ELSE cast(0 as BIT) END";
+				SqlCommand cmd = new SqlCommand(sql_str, ConnectionFactory.Instance);
+				cmd.Parameters.Add("@TableName", SqlDbType.VarChar, 150);
+				cmd.Parameters["@TableName"].Value = tableName;
+				
+				if (ConnectionFactory.Instance == null) return false;
+				if (ConnectionFactory.Instance.State != ConnectionState.Open)
+					ConnectionFactory.Instance.Open();
+
+				bool tableExists = (bool)cmd.ExecuteScalar();
+
+				return tableExists;
+			}
+			finally
+			{
+				ConnectionFactory.CloseConnection();
+			}
+			
+		}
+
+		public static bool StoredProcedureExists(string tableName)
+		{
+			try
+			{
+				if (ConnectionFactory.Instance == null) return false;
+				if (ConnectionFactory.Instance.State != ConnectionState.Open)
+					ConnectionFactory.Instance.Open();
+
+				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance);
+				com.CommandType = CommandType.StoredProcedure;
+				com.Parameters.Add("@objname", SqlDbType.NVarChar, 517);
+				com.Parameters[0].Value = tableName;
+
+				using (SqlDataAdapter adapter = new SqlDataAdapter(com))
+				{
+					DataSet ds = new DataSet();
+					adapter.Fill(ds);
+					return (ds != null && ds.Tables.Count > 0);					
+				}
+			}
+			finally
+			{
+				ConnectionFactory.CloseConnection();
+			}
+
+		}
+
 		public void FillAutoCompleteCustomSource()
 		{
 			/// 
@@ -105,10 +155,9 @@ namespace ColumnDepence
 			}
 			finally
 			{
-				if (ConnectionFactory.Instance != null)
-					ConnectionFactory.Instance.Close();
+				ConnectionFactory.CloseConnection();
 			}
-			return new DataSet();
+			return null;
 		}
 		
 
@@ -148,8 +197,7 @@ namespace ColumnDepence
 				spInfo.SPName = SPName;
 				spInfo.InitControl();
 				spInfo.OpenSpTab += OpenSpTab;
-				spInfo.OpenTableTab += OpenTableTab;
-				//allInfo.CloseTabPage += new TabPageDelegate(CloseTabPage);
+				spInfo.OpenTableTab += OpenTableTab;				
 				tabControl_TableInfo.TabPages.Add(SPName, SPName);
 				tabControl_TableInfo.TabPages[SPName].Controls.Add(spInfo);
 				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[SPName];
@@ -340,36 +388,41 @@ namespace ColumnDepence
 		private void TextBoxTableName_KeyUp(object sender, KeyEventArgs e)
 		{
 			if (e.Shift) return;
-			if ((e.KeyData & Keys.Return) == Keys.Return || (e.KeyData & Keys.Enter) == Keys.Enter)
+			if (e.KeyValue == 13  /* Keys.Return ||  Keys.Enter*/ )
 			{
 				txtTableName.Enabled = false;
 				button_TabDef.Enabled = false;
 				button_GetAllRows.Enabled = false;
-
-				if (e.Control)
+				if (TableExists(TableName))
 				{
-					m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
-					CreateTabPageWithValues(TableName);
+					if (e.Control)
+					{
+						m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
+						CreateTabPageWithValues(TableName);
+					}
+					else
+					{
+						m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
+						CreateTabPageWithDefinition(TableName);
+					}
 				}
-				else
-				{
-					m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
-					CreateTabPageWithDefinition(TableName);
-				}
-
 				txtTableName.Enabled = true;
 				button_TabDef.Enabled = true;
 				button_GetAllRows.Enabled = true;
-
+				txtTableName.Focus();
 			}
 		}
 
 		private void TextBoxSpSearch_KeyUp(object sender, KeyEventArgs e)
 		{
 			if (e.Shift) return;
-			if (e.KeyData == Keys.Return || e.KeyData == Keys.Enter)
+			if (e.KeyValue == 13  /* Keys.Return ||  Keys.Enter*/ )
 			{
-				CreateSPTabPage(m_textBox_SpSearch.Text.Trim());
+				if (StoredProcedureExists(TableName))
+				{
+					CreateSPTabPage(m_textBox_SpSearch.Text.Trim());
+					m_textBox_SpSearch.Focus();
+				}
 			}
 		}
 	}
