@@ -556,6 +556,7 @@ namespace ColumnDepence
 			if (toolbox == null)
 			{
 				toolbox = new Form();
+				toolbox.Text = TableName;
 				this.toolStripButton_CloseTab.Visible = false;
 				this.toolStripButton_ToolBox.Text = "Show as tab page";
 				this.Dock = DockStyle.Fill;
@@ -564,13 +565,13 @@ namespace ColumnDepence
 				toolbox.Size = new Size(800, 600);
 				toolbox.Show();
 				this.RaiseCloseTabPage();
-				
+				toolbox.Owner = m_parentForm;
 			}
 			else
 			{
 				toolbox.Close();
-				this.toolStripButton_ToolBox.Text = "Show as tool box";
-				this.toolStripButton_CloseTab.Visible = true;
+				//this.toolStripButton_ToolBox.Text = "Show as tool box";
+				//this.toolStripButton_CloseTab.Visible = true;
 				
 				TabPage tp = m_parentForm.GetTabPage(this.TableName);
 				((UserControlAllTableInfo)tp.Controls[0]).InitControl(this.TableName, this.ShowAllTableInfo, m_parentForm);

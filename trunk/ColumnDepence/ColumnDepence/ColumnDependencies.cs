@@ -27,7 +27,7 @@ namespace ColumnDepence
 			InitializeComponent();
 			m_userControlHistoryList_Tables.SettingName = "LastUsedTables";
 			m_userControlHistoryList_Sp.SettingName = "LastUsedSPs";
-			
+			Application.DoEvents();
 			FillAutoCompleteCustomSource();
 			m_This = this;
 		}
@@ -51,6 +51,8 @@ namespace ColumnDepence
 				bool tableExists = (bool)cmd.ExecuteScalar();
 
 				return tableExists;
+			}catch{
+				return false;
 			}
 			finally
 			{
@@ -76,8 +78,12 @@ namespace ColumnDepence
 				{
 					DataSet ds = new DataSet();
 					adapter.Fill(ds);
-					return (ds != null && ds.Tables.Count > 0);					
+					return (ds != null && ds.Tables.Count > 0);
 				}
+			}
+			catch
+			{
+				return false;
 			}
 			finally
 			{
@@ -184,6 +190,11 @@ namespace ColumnDepence
 
 		public void CreateSPTabPage(string SPName)
 		{
+			CreateSPTabPage( SPName, null);
+		}
+
+		public void CreateSPTabPage(string SPName, UserControlSPInfo spInfo)
+		{
 			m_textBox_SpSearch.Enabled = false;
 
 			if (tabControl_TableInfo.TabPages.ContainsKey(SPName))
@@ -192,12 +203,18 @@ namespace ColumnDepence
 			}
 			else
 			{
-				UserControlSPInfo spInfo = new UserControlSPInfo();
+				if (spInfo == null)
+				{
+					spInfo = new UserControlSPInfo();
+					spInfo.SPName = SPName;
+					spInfo.InitControl();
+				}
 				spInfo.Dock = DockStyle.Fill;
-				spInfo.SPName = SPName;
-				spInfo.InitControl();
+
 				spInfo.OpenSpTab += OpenSpTab;
-				spInfo.OpenTableTab += OpenTableTab;				
+				spInfo.OpenTableTab += OpenTableTab;
+				spInfo.CloseTabPage += CloseTabPage;
+
 				tabControl_TableInfo.TabPages.Add(SPName, SPName);
 				tabControl_TableInfo.TabPages[SPName].Controls.Add(spInfo);
 				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[SPName];

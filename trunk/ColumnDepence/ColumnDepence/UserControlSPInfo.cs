@@ -15,8 +15,10 @@ namespace ColumnDepence
 		public event TabPageDelegate CloseTabPage;
 		public event OpenTableDelegate OpenTableTab;
 		public event OpenSPDelegate OpenSpTab;
+		private Form toolbox = null;
+		private int tryToLoadCounter = 1;
 
-
+		#region Properties
 		public ColumnDependencies FormMain
 		{
 			get
@@ -29,7 +31,58 @@ namespace ColumnDepence
 		/// Get or Sets Stored Procedures Name
 		/// </summary>
 		public string SPName { get; set; }
+		public string SPDefinition
+		{
+			get
+			{
+				return m_richTextBox_Definition.Text;
+			}
+			set
+			{
+				m_richTextBox_Definition.Text = value;
+			}
+		}
+		public object DataViewParamsDataSource
+		{
+			get
+			{
+				if (m_dataGridView_Params == null)
+					return null;
+				else
+				{
+					return m_dataGridView_Params.DataSource;
+				}
+			}
+			set
+			{
+				if (m_dataGridView_Params == null) return;
+				m_dataGridView_Params.DataSource = value;
+			}
+		}
+		public object DataViewDependentTablesDataSource
+		{
+			get
+			{
+				if (m_dataGridView_DepTables== null)
+					return null;
+				else
+				{
+					return m_dataGridView_DepTables.DataSource;
+				}
+			}
+			set
+			{
+				if (m_dataGridView_DepTables== null) return;
+				m_dataGridView_DepTables.DataSource = value;
+			}
+		}
+		public bool ShowDependenciesInfo 
+		{
+			get { return m_toolStripButtonShowParamInfo.Checked; }
+			set { m_toolStripButtonShowParamInfo.Checked = value; }
+		}
 
+		#endregion Properties
 
 		public UserControlSPInfo()
 		{
@@ -38,9 +91,41 @@ namespace ColumnDepence
 
 			m_richTextBox_Definition.AutoWordSelection = true;			
 			m_richTextBox_Definition.ZoomFactor = 1.2f;
-			
+			ShowDependenciesInfo = false;
+			m_splitContainer_Main.Panel1Collapsed = true;
 		}
 
+		/// <summary>
+		/// Fill controls values
+		/// </summary>
+		internal void InitControl()
+		{
+			this.SPName = this.SPName.Replace("dbo.", "");
+			Cursor = Cursors.WaitCursor;
+			Application.DoEvents();
+			FillParameters();
+			Application.DoEvents();
+			FillDependecies();
+			Application.DoEvents();
+			FillSPDefinition();
+			Cursor = Cursors.Default;			
+		}
+
+
+		internal UserControlSPInfo Clone()
+		{
+			UserControlSPInfo sp = new UserControlSPInfo();
+			sp.SPName = this.SPName; 
+			sp.SPDefinition = this.SPDefinition;
+			sp.DataViewDependentTablesDataSource = this.DataViewDependentTablesDataSource;
+			sp.DataViewParamsDataSource = this.DataViewParamsDataSource;
+			sp.ShowDependenciesInfo = this.ShowDependenciesInfo;
+			sp.SyntaxHighLight();
+			sp.InitCoulomnsInDVDepTables();
+			return sp;
+		}
+	
+		#region Raise on event
 		protected virtual void RaiseCloseTabPage()
 		{
 			if (CloseTabPage != null)
@@ -62,9 +147,9 @@ namespace ColumnDepence
 				OpenSpTab(this, spName);
 			}
 		}
+		#endregion Raise on event
 
-		private int tryToLoadCounter = 1;
-
+		#region Get data from DB
 		/// <summary>
 		/// Refreshes textbox with SPs definition.
 		/// </summary>
@@ -185,19 +270,7 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 						dt.Columns.Add("MyType", typeof(string), "IIF(type = 'stored procedure', 'SP' , 'TAB')");
 
 						m_dataGridView_DepTables.DataSource = dt;
-						m_dataGridView_DepTables.Columns["type"].Visible = false;
-						m_dataGridView_DepTables.Columns["updated"].Visible = false;
-						m_dataGridView_DepTables.Columns["selected"].Visible = false;
-						m_dataGridView_DepTables.Columns["MyUpd"].HeaderText = "Updated";
-						m_dataGridView_DepTables.Columns["MySel"].HeaderText = "Selected";
-						m_dataGridView_DepTables.Columns["MyType"].HeaderText = "Type";
-
-						m_dataGridView_DepTables.Columns["name"].HeaderText = "Dependent Object";
-						m_dataGridView_DepTables.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-						m_dataGridView_DepTables.Columns["name"].ContextMenuStrip = m_ContextMenuStrip_ShowDefinition;
-
-						m_dataGridView_DepTables.Columns["column"].HeaderText = "Column";
-						m_dataGridView_DepTables.Columns["column"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+						InitCoulomnsInDVDepTables();
 
 					}
 				}
@@ -211,6 +284,23 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 			{				
 				ConnectionFactory.CloseConnection();
 			}
+		}
+
+		internal void InitCoulomnsInDVDepTables()
+		{
+			m_dataGridView_DepTables.Columns["type"].Visible = false;
+			m_dataGridView_DepTables.Columns["updated"].Visible = false;
+			m_dataGridView_DepTables.Columns["selected"].Visible = false;
+			m_dataGridView_DepTables.Columns["MyUpd"].HeaderText = "Updated";
+			m_dataGridView_DepTables.Columns["MySel"].HeaderText = "Selected";
+			m_dataGridView_DepTables.Columns["MyType"].HeaderText = "Type";
+
+			m_dataGridView_DepTables.Columns["name"].HeaderText = "Dependent Object";
+			m_dataGridView_DepTables.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+			m_dataGridView_DepTables.Columns["name"].ContextMenuStrip = m_ContextMenuStrip_ShowDefinition;
+
+			m_dataGridView_DepTables.Columns["column"].HeaderText = "Column";
+			m_dataGridView_DepTables.Columns["column"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
 		}
 
 
@@ -251,22 +341,8 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				ConnectionFactory.CloseConnection();
 			}
 		}
-
-		/// <summary>
-		/// Fill controls values
-		/// </summary>
-		internal void InitControl()
-		{
-			this.SPName = this.SPName.Replace("dbo.", "");
-			Cursor = Cursors.WaitCursor;
-			Application.DoEvents();
-			FillParameters();
-			Application.DoEvents();
-			FillDependecies();
-			Application.DoEvents();
-			FillSPDefinition();
-			Cursor = Cursors.Default;			
-		}
+		
+		#endregion Get data from DB
 
 		/// <summary>
 		/// Apply syntax highlighting on SP's definition
@@ -301,7 +377,8 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				String[] keywords = { "exec","execute", "if", "then","begin", "end","else","case", "null", "use"
 									, "return","create","table","declare" ,"transaction" , "commit","rollback"
 									,"as", "set" ,"goto","drop" ,"go","while","next","open","for","cursor"
-									,"fetch","close","cast", "primary" , "key" , "rowcount","procedure"};
+									,"fetch","close","cast", "primary" , "key" , "rowcount","procedure"
+									,"nocount" , "on"};
 				for (int i = 0; i < keywords.Length; i++)
 				{
 					if (keywords[i] == token.ToLower())
@@ -318,7 +395,7 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				/// 
 				/// Check whether the token is a types. 
 				/// 
-				String[] types = { "int", "date", "datetime", "char", "nchar", "nvarchar", "bit", "collate","float" };
+				String[] types = { "int", "date", "datetime", "char", "nchar", "nvarchar", "bit", "collate","float","xml" };
 				if(!colored)
 				for (int i = 0; i < types.Length; i++)
 				{
@@ -336,7 +413,8 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				/// SQL keywords
 				/// 
 				String[] sql = { "select", "from", "where", "not", "exists", "and", "or", "insert", "into"
-								   ,"values","update","delete","inner","left","join" };
+								   ,"values","update","delete","inner","left","join" , "order", "by" ,"having"
+							   , "out","in", "output","asc","desc"};
 				if (!colored)
 					for (int i = 0; i < sql.Length; i++)
 					{
@@ -355,6 +433,15 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				if(token.StartsWith("--")){
 					m_richTextBox_Definition.SelectionColor = Color.Gray;
 					m_richTextBox_Definition.SelectionFont = new Font("Arial", 10, FontStyle.Regular);
+				}else
+
+				/// 
+				/// Variable
+				/// 
+				if (token.StartsWith("@"))
+				{
+					m_richTextBox_Definition.SelectionColor = Color.DarkBlue;
+					m_richTextBox_Definition.SelectionFont = new Font("Courier New", 10, FontStyle.Bold);
 				}
 
 				index += token.Length;
@@ -362,9 +449,11 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 			// Restore the users current selection point. 
 			m_richTextBox_Definition.SelectionStart = selectionStart;
 			m_richTextBox_Definition.SelectionLength = selectionLength;
-			
+
 		}
 
+
+		#region ToolStripMenuItem events
 		private void ShowDefinitionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			try
@@ -386,6 +475,53 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 			catch { }
 
 		}
+
+
+		private void ToolStripButtonShowAsToolBox_Click(object sender, EventArgs e)
+		{
+			if (toolbox == null)
+			{
+				toolbox = new Form();
+				toolbox.Text = SPName;
+				m_toolStripButtonClose.Visible = false;
+				m_toolStripButtonShowAsToolBox.Text = "Show as tab page";
+				Dock = DockStyle.Fill;
+				toolbox.Controls.Add(this);
+				toolbox.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+				toolbox.Size = new Size(800, 600);
+				toolbox.Show();
+				RaiseCloseTabPage();
+				toolbox.Owner = FormMain;
+			}
+			else
+			{
+				try
+				{
+					if (toolbox.Controls.Count > 0 && toolbox.Controls[0] is UserControlSPInfo)
+					{
+						UserControlSPInfo spClone = ((UserControlSPInfo)toolbox.Controls[0]).Clone();
+						toolbox.Close();
+						FormMain.CreateSPTabPage(SPName, spClone);
+					}
+				}
+				catch
+				{
+					FormMain.CreateSPTabPage(this.SPName);
+				}
+			}
+		}
+
+		private void ToolStripButtonClose_Click(object sender, EventArgs e)
+		{
+			RaiseCloseTabPage();
+		}		
+
+		private void ToolStripButtonShowParamInfo_CheckedChanged(object sender, EventArgs e)
+		{
+			m_splitContainer_Main.Panel1Collapsed = !m_toolStripButtonShowParamInfo.Checked;
+		}
+
+		#endregion ToolStripMenuItem events
 
 
 	}

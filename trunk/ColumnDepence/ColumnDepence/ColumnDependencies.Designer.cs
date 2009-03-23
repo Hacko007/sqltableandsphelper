@@ -270,7 +270,7 @@
 			this.Controls.Add(this.groupBox_Search);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "ColumnDependencies";
-			this.Text = "Column Dependeces";
+			this.Text = "DB Info";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ColumnDependencies_FormClosed);
 			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ColumnDependencies_KeyPress);
 			this.groupBox_Search.ResumeLayout(false);
