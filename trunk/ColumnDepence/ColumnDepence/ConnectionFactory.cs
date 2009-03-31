@@ -45,6 +45,17 @@ namespace ColumnDepence
 			}
 		}
 
+		public static void OpenConnection()
+		{
+			try
+			{
+				if (Instance != null && Instance.State != ConnectionState.Open)
+				{
+					Instance.Open();
+				}
+			}
+			catch { }
+		}
 		public static void CloseConnection()
 		{
 			try

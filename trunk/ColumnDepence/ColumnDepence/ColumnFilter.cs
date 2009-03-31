@@ -61,7 +61,8 @@ namespace ColumnDepence.Filters
 		IsNull,
 		IsNotNull,
 		IsTrue,
-		IsFalse
+		IsFalse,
+		InValues
 	}
 
 	public abstract class RuleBase
@@ -207,6 +208,32 @@ namespace ColumnDepence.Filters
 		public override string Filter
 		{
 			get { return string.Format(" ({0} = 1 ) ", this.ColumnName); }
+		}
+	}
+
+	public class InValues : RuleBase
+	{
+		public List<object> Values { get; set; }
+		
+		public InValues()
+		{
+			this.FilterRule = FilterRule.InValues;
+			Values = new List<object>();
+		}		
+		public override string Filter
+		{
+			get {
+				string filter = "";
+				foreach (object item in Values)
+				{
+					filter += string.Format(" ({0} = '{1}') OR", this.ColumnName, item); 
+				}
+				if (filter.Length > 3) {
+					filter = filter.Substring(0, filter.Length - 3); //remove last OR
+					filter = "( " + filter + " )";
+				}
+				return filter; 										
+			}
 		}
 	}
 

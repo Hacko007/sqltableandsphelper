@@ -2,12 +2,14 @@
 using System.Data;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using ColumnDepence.DbInfo;
 
 namespace ColumnDepence
 {
 
 	public delegate void TabPageDelegate(string tabPageKey);
 	public delegate void OpenTableDelegate(object sender, string tableName, bool isDefinitionShown);
+	public delegate void OpenTableFilteredDelegate(object sender, string tableName, bool isDefinitionShown, TableFilterData cellInfo);
 	public delegate void OpenSPDelegate(object sender, string spName);
 
 
@@ -169,12 +171,12 @@ namespace ColumnDepence
 
 		private void button_GetAllRows_Click_1(object sender, EventArgs e)
 		{
-			CreateTabPageWithValues(TableName);
+			CreateTabPageWithValues(TableName,null);
 		}
 
 		private void button_TabDef_Click(object sender, EventArgs e)
 		{
-			CreateTabPageWithDefinition(TableName);
+			CreateTabPageWithDefinition(TableName,null);
 		}
 
 		public UserControlAllTableInfo GetSelectedAllTableInfo()
@@ -225,15 +227,33 @@ namespace ColumnDepence
 			m_textBox_SpSearch.Enabled = true;
 		}
 
-		void OpenTableTab(object sender, string tableName, bool isDefinitionShown)
+		void OpenTableFilteredTab(object sender, string tableName, bool isDefinitionShown,TableFilterData cellInfo)
 		{
+			if (tableName == null) return;
+
 			tableName = tableName.Replace("dbo.", "");
-			if (isDefinitionShown) {
-				CreateTabPageWithDefinition(tableName);
+			if (isDefinitionShown)
+			{
+				CreateTabPageWithDefinition(tableName, cellInfo);
 			}
 			else
 			{
-				CreateTabPageWithValues(tableName);
+				CreateTabPageWithValues(tableName, cellInfo);
+			}
+		}
+
+		void OpenTableTab(object sender, string tableName, bool isDefinitionShown)
+		{
+			if (tableName == null) return;
+
+			tableName = tableName.Replace("dbo.", "");
+			if (isDefinitionShown)
+			{
+				CreateTabPageWithDefinition(tableName,null);
+			}
+			else
+			{
+				CreateTabPageWithValues(tableName,null);
 			}
 		}
 
@@ -247,7 +267,7 @@ namespace ColumnDepence
 		{
 			try
 			{
-				TabPage tp = GetTabPage(tableName);
+				TabPage tp = GetTabPage(tableName,null);
 				tabControl_TableInfo.SelectedTab = tp;
 				return ((UserControlAllTableInfo)tp.Controls[0]);
 			}
@@ -255,12 +275,13 @@ namespace ColumnDepence
 			return null;
 		}
 
-		public TabPage GetTabPage(string tableName) {
-			CreateTabPage(tableName);
+		public TabPage GetTabPage(string tableName, TableFilterData filter)
+		{
+			CreateTabPage(tableName, filter);
 			return tabControl_TableInfo.SelectedTab;			
 		}
 
-		public void CreateTabPage(string tableName)
+		public void CreateTabPage(string tableName, TableFilterData filter)
 		{
 			if (tabControl_TableInfo.TabPages.ContainsKey(tableName))
 			{
@@ -273,6 +294,8 @@ namespace ColumnDepence
 				allInfo.CloseTabPage += CloseTabPage;
 				allInfo.OpenSpTab += OpenSpTab;
 				allInfo.OpenTableTab += OpenTableTab;
+				allInfo.OpenTableFilteredTab += OpenTableFilteredTab;
+				allInfo.SetFilter(filter);
 
 				tabControl_TableInfo.TabPages.Add(tableName, tableName);
 				tabControl_TableInfo.TabPages[tableName].Controls.Add(allInfo);
@@ -280,11 +303,11 @@ namespace ColumnDepence
 			}
 		}
 
-		public void CreateTabPageWithValues(string tableName)
+		public void CreateTabPageWithValues(string tableName, TableFilterData filter)
 		{
 			try
 			{
-				TabPage tp = GetTabPage(tableName);
+				TabPage tp = GetTabPage(tableName, filter);
 				tabControl_TableInfo.SelectedTab = tp;
 				((UserControlAllTableInfo)tp.Controls[0]).InitControl(tableName, false, this);
 				m_userControlHistoryList_Tables.AddValue(tableName );
@@ -292,11 +315,11 @@ namespace ColumnDepence
 			catch { }
 		}
 
-		public void CreateTabPageWithDefinition(string tableName)
+		public void CreateTabPageWithDefinition(string tableName, TableFilterData filter)
 		{
 			try
 			{
-				TabPage tp = GetTabPage(tableName);
+				TabPage tp = GetTabPage(tableName, filter);
 				tabControl_TableInfo.SelectedTab = tp;
 				((UserControlAllTableInfo)tp.Controls[0]).InitControl(tableName, true, this);
 				m_userControlHistoryList_Tables.AddValue(tableName);
@@ -415,12 +438,12 @@ namespace ColumnDepence
 					if (e.Control)
 					{
 						m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
-						CreateTabPageWithValues(TableName);
+						CreateTabPageWithValues(TableName,null);
 					}
 					else
 					{
 						m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
-						CreateTabPageWithDefinition(TableName);
+						CreateTabPageWithDefinition(TableName,null);
 					}
 				}
 				txtTableName.Enabled = true;
