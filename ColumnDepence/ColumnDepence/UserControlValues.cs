@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 using System.Text;
+using ColumnDepence.DbInfo;
+using System.IO;
+using ColumnDepence.Filters;
 
 namespace ColumnDepence
 {
@@ -11,6 +15,7 @@ namespace ColumnDepence
 	{
 
 		public event EventHandler ShownColumnsChanged;
+		public event OpenTableFilteredDelegate OpenTableFilteredTab;
 
 		private Dictionary<string, Filters.ColumnFilter> filter_dict = new Dictionary<string, ColumnDepence.Filters.ColumnFilter>();
 
@@ -23,10 +28,14 @@ namespace ColumnDepence
 		public UserControlValues()
 		{
 			InitializeComponent();
+			TableInfo = new TableInfo();
 		}
 
 		public DataGridView ValuesDataGrid { get { return dataGridView_Values; } }
-		
+
+		public TableInfo TableInfo { get; set; }
+
+
 		string tableCount = "";
 		/// <summary>
 		/// Sets Table count label text
@@ -51,9 +60,28 @@ namespace ColumnDepence
 			}
 		}
 
-		private void OnShownColumnsChanged() {
-			if (ShownColumnsChanged != null) {
+		public void SetFilter(TableFilterData cellInfo)
+		{
+			filter_dict = new Dictionary<string, ColumnDepence.Filters.ColumnFilter>();
+
+			if (cellInfo == null) return;
+
+			filter_dict = cellInfo.GetColumnFilters();
+		}
+
+		private void OnShownColumnsChanged()
+		{
+			if (ShownColumnsChanged != null)
+			{
 				ShownColumnsChanged(this, EventArgs.Empty);
+			}
+		}
+
+		protected virtual void RaiseOpenTableTab(string tableName, bool isDefinitionShown, TableFilterData cellInfo)
+		{
+			if (OpenTableFilteredTab != null)
+			{
+				OpenTableFilteredTab(this, tableName, isDefinitionShown, cellInfo);
 			}
 		}
 
@@ -220,62 +248,85 @@ namespace ColumnDepence
 		internal void ApplyFilter()
 		{			
 			string filter = GetFilter();
-			if (this.dataGridView_Values.DataSource is DataTable)
+
+			try
 			{
-				DataTable tab = (DataTable)this.dataGridView_Values.DataSource;
 				DataView dv = new DataView();
-				dv.Table = tab;
-				try
-				{
-					dv.RowFilter = filter;
-				}
-				catch { }
+				dv.Table = TableInfo.Values;
+				dv.RowFilter = filter;
 				dataGridView_Values.DataSource = dv;
-				ShownRows = dv.Count;
+				ShownRows = dv.Count;			
+			}
+			catch { }
+			
+			
+			//if (this.dataGridView_Values.DataSource is DataTable)
+			//{
+			//    DataTable tab = (DataTable)this.dataGridView_Values.DataSource;
+			//    DataView dv = new DataView();
+			//    dv.Table = tab;
+			//    try
+			//    {
+			//        dv.RowFilter = filter;
+			//    }
+			//    catch { }
+			//    dataGridView_Values.DataSource = dv;
+			//    ShownRows = dv.Count;
+			//}
+			//else
+			//{
+			//    DataView dv = (DataView)this.dataGridView_Values.DataSource;
+			//    try
+			//    {
+			//        dv.RowFilter = filter;
+			//    }
+			//    catch { }
+			//    dataGridView_Values.DataSource = dv;
+			//    ShownRows = dv.Count;
+			//}
+
+			if (filter == "")
+			{
+				m_labelFilter.Text = "";
+				m_buttonRemoveFilter.Visible = false;
 			}
 			else
 			{
-				DataView dv = (DataView)this.dataGridView_Values.DataSource;
-				try
-				{
-					dv.RowFilter = filter;
-				}
-				catch { }
-				dataGridView_Values.DataSource = dv;
-				ShownRows = dv.Count;
+				m_labelFilter.Text = "Filter: " + filter;
+				m_buttonRemoveFilter.Visible = true;
 			}
-
-			m_labelFilter.Text = (filter == "") ? "" : "Filter: " + filter;
+			
+			
 
 		}
 
 		#region Filter Menu Events
 
-		private void m_EqualToolStripTextBox_TextChanged(object sender, EventArgs e)
+		private void EqualToolStripTextBox_TextChanged(object sender, EventArgs e)
 		{
 			m_equalToolStripMenuItem.Checked = m_EqualToolStripTextBox.TextBox.Text.Trim() != "";
 			UpdateContexMenuStatus();
 		}
 
-		private void m_GraterThenToolStripTextBox_TextChanged(object sender, EventArgs e)
+		private void GraterThenToolStripTextBox_TextChanged(object sender, EventArgs e)
 		{
 			m_greToolStripMenuItem.Checked = m_GraterThenToolStripTextBox.TextBox.Text.Trim() != "";
 			UpdateContexMenuStatus();
 		}
 
-		private void m_LessThenToolStripTextBox2_TextChanged(object sender, EventArgs e)
+		private void LessThenToolStripTextBox2_TextChanged(object sender, EventArgs e)
 		{
 			m_lessThenToolStripMenuItem.Checked = m_LessThenToolStripTextBox2.TextBox.Text.Trim() != "";
 			UpdateContexMenuStatus();
 		}
 
-		private void m_LikeToolStripTextBox_TextChanged(object sender, EventArgs e)
+		private void LikeToolStripTextBox_TextChanged(object sender, EventArgs e)
 		{
 			m_LikeToolStripMenuItem.Checked = m_LikeToolStripTextBox.TextBox.Text.Trim() != "";
 			UpdateContexMenuStatus();
 		}
 		
-		private void m_equalToolStripMenuItem_Click(object sender, EventArgs e)
+		private void EqualToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			if (m_EqualToolStripTextBox.TextBox.Text.Trim() == "")
 			{
@@ -285,12 +336,12 @@ namespace ColumnDepence
 
 		}
 
-		private void m_filterByValueToolStripMenuItem_Click(object sender, EventArgs e)
+		private void FilterByValueToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			UpdateContexMenuStatus();
 		}
 
-		private void m_greToolStripMenuItem_Click(object sender, EventArgs e)
+		private void GreToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			if (m_GraterThenToolStripTextBox.TextBox.Text.Trim() == "")
 			{
@@ -359,8 +410,13 @@ namespace ColumnDepence
 		{
 			filter_dict.Remove(m_ActiveColumn.Name);
 
-			m_filterByValueToolStripMenuItem.Checked = false;
+			ResetFilterContextMenuItems();
+			UpdateContexMenuStatus();
+		}
 
+		private void ResetFilterContextMenuItems()
+		{
+			m_filterByValueToolStripMenuItem.Checked = false;
 			m_equalToolStripMenuItem.Checked = false;
 			m_greToolStripMenuItem.Checked = false;
 			m_lessThenToolStripMenuItem.Checked = false;
@@ -369,14 +425,14 @@ namespace ColumnDepence
 			m_isNullToolStripMenuItem.Checked = false;
 			m_isTrueToolStripMenuItem.Checked = false;
 			m_isFalseToolStripMenuItem.Checked = false;
-			
+
 			m_LikeToolStripTextBox.TextBox.Text = "";
 			m_LessThenToolStripTextBox2.TextBox.Text = "";
 			m_EqualToolStripTextBox.TextBox.Text = "";
 			m_GraterThenToolStripTextBox.TextBox.Text = "";
-			
+
 			m_removeFiltersToolStripMenuItem.Enabled = false;
-			UpdateContexMenuStatus();
+			
 		}
 
 		#endregion
@@ -385,6 +441,118 @@ namespace ColumnDepence
 		public List<string> AllColumns { get; set; }
 		public List<string> ShownColumns { get; set; }
 
+		private void ContextMenuStripShownColumns_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+
+			m_contextMenuStripShownColumns.Items.Clear();
+			m_contextMenuStripShownColumns.Items.AddRange(new ToolStripItem[]{
+				m_showallClumnsToolStripMenuItem,
+				m_ChooseColumnsToolStripMenuItem,
+				new ToolStripSeparator(),
+				m_ShowRowInfoToolStripMenuItem
+				});
+
+			if (ValuesDataGrid.SelectedCells == null || TableInfo.Values == null )
+				return;
+
+			/// if foregn key column(s) are selected 
+			/// add contxt menu that should open parent table 
+			/// with this rows filtered.
+			/// 
+
+			TableFilterDataCollection cellValues = new TableFilterDataCollection();
+
+			/// 
+			/// Find all referensed tables for selected cells
+			/// 
+			foreach (DataGridViewCell cell in ValuesDataGrid.SelectedCells)
+			{
+				// cell.ColumnIndex
+				if (TableInfo.Values.Columns.Count > cell.ColumnIndex)
+				{
+					string tableName = TableInfo.Values.Columns[cell.ColumnIndex].Table.TableName;
+					string colName = TableInfo.Values.Columns[cell.ColumnIndex].ColumnName;
+					/// 
+					/// find parents and add to CellInfoCollection
+					/// 
+					if (TableInfo.ParentReferencedTable != null && TableInfo.ParentReferencedTable.Rows.Count > 0)
+					{
+						DataRow[] parentColRefs = TableInfo.ParentReferencedTable.FindParents(colName);
+						if (parentColRefs != null && parentColRefs.Length > 0)
+						{
+							foreach (DataRow row in parentColRefs)
+							{
+								cellValues.Add(
+									row[TableInfo.ParentReferencedTable.ColumnTableName].ToString(),
+									row[TableInfo.ParentReferencedTable.ColumnParentColumnName].ToString(),
+									cell.Value,
+									TableRelation.Parent);
+							}							
+						}
+					}
+					/// 
+					/// find children and add to CellInfoCollection
+					/// 
+					if (TableInfo.ChildReferencedTable != null && TableInfo.ChildReferencedTable.Rows.Count > 0)
+					{
+						DataRow[] childColRefs = TableInfo.ChildReferencedTable.FindChilds(colName);
+						if (childColRefs != null && childColRefs.Length > 0)
+						{
+							foreach (DataRow row in childColRefs)
+							{
+								cellValues.Add(
+									row[TableInfo.ChildReferencedTable.ColumnTableName].ToString(),
+									row[TableInfo.ChildReferencedTable.ColumnParentColumnName].ToString(),
+									cell.Value, 
+									TableRelation.Child);
+							}
+
+						}
+					}									
+				}
+			}
+
+			if (cellValues.Tables.Count == 0) return;
+
+			TableRelation tabRelation = TableRelation.None;
+			
+			/// 
+			/// Create context menus for found 
+			/// refernece tables
+			/// 
+			foreach (KeyValuePair<string, TableFilterData> table in cellValues.Tables.OrderBy(tab=> tab.Value.TableRelation).ThenBy(tab=> tab.Value.TableName) )
+			{
+				if(tabRelation != table.Value.TableRelation)
+					m_contextMenuStripShownColumns.Items.Add(new ToolStripSeparator());
+
+				ToolStripMenuItem tabMenuItem = new ToolStripMenuItem(table.Key);
+				tabMenuItem.Tag = table.Value;
+				tabMenuItem.Click += new EventHandler(ShowTableRowsFilterd);
+				m_contextMenuStripShownColumns.Items.Add(tabMenuItem);
+
+				tabRelation = table.Value.TableRelation;
+
+			}
+		}
+
+		void ShowTableRowsFilterd(object sender, EventArgs e)
+		{
+			if (sender is ToolStripMenuItem &&
+				((ToolStripMenuItem)sender).Tag is TableFilterData)
+			{
+				TableFilterData ci = ((ToolStripMenuItem)sender).Tag as TableFilterData;
+				RaiseOpenTableTab(ci.TableName, false, ci);
+			}
+		}
+		
+			
+
+		/// <summary>
+		/// Get string representing selected columns
+		/// that should be used in SQL queuery. 
+		/// </summary>
+		/// <returns> * if all columns selected or list of comma separeted columns names, 
+		/// eg [col1],[col2],[col3]</returns>
 		public string GetColumnSelect() {
 			if (AllColumns == null)
 				return "*";
@@ -480,9 +648,10 @@ namespace ColumnDepence
 			OnShownColumnsChanged();
 			UpdateShownColumnsContextMenu();
 		}
+
 		#endregion Show Column ContextMenu
 
-		private void m_ShowRowInfoToolStripMenuItem_Click(object sender, EventArgs e)
+		private void ShowRowInfoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			if (dataGridView_Values.SelectedRows.Count == 0) return;
 
@@ -492,6 +661,19 @@ namespace ColumnDepence
 			showOneRow.Show();			
 		}
 
+		private void ButtonRemoveFilter_Click(object sender, EventArgs e)
+		{
+			ClearFilter();
+		}
+
+		private void ClearFilter()
+		{
+			filter_dict = new Dictionary<string, ColumnDepence.Filters.ColumnFilter>();
+			ResetFilterContextMenuItems();
+			ApplyFilter();
+		}
+
+		
 		//private List<ChangedCell> changedCells = null;
 		//private void dataGridView_Values_RowLeave(object sender, DataGridViewCellEventArgs e)
 		//{

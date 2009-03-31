@@ -148,7 +148,7 @@
 			this.dataGridView_Columns.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dataGridView_Columns.Size = new System.Drawing.Size(695, 362);
 			this.dataGridView_Columns.TabIndex = 0;
-			this.dataGridView_Columns.SelectionChanged += new System.EventHandler(this.dataGridView_Columns_SelectionChanged);
+			this.dataGridView_Columns.SelectionChanged += new System.EventHandler(this.DataGridViewColumns_SelectionChanged);
 			// 
 			// label7
 			// 
@@ -625,7 +625,7 @@
 			this.m_toolStripMenuItem_ShowDefinition.Name = "m_toolStripMenuItem_ShowDefinition";
 			this.m_toolStripMenuItem_ShowDefinition.Size = new System.Drawing.Size(159, 22);
 			this.m_toolStripMenuItem_ShowDefinition.Text = "Show Definition";
-			this.m_toolStripMenuItem_ShowDefinition.Click += new System.EventHandler(this.m_toolStripMenuItem_ShowDefinition_Click);
+			this.m_toolStripMenuItem_ShowDefinition.Click += new System.EventHandler(this.ToolStripMenuItem_ShowDefinition_Click);
 			// 
 			// UserControlAllTableInfo
 			// 

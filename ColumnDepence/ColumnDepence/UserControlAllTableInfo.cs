@@ -6,6 +6,7 @@ using System.Data;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Security.Permissions;
+using ColumnDepence.DbInfo;
 
 namespace ColumnDepence
 {
@@ -15,22 +16,39 @@ namespace ColumnDepence
 
 		public event TabPageDelegate CloseTabPage;
 		public event OpenTableDelegate OpenTableTab;
+		public event OpenTableFilteredDelegate OpenTableFilteredTab;
 		public event OpenSPDelegate OpenSpTab;
 
 		private ColumnDependencies m_parentForm;
 		string m_TableName = "";
-		Form toolbox = null;
-		
+		Form toolbox = null;		
 		
 		public UserControlAllTableInfo()
 		{
 			InitializeComponent();
 			m_userControlValues.ShownColumnsChanged += new EventHandler(UserControlValues_ShownColumnsChanged);
+			m_userControlValues.OpenTableFilteredTab += new OpenTableFilteredDelegate(UserControlValues_OpenTableFilteredTab);
+			TableInfo = new TableInfo();
+		}
+
+
+		public TableInfo TableInfo { get; set; }
+
+
+		public void SetFilter(TableFilterData cellInfo) {
+			m_userControlValues.SetFilter(cellInfo);
 		}
 
 		void UserControlValues_ShownColumnsChanged(object sender, EventArgs e)
 		{
 			FillDataGridValues(m_userControlValues.ValuesDataGrid);
+		}
+
+		void UserControlValues_OpenTableFilteredTab(object sender, string tableName, bool isDefinitionShown, TableFilterData cellInfo)
+		{
+			if (OpenTableFilteredTab != null) {
+				OpenTableFilteredTab(sender, tableName, isDefinitionShown, cellInfo);
+			}
 		}
 
 		public void InitControl(string tableName, bool showAllData ,ColumnDependencies parentForm) {
@@ -76,14 +94,13 @@ namespace ColumnDepence
 			this.m_userControlValues.TableCount = this.GetTableCountStr();
 			Application.DoEvents();
 			this.FillDataGridValues(this.m_userControlValues.ValuesDataGrid);
-			Application.DoEvents();
-			this.FillDataGridColumnConstrains();
-			Application.DoEvents();
-			this.FillDataGridParentTables();
-			Application.DoEvents();
-			this.FillDataGridChildTables();
+			Application.DoEvents();			
+
+			TableInfo.LoadTableInfo(TableName);
+			RefreshDataGrids();
 			Application.DoEvents();
 			FillSPDependecies();
+			this.m_userControlValues.TableInfo = this.TableInfo;
 			Application.DoEvents();
 			this.InitDataGridsStyle();
 			Cursor.Current = Cursors.Default;
@@ -120,12 +137,8 @@ namespace ColumnDepence
 			{
 				if (FreeSpace(dataGridView_ColumnConstrains) > 0) splitContainer_right.SplitterDistance -= FreeSpace(dataGridView_ColumnConstrains) - empty_space;
 				if (FreeSpace(dataGridView_Parent) > 0) splitContainer_RightBottom.SplitterDistance -= FreeSpace(dataGridView_Parent) - empty_space;
-				if (FreeSpace(dataGridView_Child) > 0) splitContainer_LeftSpButtom.SplitterDistance -= FreeSpace(dataGridView_Child) - empty_space;
-			
-			}	
-			
-			
-
+				if (FreeSpace(dataGridView_Child) > 0) splitContainer_LeftSpButtom.SplitterDistance -= FreeSpace(dataGridView_Child) - empty_space;			
+			}							
 		}
 
 
@@ -161,10 +174,20 @@ namespace ColumnDepence
 			this.FillDataGridValues(this.m_userControlValues.ValuesDataGrid);
 			this.m_userControlValues.UserDeletingRow -= new DataGridViewRowCancelEventHandler(this.dataGridView_Value_UserDeletingRow);
 			this.m_userControlValues.UserDeletingRow += new DataGridViewRowCancelEventHandler(this.dataGridView_Value_UserDeletingRow);
+			this.m_userControlValues.TableInfo = this.TableInfo;
+			Application.DoEvents();
 			Cursor.Current = Cursors.Default;
+
+			TableInfo.LoadTableInfo(TableName);
+
 		}
 
-		private void dataGridView_Columns_SelectionChanged(object sender, EventArgs e)
+		private void DataGridViewColumns_SelectionChanged(object sender, EventArgs e)
+		{
+			RefreshDataGrids();
+		}
+
+		private void RefreshDataGrids()
 		{
 			this.FillDataGridColumnConstrains();
 			this.FillDataGridParentTables();
@@ -219,7 +242,7 @@ namespace ColumnDepence
 		{
 			DataGridViewCellStyle style = new DataGridViewCellStyle();
 
-			style.Font = new Font(FontFamily.GenericMonospace, 12);
+			style.Font = new Font(FontFamily.GenericMonospace, 10);
 			SetCellStyle(dataGridView_Columns, style);
 
 			style = new DataGridViewCellStyle();
@@ -294,11 +317,13 @@ namespace ColumnDepence
 				sql_cmd += " WHERE " + rowFilter;
 			}
 
-			DataSet ds = FillDataSet(sql_cmd);
+			TableInfo.Values = new DataTable(TableName);
+			TableInfo.Values = TableInfo.FillDataTable(TableName,sql_cmd, TableInfo.Values);
 
-			if (ds != null && ds.Tables.Count > 0)
+			//DataSet ds = FillDataSet(sql_cmd);
+			if (TableInfo.Values != null)
 			{
-				dataGrid.DataSource = ds.Tables[0];
+				dataGrid.DataSource = TableInfo.Values;
 				if (selected_columns == "*") m_userControlValues.AllColumns = new List<string>();
 				for (int i = 0; i < dataGrid.Columns.Count; i++)
 				{
@@ -308,57 +333,25 @@ namespace ColumnDepence
 				if (selected_columns == "*")
 				{
 					m_userControlValues.ShownColumns = new List<string>();
-					m_userControlValues.ShownColumns.AddRange( m_userControlValues.AllColumns);
+					m_userControlValues.ShownColumns.AddRange(m_userControlValues.AllColumns);
 				}
 				m_userControlValues.ApplyFilter();
 				m_userControlValues.UpdateShownColumnsContextMenu();
-			}
-			//try
-			//{
-				
-			//    Application.DoEvents();
-			//    /// Get permission to SqlDependency
-			//    SqlClientPermission perm = new SqlClientPermission(PermissionState.Unrestricted);
-			//    perm.Demand();
-
-			//    SqlDependency.Stop(ConnectionFactory.ConnectionString);
-			//    SqlDependency.Start(ConnectionFactory.ConnectionString);
-
-			//    if (enableSqlDependency && !sqlDependencyActive)
-			//        AddSqlDependency(sql_cmd);
-			//}
-			//catch{ 
-			//    //(Exception dep){
-			//    //MessageBox.Show(dep.ToString());
-			//}
+			}		
 		}
 
 		void FillDataGridColumnConstrains()
-		{
-			string sql_str = "select CN.COLUMN_NAME As [Column] ,TB.CONSTRAINT_NAME as [Constraint] , TB.CONSTRAINT_TYPE as [Type]"
-	+ "from  INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CN inner join "
-	+ " INFORMATION_SCHEMA.TABLE_CONSTRAINTS TB on (CN.TABLE_NAME = TB.TABLE_NAME AND CN.CONSTRAINT_NAME = TB.CONSTRAINT_NAME) "
-	+ "WHERE  CN.TABLE_NAME = '" + this.TableName + "'  ";
+		{			
+			DataView dataView = new DataView(TableInfo.ColumnConstrains);
+			dataView.RowFilter = GetDataViewFilter(TableInfo.ColumnConstrains.ColumnColumnName.ColumnName);
 
-			if (dataGridView_Columns.SelectedRows.Count > 0)
+			if (TableInfo.ColumnConstrains == null || TableInfo.ColumnConstrains.Rows.Count == 0)
 			{
-				string cols = "";
-				foreach (DataGridViewRow row in dataGridView_Columns.SelectedRows)
-				{
-					if (cols != "") cols += " OR ";
-
-					string col_name = row.Cells[0].Value.ToString();
-					cols += " CN.COLUMN_NAME = '" + col_name + "' ";
-				}
-				sql_str += " AND ( " + cols + " ) ";
-
+				dataGridView_ColumnConstrains.DataSource = null;
 			}
-
-			DataSet ds = FillDataSet(sql_str);
-
-			if (ds != null && ds.Tables.Count > 0)
+			else
 			{
-				dataGridView_ColumnConstrains.DataSource = ds.Tables[0];
+				dataGridView_ColumnConstrains.DataSource = dataView;
 				dataGridView_ColumnConstrains.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
 				dataGridView_ColumnConstrains.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 				dataGridView_ColumnConstrains.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -367,67 +360,35 @@ namespace ColumnDepence
 
 		void FillDataGridParentTables()
 		{
-			string sql_str = " SELECT COL2.name AS Parent ,    tb.name + ' . ' + COL1.name AS Referenced_Column " //tb2.name AS RefTab, 
-				+ @"FROM         sys.columns AS COL1 INNER JOIN
-                      sys.columns AS COL2 INNER JOIN
-                      sys.tables AS tb2 INNER JOIN
-                      sys.foreign_key_columns AS FK INNER JOIN
-                      sys.tables AS tb ON FK.parent_object_id = tb.object_id ON tb2.object_id = FK.referenced_object_id ON COL2.column_id = FK.referenced_column_id AND
-                       COL2.object_id = FK.referenced_object_id ON COL1.column_id = FK.parent_column_id AND COL1.object_id = FK.parent_object_id "
-				+ " WHERE tb2.name = @TABSEARCH ";
+			DataView dataView = new DataView(TableInfo.ParentReferencedTable);
+			dataView.RowFilter = GetDataViewFilter(TableInfo.ParentReferencedTable.ColumnParentColumnName.ColumnName);
 
-			List<string> sel_columns = this.GetSelectedColumnNames();
-			string cols_sql = "";
-			foreach (string column in sel_columns)
+			if (TableInfo.ParentReferencedTable == null || TableInfo.ParentReferencedTable.Rows.Count == 0)
 			{
-				if (cols_sql != "") cols_sql += " OR ";
-				cols_sql += " COL2.name = '" + column + "' ";
+				dataGridView_Parent.DataSource = null;
 			}
-			if (cols_sql != "")
+			else
 			{
-				sql_str += " AND (" + cols_sql + ") ";
-			}
-			DataSet ds = this.FillDataSet(sql_str);
-			if (ds != null && ds.Tables.Count > 0)
-			{
-				dataGridView_Parent.DataSource = ds.Tables[0];
-				dataGridView_Parent.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-				dataGridView_Parent.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-				dataGridView_Parent.Columns[1].ContextMenuStrip = m_contextMenuStrip_ShowTable;
+				dataGridView_Parent.DataSource = dataView;
+				TableInfo.ParentReferencedTable.SetColumns(dataGridView_Parent);
+				dataGridView_Parent.Columns[0].ContextMenuStrip = m_contextMenuStrip_ShowTable;
 			}
 		}
 
 		void FillDataGridChildTables()
 		{
-			string sql_str = " SELECT    COL1.name AS Parent_Column, tb2.name +' . '+ COL2.name AS Referenced_Colomn " // 
-				+ @"FROM         sys.columns AS COL1 INNER JOIN
-                      sys.columns AS COL2 INNER JOIN
-                      sys.tables AS tb2 INNER JOIN
-                      sys.foreign_key_columns AS FK INNER JOIN
-                      sys.tables AS tb ON FK.parent_object_id = tb.object_id ON tb2.object_id = FK.referenced_object_id ON COL2.column_id = FK.referenced_column_id AND
-                       COL2.object_id = FK.referenced_object_id ON COL1.column_id = FK.parent_column_id AND COL1.object_id = FK.parent_object_id "
-				+ " WHERE tb.name = @TABSEARCH ";
 
-			List<string> sel_columns = this.GetSelectedColumnNames();
-			string cols_sql = "";
-			foreach (string column in sel_columns)
-			{
-				if (cols_sql != "") cols_sql += " OR ";
-				cols_sql += " COL1.name = '" + column + "' ";
-			}
-			if (cols_sql != "")
-			{
-				sql_str += " AND (" + cols_sql + ") ";
-			}
-			DataSet ds = this.FillDataSet(sql_str);
+			DataView dataView = new DataView(TableInfo.ChildReferencedTable);
+			dataView.RowFilter = GetDataViewFilter(TableInfo.ChildReferencedTable.ColumnChildColumnName.ColumnName);
 
-			if (ds != null && ds.Tables.Count > 0)
+			if (TableInfo.ChildReferencedTable == null || TableInfo.ChildReferencedTable.Rows.Count == 0) 
 			{
-				dataGridView_Child.DataSource = ds.Tables[0];
-				dataGridView_Child.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-				dataGridView_Child.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-				dataGridView_Child.Columns[1].ContextMenuStrip = m_contextMenuStrip_ShowTable;
+				dataGridView_Child.DataSource = null;
+			}else
+			{
+				dataGridView_Child.DataSource = dataView;
+				TableInfo.ChildReferencedTable.SetColumns(dataGridView_Child);
+				dataGridView_Child.Columns[0].ContextMenuStrip = m_contextMenuStrip_ShowTable;
 			}
 		}
 
@@ -482,36 +443,79 @@ namespace ColumnDepence
 
 
 		}
+		//DataTable FillDataTable(string sql_cmd_str, DataTable dataTable)
+		//{
+		//    try
+		//    {
+		//        if (ConnectionFactory.Instance == null) return null;
 
+		//        ConnectionFactory.OpenConnection();
 
-		DataSet FillDataSet(string sql_cmd_str)
+		//        SqlCommand com = new SqlCommand(sql_cmd_str, ConnectionFactory.Instance);
+		//        if (sql_cmd_str.IndexOf("@TABSEARCH") > -1)
+		//        {
+		//            com.Parameters.Add("@TABSEARCH", SqlDbType.NVarChar);
+		//            com.Parameters["@TABSEARCH"].Value = this.TableName;
+		//        }
+		//        using (SqlDataAdapter adapter = new SqlDataAdapter(com))
+		//        {
+
+		//            if (dataTable == null)
+		//            {
+		//                dataTable = new DataTable();
+		//            }
+		//            adapter.Fill(dataTable);
+		//            return dataTable;
+		//        }
+		//    }
+		//    catch
+		//    {
+		//        return null;
+
+		//    }
+		//    finally
+		//    {
+		//        ConnectionFactory.CloseConnection();
+		//    }
+		//}
+
+		
+		DataSet FillDataSet(string sql_cmd_str, DataSet dataSet)
 		{
 			try
 			{
-				if (this.Connection.State != ConnectionState.Open)
-				{
-					this.Connection.Open();
-				}
+				ConnectionFactory.OpenConnection();
 
-				SqlCommand com = new SqlCommand(sql_cmd_str, this.Connection);
+				SqlCommand com = new SqlCommand(sql_cmd_str, ConnectionFactory.Instance);
 				if (sql_cmd_str.IndexOf("@TABSEARCH") > -1)
 				{
 					com.Parameters.Add("@TABSEARCH", SqlDbType.NVarChar);
 					com.Parameters["@TABSEARCH"].Value = this.TableName;
 				}
 				using (SqlDataAdapter adapter = new SqlDataAdapter(com))
-				{
-					DataSet ds = new DataSet();
-					adapter.Fill(ds);
-					return ds;
+				{					
+					if (dataSet == null)
+					{
+						dataSet = new DataSet();
+					}
+					adapter.Fill(dataSet);
+					return dataSet;
 				}
-
+			}catch{
+				return null;
 			}
 			finally
 			{
-				this.Connection.Close();
+				ConnectionFactory.CloseConnection();
 			}
 		}
+
+
+		DataSet FillDataSet(string sql_cmd_str)
+		{
+			return FillDataSet(sql_cmd_str ,null);
+		}
+
 
 		void ShowTableValues_Click(object sender, EventArgs e) {
 			try
@@ -521,7 +525,7 @@ namespace ColumnDepence
 				Control c = tool.SourceControl;
 				DataGridViewRow row = (((System.Windows.Forms.DataGridView)(c))).CurrentRow;
 				string table = GetTableNameFromColumnValue(row.Cells[1].Value.ToString());
-				m_parentForm.CreateTabPageWithValues(table);
+				m_parentForm.CreateTabPageWithValues(table,null);
 			}
 			catch { }
 		}
@@ -534,7 +538,7 @@ namespace ColumnDepence
 				Control c = tool.SourceControl;
 				DataGridViewRow row = (((System.Windows.Forms.DataGridView)(c))).CurrentRow;
 				string table = GetTableNameFromColumnValue(row.Cells[1].Value.ToString());
-				m_parentForm.CreateTabPageWithDefinition(table);
+				m_parentForm.CreateTabPageWithDefinition(table,null);
 			}
 			catch { }
 		}
@@ -573,7 +577,7 @@ namespace ColumnDepence
 				//this.toolStripButton_ToolBox.Text = "Show as tool box";
 				//this.toolStripButton_CloseTab.Visible = true;
 				
-				TabPage tp = m_parentForm.GetTabPage(this.TableName);
+				TabPage tp = m_parentForm.GetTabPage(this.TableName,null);
 				((UserControlAllTableInfo)tp.Controls[0]).InitControl(this.TableName, this.ShowAllTableInfo, m_parentForm);
 			}
 		}
@@ -673,6 +677,20 @@ namespace ColumnDepence
 			}
 			return result;
 		}
+
+		private string GetDataViewFilter(string onColumn)
+		{
+			List<string> sel_columns = this.GetSelectedColumnNames();
+			string dv_filter = "";
+
+			foreach (string column in sel_columns)
+			{
+				if (dv_filter != "") dv_filter += " OR ";
+				dv_filter += onColumn + " = '" + column + "' ";
+			}
+			return dv_filter;
+		}
+
 		private string GetTableNameFromColumnValue(string column_value) {
 			if (column_value == null || column_value == "") return null;
 
@@ -684,81 +702,9 @@ namespace ColumnDepence
 			{
 				return null;
 			}
-		}
+		}		
 
-
-		
-		#region TODO: SqlDependency 
-		bool enableSqlDependency = true;
-		bool sqlDependencyActive = false;
-		SqlCommand dependency_command = null;
-
-		private void AddSqlDependency(string sql_cmd)
-		{
-			try
-			{
-				
-				if (dependency_command == null)
-				{
-					dependency_command = new SqlCommand(sql_cmd, ConnectionFactory.Instance);
-				}
-				else
-				{
-					dependency_command.CommandText = sql_cmd ;
-				}
-
-				// Make sure the command object does not already have
-				// a notification object associated with it.
-				dependency_command.Notification = null;
-
-				// Create and bind the SqlDependency object
-				// to the command object.
-				SqlDependency dependency = new SqlDependency(dependency_command);
-				dependency.OnChange += new OnChangeEventHandler(SqlDependency_OnChange);				
-			}
-			catch (Exception exc)
-			{
-				sqlDependencyActive = false;
-				MessageBox.Show(exc.ToString());
-			}
-			sqlDependencyActive = true;
-		}
-
-		private void SqlDependency_OnChange(object sender, SqlNotificationEventArgs e)
-		{
-			// This event will occur on a thread pool thread.
-			// Updating the UI from a worker thread is not permitted.
-			// The following code checks to see if it is safe to
-			// update the UI.
-			ISynchronizeInvoke i = (ISynchronizeInvoke)this;
-
-			// If InvokeRequired returns True, the code
-			// is executing on a worker thread.
-			if (i.InvokeRequired)
-			{
-				// Create a delegate to perform the thread switch.
-				OnChangeEventHandler tempDelegate = new OnChangeEventHandler(SqlDependency_OnChange);
-
-				object[] args = { sender, e };
-
-				// Marshal the data from the worker thread
-				// to the UI thread.
-				i.BeginInvoke(tempDelegate, args);
-
-				return;
-			}
-			// Remove the handler, since it is only good
-			// for a single notification.
-			SqlDependency dependency =	(SqlDependency)sender;
-
-			dependency.OnChange -= SqlDependency_OnChange;
-			
-			// Reload the dataset that is bound to the grid.
-			FillDataGridValues(m_userControlValues.ValuesDataGrid);
-		}
-		#endregion SqlDependency
-
-		private void m_toolStripMenuItem_ShowDefinition_Click(object sender, EventArgs e)
+		private void ToolStripMenuItem_ShowDefinition_Click(object sender, EventArgs e)
 		{
 			try
 			{

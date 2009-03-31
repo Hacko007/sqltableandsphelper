@@ -57,6 +57,14 @@
     </Compile>
     <Compile Include="ColumnFilter.cs" />
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="DbInfo\TableFilterData.cs" />
+    <Compile Include="DbInfo\TableFilterDataCollection.cs" />
+    <Compile Include="DbInfo\DataTableColumnConstrains.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DbInfo\DataTableReferencedColumnTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormSelectShownColumns.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +131,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="StackSetting.cs" />
+    <Compile Include="DbInfo\TableInfo.cs" />
     <Compile Include="UserControlAllTableInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
