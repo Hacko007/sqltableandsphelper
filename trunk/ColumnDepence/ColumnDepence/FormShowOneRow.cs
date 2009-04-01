@@ -14,27 +14,47 @@ namespace ColumnDepence
 		public DataGridView DataGridValues { get; set; }
 		public DataTable DataTable {
 			get {
-				if (DataGridValues == null || (DataGridValues.DataSource is DataView) == false )
+				if (DataGridValues == null || (DataGridValues.DataSource is DataTable) == false )
 					return null;
-				
-				return ((DataView)DataGridValues.DataSource).Table as DataTable;
+
+				return DataGridValues.DataSource as DataTable;
 			}
 		}
-
-		private DataRow m_ActiveRow;
-		public DataRow ActiveRow {
+		private int m_RowIndex = -1;
+		public int RowIndex
+		{
 			get {
 				if (DataTable == null || DataTable.Rows.Count == 0)
-					return null;
+					return -1;
 
-				if (m_ActiveRow == null)
+				if (m_RowIndex >= DataTable.Rows.Count)
 				{
-					ActiveRow = DataTable.Rows[0];
+					m_RowIndex = DataTable.Rows.Count - 1;
 				}
-				return m_ActiveRow; 
+				else if (m_RowIndex < 0)
+				{
+					m_RowIndex = 0;
+				}
+				return m_RowIndex; 
 			}
+			set { m_RowIndex = value; }
+		}
 
-			set { m_ActiveRow = value; }
+		//private DataRow m_ActiveRow;
+		public DataRow ActiveRow {
+			get {
+				try
+				{
+					if (RowIndex == -1)
+						return null;
+					//m_ActiveRow = DataTable.Rows[RowIndex];
+
+					return DataTable.Rows[RowIndex]; ;
+				}
+				catch {
+					return null;
+				}
+			}
 		}
 		
 		
@@ -52,65 +72,59 @@ namespace ColumnDepence
 				return;
 			}
 
-			m_PropertyGridRowData.SelectedObject = ActiveRow.ItemArray ;//ActiveRowValues;
+			m_dataGridViewValue.Rows.Clear();
+
+			foreach (DataColumn column in ActiveRow.Table.Columns)
+			{
+				m_dataGridViewValue.Rows.Add(column.ColumnName, ActiveRow[column]);
+			}
+			
 			m_ButtonUpdate.Enabled = false;
 			m_ButtonCancel.Enabled = false;
-		}
 
-		private object[] ActiveRowValues {
-			get {
-				if (ActiveRow == null) return null;
-				List<object> values = new List<object>();
-				
-				//foreach (DataGridViewCell item in ActiveRow.Cells)
-				//{
-				//    values.Add(item.Value);
-				//}
-				return values.ToArray();
+			if (DataTable != null) {
+				m_labelTabName.Text = DataTable.TableName;
+				this.Text = "Show one row in " + DataTable.TableName;
 			}
 		}
+
 
 		private void ButtonPrev_Click(object sender, EventArgs e)
 		{
-			if (DataTable == null || DataTable.Rows.Count == 0)
+			if (RowIndex > 0)
 			{
-				DisableAllButtons(); 
-				return;
+				RowIndex--;
+				LoadRowItnoView();
 			}
-			
-
-			//foreach (DataGridViewRow item in SelectedRows)
-			//{
-
-			//}
-
 		}
 
 		private void ButtonNext_Click(object sender, EventArgs e)
-		{
-			if (DataTable == null || DataTable.Rows.Count == 0)
-			{
-				DisableAllButtons();
-				return;
-			}
-			
+		{			
+				RowIndex++;
+				LoadRowItnoView();			
 		}
 
 
 		private void ButtonUpdate_Click(object sender, EventArgs e)
 		{
-
+			//TODO: Save changes
+			MessageBox.Show("Not implemented");
+			DataTable.RejectChanges();
+			LoadRowItnoView();						
+			EnableEditButtons(false);
 		}
 
 		private void ButtonCancel_Click(object sender, EventArgs e)
 		{
-
+			DataTable.RejectChanges();
+			LoadRowItnoView();			
+			EnableEditButtons(false);
 		}
 
-		private void PropertyGridRowData_SelectedObjectsChanged(object sender, EventArgs e)
+		private void EnableEditButtons(bool enable)
 		{
-			m_ButtonUpdate.Enabled = true;
-			m_ButtonCancel.Enabled = true;
+			m_ButtonUpdate.Enabled = enable;
+			m_ButtonCancel.Enabled = enable;
 		}
 
 		private void DisableAllButtons() {
@@ -119,6 +133,11 @@ namespace ColumnDepence
 			m_ButtonUpdate.Enabled = true;
 			m_ButtonCancel.Enabled = true;
 		
+		}
+
+		private void DataGridViewValue_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+		{
+			EnableEditButtons(true);			
 		}
 	}
 }
