@@ -671,7 +671,7 @@ namespace ColumnDepence
 
 		private void ShowRowInfoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (dataGridView_Values.SelectedRows.Count == 0) return;
+			if (dataGridView_Values.Rows.Count == 0) return;
 
 			FormShowOneRow showOneRow = new FormShowOneRow();
 			showOneRow.DataGridValues = dataGridView_Values;

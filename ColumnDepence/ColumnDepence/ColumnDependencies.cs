@@ -286,13 +286,15 @@ namespace ColumnDepence
 			if (tabControl_TableInfo.TabPages.ContainsKey(tableName))
 			{
 				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[tableName];
-				if (filter == null || ((tabControl_TableInfo.SelectedTab.Controls[0] is UserControlAllTableInfo) == false)) return;
 				try
 				{
+					if (filter == null || ((tabControl_TableInfo.SelectedTab.Controls[0] is UserControlAllTableInfo) == false)) 
+						return;
+			
 					UserControlAllTableInfo allInfo = tabControl_TableInfo.SelectedTab.Controls[0] as UserControlAllTableInfo;
 					allInfo.SetFilter(filter);
 				}
-				catch {}
+				catch { }
 			}
 			else
 			{
@@ -306,7 +308,7 @@ namespace ColumnDepence
 
 				tabControl_TableInfo.TabPages.Add(tableName, tableName);
 				tabControl_TableInfo.TabPages[tableName].Controls.Add(allInfo);
-				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[tableName];			
+				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[tableName];
 			}
 		}
 

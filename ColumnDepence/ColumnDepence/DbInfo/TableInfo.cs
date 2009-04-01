@@ -29,7 +29,7 @@ namespace ColumnDepence.DbInfo
 
 
 
-		public void LoadColumnConstrains(string tableName) {
+		private void LoadColumnConstrains(string tableName) {
 			if (ColumnConstrains != null && ColumnConstrains.IsDataLoaded) return;
 
 			ColumnConstrains =(DataTableColumnConstrains) FillDataTable(
@@ -45,7 +45,7 @@ namespace ColumnDepence.DbInfo
 			ColumnConstrains.IsDataLoaded = true;
 		}
 
-		public void LoadParentReferencedTable(string tableName)
+		private void LoadParentReferencedTable(string tableName)
 		{
 			if (ParentReferencedTable != null && ParentReferencedTable.IsDataLoaded) return;
 
@@ -63,7 +63,7 @@ namespace ColumnDepence.DbInfo
 		}
 
 
-		public void LoadChildReferencedTable(string tableName)
+		private void LoadChildReferencedTable(string tableName)
 		{
 			if (ChildReferencedTable != null && ChildReferencedTable.IsDataLoaded) return;
 
