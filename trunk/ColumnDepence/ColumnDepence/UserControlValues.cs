@@ -7,6 +7,7 @@ using System.Text;
 using ColumnDepence.DbInfo;
 using System.IO;
 using ColumnDepence.Filters;
+using System.Drawing;
 
 namespace ColumnDepence
 {
@@ -486,7 +487,7 @@ namespace ColumnDepence
 									row[TableInfo.ParentReferencedTable.ColumnTableName].ToString(),
 									row[TableInfo.ParentReferencedTable.ColumnParentColumnName].ToString(),
 									cell.Value,
-									TableRelation.Parent);
+									TableRelation.Child);
 							}							
 						}
 					}
@@ -504,7 +505,7 @@ namespace ColumnDepence
 									row[TableInfo.ChildReferencedTable.ColumnTableName].ToString(),
 									row[TableInfo.ChildReferencedTable.ColumnParentColumnName].ToString(),
 									cell.Value, 
-									TableRelation.Child);
+									TableRelation.Parent);
 							}
 
 						}
@@ -522,8 +523,25 @@ namespace ColumnDepence
 			/// 
 			foreach (KeyValuePair<string, TableFilterData> table in cellValues.Tables.OrderBy(tab=> tab.Value.TableRelation).ThenBy(tab=> tab.Value.TableName) )
 			{
-				if(tabRelation != table.Value.TableRelation)
+				if (tabRelation != table.Value.TableRelation)
+				{
 					m_contextMenuStripShownColumns.Items.Add(new ToolStripSeparator());
+					ToolStripLabel toolStripLabel = new ToolStripLabel();
+					toolStripLabel.ForeColor = Color.DarkGray;
+					toolStripLabel.Font = new Font(toolStripLabel.Font, FontStyle.Bold | FontStyle.Underline);
+					switch (table.Value.TableRelation)
+					{
+						case TableRelation.Parent:
+							toolStripLabel.Text = "   Parent tables   ";
+							m_contextMenuStripShownColumns.Items.Add(toolStripLabel);
+							break;
+						case TableRelation.Child:
+							toolStripLabel.Text = "   Child tables   ";
+							m_contextMenuStripShownColumns.Items.Add(toolStripLabel);
+							break;					
+					}
+					
+				}
 
 				ToolStripMenuItem tabMenuItem = new ToolStripMenuItem(table.Key);
 				tabMenuItem.Tag = table.Value;

@@ -285,7 +285,14 @@ namespace ColumnDepence
 		{
 			if (tabControl_TableInfo.TabPages.ContainsKey(tableName))
 			{
-					tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[tableName];
+				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[tableName];
+				if (filter == null || ((tabControl_TableInfo.SelectedTab.Controls[0] is UserControlAllTableInfo) == false)) return;
+				try
+				{
+					UserControlAllTableInfo allInfo = tabControl_TableInfo.SelectedTab.Controls[0] as UserControlAllTableInfo;
+					allInfo.SetFilter(filter);
+				}
+				catch {}
 			}
 			else
 			{

@@ -310,7 +310,7 @@ namespace ColumnDepence
 			if (selected_columns == null) return;
 
 			string sql_cmd = (this.get_all_rows)
-				? "SELECT  "+ selected_columns +" FROM  " + this.TableName
+				? "SELECT  TOP 5000 " + selected_columns + " FROM  " + this.TableName
 				: "SELECT  TOP 300 " + selected_columns + " FROM  " + this.TableName;			
 
 			if (rowFilter != "") {
