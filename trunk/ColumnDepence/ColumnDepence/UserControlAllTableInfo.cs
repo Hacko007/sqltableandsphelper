@@ -106,39 +106,42 @@ namespace ColumnDepence
 			Cursor.Current = Cursors.Default;
 
 			ColumnDependencies.FormMain.StatusInfo1 = this.TableName + " definition loaded";
-			
-			/// 
-			/// Fix splitcontaner size for empty datagrids
-			/// 
-
-			int empty_space = 15;
-
-			/// Left slit container
-			splitContainer_left.SplitterDistance -= FreeSpace(dataGridView_Columns) - empty_space;
-			if(m_userControlValues.ValuesDataGrid.Rows.Count == 0)
-				splitContainer_left.SplitterDistance = Math.Min(splitContainer_left.Height - 80, splitContainer_left.SplitterDistance);
-			else
-				splitContainer_left.SplitterDistance = Math.Min(splitContainer_left.Height - 150, splitContainer_left.SplitterDistance);
-
-			/// Right split containeer
-			
-			int sz_sum = FreeSpace(dataGridView_Child) 
-				+ FreeSpace(dataGridView_ColumnConstrains)
-				+ FreeSpace(dataGridView_Parent) 
-				+ FreeSpace(dataGridView_Sp);
-
-			if (splitContainer_right.Height + sz_sum > 0)
+			try
 			{
-				splitContainer_right.SplitterDistance -= FreeSpace(dataGridView_ColumnConstrains) - empty_space;
-				splitContainer_RightBottom.SplitterDistance -= FreeSpace(dataGridView_Parent) - empty_space;
-				splitContainer_LeftSpButtom.SplitterDistance -= FreeSpace(dataGridView_Child) - empty_space;
+				/// 
+				/// Fix splitcontaner size for empty datagrids
+				/// 
+
+				int empty_space = 15;
+
+				/// Left slit container
+				splitContainer_left.SplitterDistance -= FreeSpace(dataGridView_Columns) - empty_space;
+				if (m_userControlValues.ValuesDataGrid.Rows.Count == 0)
+					splitContainer_left.SplitterDistance = Math.Min(splitContainer_left.Height - 80, splitContainer_left.SplitterDistance);
+				else
+					splitContainer_left.SplitterDistance = Math.Min(splitContainer_left.Height - 150, splitContainer_left.SplitterDistance);
+
+				/// Right split containeer
+
+				int sz_sum = FreeSpace(dataGridView_Child)
+					+ FreeSpace(dataGridView_ColumnConstrains)
+					+ FreeSpace(dataGridView_Parent)
+					+ FreeSpace(dataGridView_Sp);
+
+				if (splitContainer_right.Height + sz_sum > 0)
+				{
+					splitContainer_right.SplitterDistance -= FreeSpace(dataGridView_ColumnConstrains) - empty_space;
+					splitContainer_RightBottom.SplitterDistance -= FreeSpace(dataGridView_Parent) - empty_space;
+					splitContainer_LeftSpButtom.SplitterDistance -= FreeSpace(dataGridView_Child) - empty_space;
+				}
+				else
+				{
+					if (FreeSpace(dataGridView_ColumnConstrains) > 0) splitContainer_right.SplitterDistance -= FreeSpace(dataGridView_ColumnConstrains) - empty_space;
+					if (FreeSpace(dataGridView_Parent) > 0) splitContainer_RightBottom.SplitterDistance -= FreeSpace(dataGridView_Parent) - empty_space;
+					if (FreeSpace(dataGridView_Child) > 0) splitContainer_LeftSpButtom.SplitterDistance -= FreeSpace(dataGridView_Child) - empty_space;
+				}
 			}
-			else 			
-			{
-				if (FreeSpace(dataGridView_ColumnConstrains) > 0) splitContainer_right.SplitterDistance -= FreeSpace(dataGridView_ColumnConstrains) - empty_space;
-				if (FreeSpace(dataGridView_Parent) > 0) splitContainer_RightBottom.SplitterDistance -= FreeSpace(dataGridView_Parent) - empty_space;
-				if (FreeSpace(dataGridView_Child) > 0) splitContainer_LeftSpButtom.SplitterDistance -= FreeSpace(dataGridView_Child) - empty_space;			
-			}							
+			catch { }					
 		}
 
 
@@ -524,7 +527,7 @@ namespace ColumnDepence
 				ContextMenuStrip tool = (ContextMenuStrip)itm.GetCurrentParent();
 				Control c = tool.SourceControl;
 				DataGridViewRow row = (((System.Windows.Forms.DataGridView)(c))).CurrentRow;
-				string table = GetTableNameFromColumnValue(row.Cells[1].Value.ToString());
+				string table = row.Cells[0].Value.ToString();
 				m_parentForm.CreateTabPageWithValues(table,null);
 			}
 			catch { }
@@ -537,7 +540,7 @@ namespace ColumnDepence
 				ContextMenuStrip tool = (ContextMenuStrip)itm.GetCurrentParent();
 				Control c = tool.SourceControl;
 				DataGridViewRow row = (((System.Windows.Forms.DataGridView)(c))).CurrentRow;
-				string table = GetTableNameFromColumnValue(row.Cells[1].Value.ToString());
+				string table = row.Cells[0].Value.ToString();
 				m_parentForm.CreateTabPageWithDefinition(table,null);
 			}
 			catch { }
@@ -689,19 +692,6 @@ namespace ColumnDepence
 				dv_filter += onColumn + " = '" + column + "' ";
 			}
 			return dv_filter;
-		}
-
-		private string GetTableNameFromColumnValue(string column_value) {
-			if (column_value == null || column_value == "") return null;
-
-			int ix = column_value.IndexOf('.');
-			if (ix > 0) {
-				return column_value.Substring(0, ix).Trim();
-			}
-			else
-			{
-				return null;
-			}
 		}		
 
 		private void ToolStripMenuItem_ShowDefinition_Click(object sender, EventArgs e)
