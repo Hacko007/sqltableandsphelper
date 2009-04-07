@@ -101,8 +101,7 @@ namespace ColumnDepence
 			Application.DoEvents();
 			FillSPDependecies();
 			this.m_userControlValues.TableInfo = this.TableInfo;
-			Application.DoEvents();
-			this.InitDataGridsStyle();
+			Application.DoEvents();			
 			Cursor.Current = Cursors.Default;
 
 			ColumnDependencies.FormMain.StatusInfo1 = this.TableName + " definition loaded";
@@ -119,7 +118,7 @@ namespace ColumnDepence
 				if (m_userControlValues.ValuesDataGrid.Rows.Count == 0)
 					splitContainer_left.SplitterDistance = Math.Min(splitContainer_left.Height - 80, splitContainer_left.SplitterDistance);
 				else
-					splitContainer_left.SplitterDistance = Math.Min(splitContainer_left.Height - 150, splitContainer_left.SplitterDistance);
+					splitContainer_left.SplitterDistance = Math.Min(splitContainer_left.Height - 250, splitContainer_left.SplitterDistance);
 
 				/// Right split containeer
 
@@ -229,33 +228,6 @@ namespace ColumnDepence
 		
 		public SqlConnection Connection { get; set; }
 		public bool ShowAllTableInfo { get; set; }
-
-
-
-
-		void SetCellStyle(DataGridView dg, DataGridViewCellStyle style)
-		{
-			for (int i = 0; i < dg.Columns.Count; i++)
-			{
-				dg.Columns[i].DefaultCellStyle = style;
-			}
-		}
-
-		private void InitDataGridsStyle()
-		{
-			DataGridViewCellStyle style = new DataGridViewCellStyle();
-
-			style.Font = new Font(FontFamily.GenericMonospace, 10);
-			SetCellStyle(dataGridView_Columns, style);
-
-			style = new DataGridViewCellStyle();
-			style.Font = new Font(FontFamily.GenericMonospace, 10);
-			SetCellStyle(dataGridView_Child, style);
-			SetCellStyle(dataGridView_ColumnConstrains, style);
-			SetCellStyle(dataGridView_Parent, style);
-			SetCellStyle(m_userControlValues.ValuesDataGrid, style);
-		}
-
 
 
 		void FillColumnDataGrid()
@@ -446,42 +418,6 @@ namespace ColumnDepence
 
 
 		}
-		//DataTable FillDataTable(string sql_cmd_str, DataTable dataTable)
-		//{
-		//    try
-		//    {
-		//        if (ConnectionFactory.Instance == null) return null;
-
-		//        ConnectionFactory.OpenConnection();
-
-		//        SqlCommand com = new SqlCommand(sql_cmd_str, ConnectionFactory.Instance);
-		//        if (sql_cmd_str.IndexOf("@TABSEARCH") > -1)
-		//        {
-		//            com.Parameters.Add("@TABSEARCH", SqlDbType.NVarChar);
-		//            com.Parameters["@TABSEARCH"].Value = this.TableName;
-		//        }
-		//        using (SqlDataAdapter adapter = new SqlDataAdapter(com))
-		//        {
-
-		//            if (dataTable == null)
-		//            {
-		//                dataTable = new DataTable();
-		//            }
-		//            adapter.Fill(dataTable);
-		//            return dataTable;
-		//        }
-		//    }
-		//    catch
-		//    {
-		//        return null;
-
-		//    }
-		//    finally
-		//    {
-		//        ConnectionFactory.CloseConnection();
-		//    }
-		//}
-
 		
 		DataSet FillDataSet(string sql_cmd_str, DataSet dataSet)
 		{
