@@ -31,6 +31,7 @@ namespace ColumnDepence
 			m_userControlHistoryList_Sp.SettingName = "LastUsedSPs";
 			Application.DoEvents();
 			FillAutoCompleteCustomSource();
+			SetTitle();
 			m_This = this;
 		}
 
@@ -145,7 +146,7 @@ namespace ColumnDepence
 		{
 			try
 			{
-				if (m_UserControlConnection.Connect())
+				if (ConnectionFactory.OpenConnection())
 				{
 					SqlCommand com = new SqlCommand(sql_cmd_str, ConnectionFactory.Instance);
 					if (sql_cmd_str.IndexOf("@TABSEARCH") > -1)
@@ -472,6 +473,18 @@ namespace ColumnDepence
 					CreateSPTabPage(m_textBox_SpSearch.Text.Trim());
 					m_textBox_SpSearch.Focus();
 				}
+			}
+		}
+
+		internal void SetTitle()
+		{
+			if (ConnectionFactory.Instance == null)
+			{
+				Text = " DB Info ";
+			}
+			else
+			{
+				Text = " DB Info  -   " + ConnectionFactory.ShortConnectionName;
 			}
 		}
 	}

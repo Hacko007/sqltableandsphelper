@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Data;
 
 namespace ColumnDepence
 {
@@ -14,14 +10,42 @@ namespace ColumnDepence
 	{
 		private ConnectionFactory() { }
 
+		private static void InitConnectionStringFromHistory()
+		{
+			SqlConnectionStringBuilder con = new SqlConnectionStringBuilder();
+			con.DataSource = global::ColumnDepence.Properties.Settings.Default.LastUsedServer;
+			con.InitialCatalog = global::ColumnDepence.Properties.Settings.Default.LastUsedDatabase;
+			con.UserID = global::ColumnDepence.Properties.Settings.Default.LastUsedUsername;
+			con.Password = global::ColumnDepence.Properties.Settings.Default.LastUsedPassword;
+			
+			ConnectionString = con.ConnectionString;
+		}
+
 		private static string connectionString = null;
 		public static string ConnectionString { 
-			get { return connectionString; }
+			get {
+				if (connectionString == null) {
+					InitConnectionStringFromHistory();
+				}
+				return connectionString; 
+			}
 			set
 			{
 				connectionString = value;
 				m_Instance = new SqlConnection(connectionString);				
 			}
+		}
+
+		public static string ShortConnectionName {
+			get {
+				if (Instance == null)
+				{
+					return "";
+				}
+				else {
+					return Instance.DataSource + " . " + Instance.Database;
+				}
+			} 
 		}
 
 		#region Connection factory method
@@ -45,7 +69,7 @@ namespace ColumnDepence
 			}
 		}
 
-		public static void OpenConnection()
+		public static bool OpenConnection()
 		{
 			try
 			{
@@ -53,8 +77,12 @@ namespace ColumnDepence
 				{
 					Instance.Open();
 				}
+				
+				return (Instance.State == ConnectionState.Open);
 			}
-			catch { }
+			catch {
+				return false;
+			}
 		}
 		public static void CloseConnection()
 		{

@@ -122,5 +122,23 @@ namespace ColumnDepence
 
 
 
+
+		internal void RemoveValue(string value)
+		{
+			try
+			{
+				((StringCollection)Properties.Settings.Default[SettingName]).Remove(value);
+				Properties.Settings.Default.Save();
+				FillTableHistoryList();
+			}
+			catch { }
+		}
+
+		internal void Clear()
+		{
+			Properties.Settings.Default[SettingName] = new StringCollection();
+			Properties.Settings.Default.Save();
+			FillTableHistoryList();
+		}
 	}
 }

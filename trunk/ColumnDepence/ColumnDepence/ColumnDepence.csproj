@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="ColumnFilter.cs" />
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="ConnectionStringItem.cs" />
     <Compile Include="DbInfo\TableFilterData.cs" />
     <Compile Include="DbInfo\TableFilterDataCollection.cs" />
     <Compile Include="DbInfo\DataTableColumnConstrains.cs">
@@ -64,6 +65,12 @@
     </Compile>
     <Compile Include="DbInfo\DataTableReferencedColumnTable.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormConnectToDb.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormConnectToDb.Designer.cs">
+      <DependentUpon>FormConnectToDb.cs</DependentUpon>
     </Compile>
     <Compile Include="FormSelectShownColumns.cs">
       <SubType>Form</SubType>
@@ -81,6 +88,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ColumnDependencies.resx">
       <DependentUpon>ColumnDependencies.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConnectToDb.resx">
+      <DependentUpon>FormConnectToDb.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSelectShownColumns.resx">

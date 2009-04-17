@@ -108,7 +108,8 @@ namespace ColumnDepence
 			FillDependecies();
 			Application.DoEvents();
 			FillSPDefinition();
-			Cursor = Cursors.Default;			
+			Cursor = Cursors.Default;
+			m_toolStripLabelConnection.Text = ConnectionFactory.ShortConnectionName;
 		}
 
 
@@ -275,7 +276,7 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 					}
 				}
 			}
-			catch (SqlException sexc)
+			catch (SqlException)
 			{
 				MessageBox.Show("Checke if " + SPName + " exists in database");
 			}
@@ -523,6 +524,41 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 
 		#endregion ToolStripMenuItem events
 
+		private void ToolStripTextBoxFind_TextChanged(object sender, EventArgs e)
+		{
+			m_richTextBox_Definition.SelectAll();			
+			m_richTextBox_Definition.SelectionBackColor = Color.White;				
+
+			if (m_toolStripTextBoxFind.Text.Trim().Length == 0)
+			{
+				LastFindIndex = 0;
+				return;
+			}
+			else
+			{
+				FindText(m_toolStripTextBoxFind.Text, 0, true);
+			}
+		}
+
+		private void FindText(string searchString, int startingFrom , bool scrollToString)
+		{
+			
+			LastFindIndex = m_richTextBox_Definition.Find(searchString, startingFrom, RichTextBoxFinds.None );
+			
+			/// Add color
+			if (LastFindIndex >= 0) 
+			{
+				m_richTextBox_Definition.SelectionStart = LastFindIndex;
+				m_richTextBox_Definition.SelectionLength = searchString.Length;
+				m_richTextBox_Definition.SelectionBackColor = Color.LightGreen;
+				if(scrollToString)
+					m_richTextBox_Definition.ScrollToCaret();
+
+				FindText(searchString, LastFindIndex + 1, false);
+			}
+		}		
+
+		public int LastFindIndex { get; set; }
 
 	}
 
