@@ -629,17 +629,17 @@ namespace ColumnDepence
 					m_ShowRowInfoToolStripMenuItem
 				});
 			
-			return;
+			//return;
 
-			foreach (string item in AllColumns)
-			{
-				bool selected = (ShownColumns != null && ShownColumns.Contains(item));
-				ToolStripMenuItem mi = new ToolStripMenuItem(item);
-				mi.CheckOnClick = true;
-				mi.Checked = selected;
-				mi.CheckedChanged += new EventHandler(ShowColumnToolStripMenuItem_CheckedChanged);
-				m_contextMenuStripShownColumns.Items.Add(mi);
-			}
+			//foreach (string item in AllColumns)
+			//{
+			//    bool selected = (ShownColumns != null && ShownColumns.Contains(item));
+			//    ToolStripMenuItem mi = new ToolStripMenuItem(item);
+			//    mi.CheckOnClick = true;
+			//    mi.Checked = selected;
+			//    mi.CheckedChanged += new EventHandler(ShowColumnToolStripMenuItem_CheckedChanged);
+			//    m_contextMenuStripShownColumns.Items.Add(mi);
+			//}
 		}
 
 		void ShowColumnToolStripMenuItem_CheckedChanged(object sender, EventArgs e)

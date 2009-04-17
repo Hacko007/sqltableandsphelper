@@ -56,9 +56,9 @@ namespace ColumnDepence.DbInfo
 				dataGridView.Columns[1].HeaderText = ColumnParentColumnName.Caption;
 				dataGridView.Columns[2].HeaderText = ColumnChildColumnName.Caption;
 
-				dataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-				dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
-				dataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+				dataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+				dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+				dataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
 
 				dataGridView.Columns[1].ContextMenuStrip = null;
 				dataGridView.Columns[2].ContextMenuStrip = null;

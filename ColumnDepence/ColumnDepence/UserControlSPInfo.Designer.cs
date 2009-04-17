@@ -42,6 +42,11 @@
 			this.m_toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripButtonShowAsToolBox = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripButtonShowParamInfo = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.m_toolStripLabelFind = new System.Windows.Forms.ToolStripLabel();
+			this.m_toolStripTextBoxFind = new System.Windows.Forms.ToolStripTextBox();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.m_toolStripLabelConnection = new System.Windows.Forms.ToolStripLabel();
 			this.m_splitContainer_Main.Panel1.SuspendLayout();
 			this.m_splitContainer_Main.Panel2.SuspendLayout();
 			this.m_splitContainer_Main.SuspendLayout();
@@ -142,6 +147,7 @@
 			// 
 			// m_richTextBox_Definition
 			// 
+			this.m_richTextBox_Definition.AcceptsTab = true;
 			this.m_richTextBox_Definition.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_richTextBox_Definition.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.m_richTextBox_Definition.Location = new System.Drawing.Point(0, 0);
@@ -170,7 +176,12 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_toolStripButtonClose,
             this.m_toolStripButtonShowAsToolBox,
-            this.m_toolStripButtonShowParamInfo});
+            this.m_toolStripButtonShowParamInfo,
+            this.toolStripSeparator1,
+            this.m_toolStripLabelFind,
+            this.m_toolStripTextBoxFind,
+            this.toolStripSeparator2,
+            this.m_toolStripLabelConnection});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(1021, 25);
@@ -206,6 +217,33 @@
 			this.m_toolStripButtonShowParamInfo.Size = new System.Drawing.Size(116, 22);
 			this.m_toolStripButtonShowParamInfo.Text = "Show ralationships";
 			this.m_toolStripButtonShowParamInfo.CheckedChanged += new System.EventHandler(this.ToolStripButtonShowParamInfo_CheckedChanged);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
+			// m_toolStripLabelFind
+			// 
+			this.m_toolStripLabelFind.Name = "m_toolStripLabelFind";
+			this.m_toolStripLabelFind.Size = new System.Drawing.Size(31, 22);
+			this.m_toolStripLabelFind.Text = "Find:";
+			// 
+			// m_toolStripTextBoxFind
+			// 
+			this.m_toolStripTextBoxFind.Name = "m_toolStripTextBoxFind";
+			this.m_toolStripTextBoxFind.Size = new System.Drawing.Size(150, 25);
+			this.m_toolStripTextBoxFind.TextChanged += new System.EventHandler(this.ToolStripTextBoxFind_TextChanged);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+			// 
+			// m_toolStripLabelConnection
+			// 
+			this.m_toolStripLabelConnection.Name = "m_toolStripLabelConnection";
+			this.m_toolStripLabelConnection.Size = new System.Drawing.Size(0, 22);
 			// 
 			// UserControlSPInfo
 			// 
@@ -248,5 +286,10 @@
 		private System.Windows.Forms.ToolStripButton m_toolStripButtonShowAsToolBox;
 		private System.Windows.Forms.ToolStripButton m_toolStripButtonClose;
 		private System.Windows.Forms.ToolStripButton m_toolStripButtonShowParamInfo;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripTextBox m_toolStripTextBoxFind;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripLabel m_toolStripLabelConnection;
+		private System.Windows.Forms.ToolStripLabel m_toolStripLabelFind;
 	}
 }
