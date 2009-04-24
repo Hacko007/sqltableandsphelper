@@ -22,20 +22,20 @@ namespace ColumnDepence
 
 		public string[] DataSource { get; set; }
 
-		private int _max_size = 100;
+		private int m_MaxSize = 100;
 		
 		/// <summary>
 		/// Gets or sets Max count of unique elements in stack
 		/// </summary>
 		public int MaxSize {
-			get { return _max_size; }
-			set { _max_size = value; }
+			get { return m_MaxSize; }
+			set { m_MaxSize = value; }
 		}
 
     
 
 
-		private string m_SettingName = null;
+		private string m_SettingName;
 
 		/// <summary>
 		/// Gets or Sets which Setting Name to use from 
@@ -70,8 +70,8 @@ namespace ColumnDepence
 				/// 
 				/// Remove table from queue if in queue
 				/// 
-				m_TableHistoryQueue.Enqueue(this.ItemName);
-				var hist = m_TableHistoryQueue.ToArray().Where(tab => tab != this.ItemName);
+				m_TableHistoryQueue.Enqueue(ItemName);
+				var hist = m_TableHistoryQueue.ToArray().Where(tab => tab != ItemName);
 				
 				m_TableHistoryQueue.Clear();
 				if (hist != null && hist.Count() > 0)
@@ -86,7 +86,7 @@ namespace ColumnDepence
 				/// 
 				/// Add table on top
 				/// 
-				m_TableHistoryQueue.Enqueue(this.ItemName);
+				m_TableHistoryQueue.Enqueue(ItemName);
 
 				((StringCollection)Properties.Settings.Default[SettingName]).AddRange(m_TableHistoryQueue.ToArray());
 				Properties.Settings.Default.Save();
@@ -115,8 +115,8 @@ namespace ColumnDepence
 				}
 			}
 
-			StringCollection _sc = new StringCollection();
-			_sc.AddRange( m_TableHistoryQueue.ToArray());
+			StringCollection sc = new StringCollection();
+			sc.AddRange( m_TableHistoryQueue.ToArray());
 			DataSource = m_TableHistoryQueue.ToArray();
 		}
 

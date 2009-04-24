@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,49 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CloseImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toolStripButton_CloseTab.Image1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="FilterByColumn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FilterByColumn.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="LoadAllValues" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toolStripSplitButton_LoadMain.Image1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="LoadDefinitionImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toolStripButton_LoadDef.Image1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="programIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\programIcon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ToolBoxImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toolStripButton_ToolBox.Image1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SqlGetColumnConstrains" xml:space="preserve">
-    <value>select CN.COLUMN_NAME As [Column] ,TB.CONSTRAINT_NAME as [Constraint] , TB.CONSTRAINT_TYPE as [Type] 
- from  INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CN inner join 
-  INFORMATION_SCHEMA.TABLE_CONSTRAINTS TB on (CN.TABLE_NAME = TB.TABLE_NAME AND CN.CONSTRAINT_NAME = TB.CONSTRAINT_NAME) 
- WHERE  CN.TABLE_NAME = @TABSEARCH</value>
-  </data>
-  <data name="SqlGetParentTables" xml:space="preserve">
-    <value>SELECT    COL1.name AS Referenced_Column , COL2.name AS Parent_Column ,tb2.name AS TableName 
-FROM  sys.columns AS COL1 INNER JOIN
-                      sys.columns AS COL2 INNER JOIN
-                      sys.tables AS tb2 INNER JOIN
-                      sys.foreign_key_columns AS FK INNER JOIN
-                      sys.tables AS tb ON FK.parent_object_id = tb.object_id ON tb2.object_id = FK.referenced_object_id ON COL2.column_id = FK.referenced_column_id AND
-                       COL2.object_id = FK.referenced_object_id ON COL1.column_id = FK.parent_column_id AND COL1.object_id = FK.parent_object_id 
- WHERE tb.name = @TABSEARCH</value>
-  </data>
-  <data name="SqlGetChildTables" xml:space="preserve">
-    <value>SELECT COL2.name AS Parent_Column , COL1.name AS Referenced_Column , tb.name AS TableName 
- FROM sys.columns AS COL1 INNER JOIN
-                      sys.columns AS COL2 INNER JOIN
-                      sys.tables AS tb2 INNER JOIN
-                      sys.foreign_key_columns AS FK INNER JOIN
-                      sys.tables AS tb ON FK.parent_object_id = tb.object_id ON tb2.object_id = FK.referenced_object_id ON COL2.column_id = FK.referenced_column_id AND
-                       COL2.object_id = FK.referenced_object_id ON COL1.column_id = FK.parent_column_id AND COL1.object_id = FK.parent_object_id  
-  WHERE tb2.name = @TABSEARCH</value>
-  </data>
 </root>

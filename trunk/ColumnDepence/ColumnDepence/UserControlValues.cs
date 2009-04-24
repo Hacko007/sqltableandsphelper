@@ -5,8 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Text;
 using ColumnDepence.DbInfo;
-using System.IO;
-using ColumnDepence.Filters;
 using System.Drawing;
 
 namespace ColumnDepence
@@ -18,56 +16,58 @@ namespace ColumnDepence
 		public event EventHandler ShownColumnsChanged;
 		public event OpenTableFilteredDelegate OpenTableFilteredTab;
 
-		private Dictionary<string, Filters.ColumnFilter> filter_dict = new Dictionary<string, ColumnDepence.Filters.ColumnFilter>();
-
-		/// <summary>
-		/// Last pressed column header
-		/// </summary>
-		private DataGridViewColumn m_ActiveColumn = null;
-
 		public event DataGridViewRowCancelEventHandler UserDeletingRow;
 		public UserControlValues()
 		{
 			InitializeComponent();
 			TableInfo = new TableInfo();
+			m_TableCount = "";
+			m_ShownRows = 0;
+			m_ActiveColumn = null;
+
+			CreateFilterPopup();
 		}
 
-		public DataGridView ValuesDataGrid { get { return dataGridView_Values; } }
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemLike;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemEqual;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemNotEqual;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemGreaterThen;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemLessThen;
+
+		public DataGridView ValuesDataGrid { get { return m_DataGridViewValues; } }
 
 		public TableInfo TableInfo { get; set; }
 
 
-		string tableCount = "";
 		/// <summary>
 		/// Sets Table count label text
 		/// </summary>
 		public string TableCount {
-			get { return tableCount; }
+			get { return m_TableCount; }
 			set {
-				tableCount = value;
+				m_TableCount = value;
 				m_labelTableCount.Text = value;
 		} }
-		
-		int shownRows = 0;
+
 		/// <summary>
 		/// Gets or Sets how meny rows are shown in this datagrid.		
 		/// </summary>
 		public int ShownRows
 		{
-			get { return shownRows; }
+			get { return m_ShownRows; }
 			set {
-				shownRows = value;
-				m_labelTableCount.Text = TableCount + " (Shown " + shownRows + ")";
+				m_ShownRows = value;
+				m_labelTableCount.Text = TableCount + " (Shown " + m_ShownRows + ")";
 			}
 		}
 
 		public void SetFilter(TableFilterData cellInfo)
 		{
-			filter_dict = new Dictionary<string, ColumnDepence.Filters.ColumnFilter>();
+			m_FilterDictionary = new Dictionary<string, ColumnFilter>();
 
 			if (cellInfo == null) return;
 
-			filter_dict = cellInfo.GetColumnFilters();
+			m_FilterDictionary = cellInfo.GetColumnFilters();
 		}
 
 		private void OnShownColumnsChanged()
@@ -86,7 +86,7 @@ namespace ColumnDepence
 			}
 		}
 
-		private void dataGridView_Values_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+		private void DataGridViewValues_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
 			if (UserDeletingRow != null)
 			{
@@ -94,135 +94,193 @@ namespace ColumnDepence
 			}
 		}
 
-		private void dataGridView_Values_MouseUp(object sender, MouseEventArgs e)
+		private void DataGridViewValues_MouseUp(object sender, MouseEventArgs e)
 		{
-			DataGridView.HitTestInfo hti = dataGridView_Values.HitTest(e.Location.X, e.Location.Y);
-			if (hti.Type == DataGridViewHitTestType.ColumnHeader && e.Button == MouseButtons.Right)
-			{				
-				try
+			DataGridView.HitTestInfo hti = m_DataGridViewValues.HitTest(e.Location.X, e.Location.Y);
+			if (hti.Type != DataGridViewHitTestType.ColumnHeader || e.Button != MouseButtons.Right)
+			{
+				return;
+			}
+			try
+			{
+				m_ActiveColumn = m_DataGridViewValues.Columns[hti.ColumnIndex];
+
+				if (!m_FilterDictionary.ContainsKey(m_ActiveColumn.Name))
 				{
-					m_ActiveColumn = dataGridView_Values.Columns[hti.ColumnIndex];
-
-					if (!filter_dict.ContainsKey(m_ActiveColumn.Name))
-					{
-						Filters.ColumnFilter col_filters = new ColumnDepence.Filters.ColumnFilter();
-						col_filters.ColumnName = m_ActiveColumn.Name;
-						col_filters.Rules = new Dictionary<ColumnDepence.Filters.FilterRule, ColumnDepence.Filters.RuleBase>();
-						filter_dict.Add(col_filters.ColumnName, col_filters);
-					}
-					ResetContextMenu(m_contextMenuStripFilter, filter_dict[m_ActiveColumn.Name]);
-
-					/// Which filters are visible 
-					/// depends on column type
-
-					m_LikeToolStripMenuItem.Visible = (m_ActiveColumn.ValueType != typeof(int) 
-													&& (m_ActiveColumn.ValueType != typeof(bool)));
-
-					m_equalToolStripMenuItem.Visible = (m_ActiveColumn.ValueType != typeof(bool));					
-					m_greToolStripMenuItem.Visible = (m_ActiveColumn.ValueType != typeof(bool));
-					m_lessThenToolStripMenuItem.Visible = (m_ActiveColumn.ValueType != typeof(bool));
-
-					m_isTrueToolStripMenuItem.Visible = (m_ActiveColumn.ValueType == typeof(bool));
-					m_isFalseToolStripMenuItem.Visible = (m_ActiveColumn.ValueType == typeof(bool));
-					
-
-					m_ActiveColumn.ContextMenuStrip = m_contextMenuStripFilter;
-					m_contextMenuStripFilter.Show(Cursor.Position);
-					m_contextMenuStripFilter.BringToFront();
+					ColumnFilter colFilters = new ColumnFilter
+					                          	{
+					                          		ColumnName = m_ActiveColumn.Name,
+					                          		Rules = new Dictionary<FilterRule, RuleBase>()
+					                          	};
+					m_FilterDictionary.Add(colFilters.ColumnName, colFilters);
 				}
-				catch { }
+				ResetContextMenu(m_FilterDictionary[m_ActiveColumn.Name]);
+
+				m_ToolStripLabelFilteredColumn.Text = "Filter column:" + m_ActiveColumn.Name;
+
+				m_ToolStripMenuItemEqual.ValueType = m_ActiveColumn.ValueType;
+				m_ToolStripMenuItemNotEqual.ValueType = m_ActiveColumn.ValueType;
+				m_ToolStripMenuItemGreaterThen.ValueType = m_ActiveColumn.ValueType;
+				m_ToolStripMenuItemLessThen.ValueType = m_ActiveColumn.ValueType;
+
+				/// Which filters are visible 
+				/// depends on column type
+				bool notInt = m_ActiveColumn.ValueType != typeof (int);
+				bool notBool = (m_ActiveColumn.ValueType != typeof (bool));
+
+				m_ToolStripMenuItemLike.Visible = notInt && notBool;
+
+				m_ToolStripMenuItemEqual.Visible = notBool;
+				m_ToolStripMenuItemNotEqual.Visible = notBool;
+				m_ToolStripMenuItemGreaterThen.Visible = notBool;
+				m_ToolStripMenuItemLessThen.Visible = notBool;
+
+				m_ToolStripMenuItemIsTrue.Visible = !notBool;
+				m_ToolStripMenuItemIsFalse.Visible = !notBool;
+
+
+				m_ActiveColumn.ContextMenuStrip = m_contextMenuStripFilter;
+
+				m_contextMenuStripFilter.Show(new Point(Cursor.Position.X, Cursor.Position.Y + 15));
+				m_contextMenuStripFilter.BringToFront();
+			}
+			catch
+			{
 			}
 		}
 
-		private void ResetContextMenu(ContextMenuStrip m_contextMenuStrip, ColumnDepence.Filters.ColumnFilter columnFilter)
+		private void CreateFilterPopup()
+		{
+			m_ToolStripSeparator2 = new ToolStripSeparator();
+			m_ToolStripLabelFilteredColumn = new ToolStripLabel("Filter column:");
+			m_ToolStripMenuItemLike = new UserControlToolStripLabelTextBox {LabelText = "Like"};
+			m_ToolStripMenuItemEqual = new UserControlToolStripLabelTextBox {LabelText = "="};
+			m_ToolStripMenuItemNotEqual = new UserControlToolStripLabelTextBox {LabelText = "<>"};
+			m_ToolStripMenuItemGreaterThen = new UserControlToolStripLabelTextBox {LabelText = ">"};
+			m_ToolStripMenuItemLessThen = new UserControlToolStripLabelTextBox {LabelText = "<"};
+
+			m_ToolStripMenuItemLike.TextBox.TextChanged += ToolStripTextBoxTextChanged;
+			m_ToolStripMenuItemEqual.TextBox.TextChanged += ToolStripTextBoxTextChanged;
+			m_ToolStripMenuItemNotEqual.TextBox.TextChanged += ToolStripTextBoxTextChanged;
+			m_ToolStripMenuItemGreaterThen.TextBox.TextChanged += ToolStripTextBoxTextChanged;
+			m_ToolStripMenuItemLessThen.TextBox.TextChanged += ToolStripTextBoxTextChanged;
+
+			m_ToolStripMenuItemLike.Visible = false;
+			m_ToolStripMenuItemEqual.Visible = false;
+			m_ToolStripMenuItemNotEqual.Visible = false;
+			m_ToolStripMenuItemGreaterThen.Visible = false;
+			m_ToolStripMenuItemLessThen.Visible = false;
+			m_ToolStripMenuItemIsTrue.Visible = false;
+			m_ToolStripMenuItemIsFalse.Visible = false;
+
+
+			m_contextMenuStripFilter.Items.Clear();
+			m_contextMenuStripFilter.Items.AddRange(new ToolStripItem[]
+			                                        	{
+			                                        		m_ToolStripLabelFilteredColumn,
+			                                        		new ToolStripSeparator(),
+
+			                                        		m_removeFiltersToolStripMenuItem,
+			                                        		m_ToolStripSeparator2,
+
+			                                        		m_ToolStripMenuItemLike, m_ToolStripMenuItemEqual,
+			                                        		m_ToolStripMenuItemNotEqual
+			                                        		, m_ToolStripMenuItemGreaterThen, m_ToolStripMenuItemLessThen
+			                                        		, m_ToolStripMenuItemIsTrue, m_ToolStripMenuItemIsFalse
+			                                        		, m_isNotNullToolStripMenuItem, m_isNullToolStripMenuItem
+			                                        	});
+
+
+		}
+
+		private void ResetContextMenu(ColumnFilter columnFilter)
 		{
 			
-			m_equalToolStripMenuItem.Checked = columnFilter.HasFilter(Filters.FilterRule.Eq) ;
-			m_greToolStripMenuItem.Checked = columnFilter.HasFilter(Filters.FilterRule.Greater);
-			m_isNotNullToolStripMenuItem.Checked = columnFilter.HasFilter(Filters.FilterRule.IsNotNull);
-			m_isNullToolStripMenuItem.Checked = columnFilter.HasFilter(Filters.FilterRule.IsNull);
-			m_lessThenToolStripMenuItem.Checked = columnFilter.HasFilter(Filters.FilterRule.Less);
-			m_LikeToolStripMenuItem.Checked = columnFilter.HasFilter(Filters.FilterRule.Like);
-			m_isTrueToolStripMenuItem.Checked = columnFilter.HasFilter(Filters.FilterRule.IsTrue);
-			m_isFalseToolStripMenuItem.Checked = columnFilter.HasFilter(Filters.FilterRule.IsFalse);
+			m_isNotNullToolStripMenuItem.Checked = columnFilter.HasFilter(FilterRule.IsNotNull);
+			m_isNullToolStripMenuItem.Checked = columnFilter.HasFilter(FilterRule.IsNull);			
+			m_ToolStripMenuItemIsTrue.Checked = columnFilter.HasFilter(FilterRule.IsTrue);
+			m_ToolStripMenuItemIsFalse.Checked = columnFilter.HasFilter(FilterRule.IsFalse);
 			
-			m_LikeToolStripTextBox.TextBox.Text = columnFilter.GetRuleValue(Filters.FilterRule.Like);
-			m_LessThenToolStripTextBox2.TextBox.Text = columnFilter.GetRuleValue(Filters.FilterRule.Less);
-			m_EqualToolStripTextBox.TextBox.Text = columnFilter.GetRuleValue(Filters.FilterRule.Eq);
-			m_GraterThenToolStripTextBox.TextBox.Text = columnFilter.GetRuleValue(Filters.FilterRule.Greater);
+			m_ToolStripMenuItemLike.Text = columnFilter.GetRuleValue(FilterRule.Like);
+			m_ToolStripMenuItemLessThen.Text = columnFilter.GetRuleValue(FilterRule.Less);
+			m_ToolStripMenuItemEqual.Text = columnFilter.GetRuleValue(FilterRule.Eq);
+			m_ToolStripMenuItemNotEqual.Text = columnFilter.GetRuleValue(FilterRule.NotEq);
+			m_ToolStripMenuItemGreaterThen.Text = columnFilter.GetRuleValue(FilterRule.Greater);
 
-			this.UpdateContexMenuStatus();
+			UpdateContexMenuStatus();
 		}
 
 		private void UpdateContexMenuStatus()
 		{
 
-			bool has_filter = m_equalToolStripMenuItem.Checked
-			 || m_greToolStripMenuItem.Checked
-			 || m_isNotNullToolStripMenuItem.Checked
-			 || m_isNullToolStripMenuItem.Checked
-			 || m_lessThenToolStripMenuItem.Checked
-			 || m_LikeToolStripMenuItem.Checked
-			 || m_isTrueToolStripMenuItem.Checked
-			 || m_isFalseToolStripMenuItem.Checked;
+			bool hasFilter = m_ToolStripMenuItemEqual.HasValue
+			                 || m_ToolStripMenuItemGreaterThen.HasValue
+			                 || m_ToolStripMenuItemLessThen.HasValue
+			                 || m_ToolStripMenuItemLike.HasValue
+			                 || m_isNotNullToolStripMenuItem.Checked
+			                 || m_isNullToolStripMenuItem.Checked
+			                 || m_ToolStripMenuItemIsTrue.Checked
+			                 || m_ToolStripMenuItemIsFalse.Checked;
 
 			string col = m_ActiveColumn.Name;
 
-			if (!filter_dict.ContainsKey(col))
+			if (!m_FilterDictionary.ContainsKey(col))
 			{
-				Filters.ColumnFilter cf = new ColumnDepence.Filters.ColumnFilter();
-				cf.ColumnName = col;
-				cf.Rules = new Dictionary<ColumnDepence.Filters.FilterRule, ColumnDepence.Filters.RuleBase>();
-				filter_dict.Add(col, cf);
+				ColumnFilter cf = new ColumnFilter {ColumnName = col, Rules = new Dictionary<FilterRule, RuleBase>()};
+				m_FilterDictionary.Add(col, cf);
 			}
 
-			if (m_LikeToolStripMenuItem.Checked)
-				filter_dict[col].Add(new Filters.Like(col, m_LikeToolStripTextBox.Text));
+			if (m_ToolStripMenuItemLike.HasValue)
+				m_FilterDictionary[col].Add(new Like(col, m_ToolStripMenuItemLike.Text));
 			else
-				filter_dict[col].Remove(Filters.FilterRule.Like);
+				m_FilterDictionary[col].Remove(FilterRule.Like);
 
-			if (m_equalToolStripMenuItem.Checked)
-				filter_dict[col].Add(new Filters.Eq(col, m_EqualToolStripTextBox.Text));
+			if (m_ToolStripMenuItemEqual.HasValue)
+				m_FilterDictionary[col].Add(new Eq(col, m_ToolStripMenuItemEqual.Text));
 			else
-				filter_dict[col].Remove(Filters.FilterRule.Eq);
+				m_FilterDictionary[col].Remove(FilterRule.Eq);
 
-
-			if (m_lessThenToolStripMenuItem.Checked)
-				filter_dict[col].Add(new Filters.Less(col, m_LessThenToolStripTextBox2.Text));
+			if (m_ToolStripMenuItemNotEqual.HasValue)
+				m_FilterDictionary[col].Add(new NotEq(col, m_ToolStripMenuItemNotEqual.Text));
 			else
-				filter_dict[col].Remove(Filters.FilterRule.Less);
+				m_FilterDictionary[col].Remove(FilterRule.NotEq);
 
-			if (m_greToolStripMenuItem.Checked)
-				filter_dict[col].Add(new Filters.Greater(col, m_GraterThenToolStripTextBox.Text));
+
+			if (m_ToolStripMenuItemLessThen.HasValue)
+				m_FilterDictionary[col].Add(new Less(col, m_ToolStripMenuItemLessThen.Text));
 			else
-				filter_dict[col].Remove(Filters.FilterRule.Greater);
+				m_FilterDictionary[col].Remove(FilterRule.Less);
+
+			if (m_ToolStripMenuItemGreaterThen.HasValue)
+				m_FilterDictionary[col].Add(new Greater(col, m_ToolStripMenuItemGreaterThen.Text));
+			else
+				m_FilterDictionary[col].Remove(FilterRule.Greater);
 
 			if (m_isNotNullToolStripMenuItem.Checked)
-				filter_dict[col].Add(new Filters.IsNotNull(col));
+				m_FilterDictionary[col].Add(new IsNotNull(col));
 			else
-				filter_dict[col].Remove(Filters.FilterRule.IsNotNull);
+				m_FilterDictionary[col].Remove(FilterRule.IsNotNull);
 
 			if (m_isNullToolStripMenuItem.Checked)
-				filter_dict[col].Add(new Filters.IsNull(col));
+				m_FilterDictionary[col].Add(new IsNull(col));
 			else
-				filter_dict[col].Remove(Filters.FilterRule.IsNull);
+				m_FilterDictionary[col].Remove(FilterRule.IsNull);
 
 
-			if (m_isTrueToolStripMenuItem.Checked)
-				filter_dict[col].Add(new Filters.IsTrue(col));
+			if (m_ToolStripMenuItemIsTrue.Checked)
+				m_FilterDictionary[col].Add(new IsTrue(col));
 			else
-				filter_dict[col].Remove(Filters.FilterRule.IsTrue);
+				m_FilterDictionary[col].Remove(FilterRule.IsTrue);
 
-			if (m_isFalseToolStripMenuItem.Checked)
-				filter_dict[col].Add(new Filters.IsFalse(col));
+			if (m_ToolStripMenuItemIsFalse.Checked)
+				m_FilterDictionary[col].Add(new IsFalse(col));
 			else
-				filter_dict[col].Remove(Filters.FilterRule.IsFalse);
+				m_FilterDictionary[col].Remove(FilterRule.IsFalse);
 
+			m_removeFiltersToolStripMenuItem.Visible = hasFilter;
+			m_ToolStripSeparator2.Visible = hasFilter;
 
-			m_filterByValueToolStripMenuItem.Checked = has_filter;
-			m_removeFiltersToolStripMenuItem.Enabled = has_filter;
-
-			m_ActiveColumn.HeaderText = (has_filter) ? "["+ m_ActiveColumn.Name + "]" : m_ActiveColumn.Name;
+			m_ActiveColumn.HeaderText = (hasFilter) ? "["+ m_ActiveColumn.Name + "]" : m_ActiveColumn.Name;
 			
 			ApplyFilter();
 		}
@@ -231,9 +289,9 @@ namespace ColumnDepence
 
 			StringBuilder filterBuild = new StringBuilder();
 
-			foreach (KeyValuePair<string, Filters.ColumnFilter> col_rules in filter_dict)
+			foreach (KeyValuePair<string, ColumnFilter> colRules in m_FilterDictionary)
 			{
-				foreach (KeyValuePair<Filters.FilterRule, Filters.RuleBase> rules in col_rules.Value.Rules)
+				foreach (KeyValuePair<FilterRule, RuleBase> rules in colRules.Value.Rules)
 				{
 					filterBuild.Append(rules.Value.Filter + " AND ");
 				}
@@ -252,39 +310,11 @@ namespace ColumnDepence
 
 			try
 			{
-				DataView dv = new DataView();
-				dv.Table = TableInfo.Values;
-				dv.RowFilter = filter;
-				dataGridView_Values.DataSource = dv;
+				DataView dv = new DataView {Table = TableInfo.Values, RowFilter = filter};
+				m_DataGridViewValues.DataSource = dv;
 				ShownRows = dv.Count;			
 			}
-			catch { }
-			
-			
-			//if (this.dataGridView_Values.DataSource is DataTable)
-			//{
-			//    DataTable tab = (DataTable)this.dataGridView_Values.DataSource;
-			//    DataView dv = new DataView();
-			//    dv.Table = tab;
-			//    try
-			//    {
-			//        dv.RowFilter = filter;
-			//    }
-			//    catch { }
-			//    dataGridView_Values.DataSource = dv;
-			//    ShownRows = dv.Count;
-			//}
-			//else
-			//{
-			//    DataView dv = (DataView)this.dataGridView_Values.DataSource;
-			//    try
-			//    {
-			//        dv.RowFilter = filter;
-			//    }
-			//    catch { }
-			//    dataGridView_Values.DataSource = dv;
-			//    ShownRows = dv.Count;
-			//}
+			catch { }									
 
 			if (filter == "")
 			{
@@ -303,54 +333,11 @@ namespace ColumnDepence
 
 		#region Filter Menu Events
 
-		private void EqualToolStripTextBox_TextChanged(object sender, EventArgs e)
-		{
-			m_equalToolStripMenuItem.Checked = m_EqualToolStripTextBox.TextBox.Text.Trim() != "";
+		private void ToolStripTextBoxTextChanged(object sender, EventArgs e)
+		{			
 			UpdateContexMenuStatus();
-		}
-
-		private void GraterThenToolStripTextBox_TextChanged(object sender, EventArgs e)
-		{
-			m_greToolStripMenuItem.Checked = m_GraterThenToolStripTextBox.TextBox.Text.Trim() != "";
-			UpdateContexMenuStatus();
-		}
-
-		private void LessThenToolStripTextBox2_TextChanged(object sender, EventArgs e)
-		{
-			m_lessThenToolStripMenuItem.Checked = m_LessThenToolStripTextBox2.TextBox.Text.Trim() != "";
-			UpdateContexMenuStatus();
-		}
-
-		private void LikeToolStripTextBox_TextChanged(object sender, EventArgs e)
-		{
-			m_LikeToolStripMenuItem.Checked = m_LikeToolStripTextBox.TextBox.Text.Trim() != "";
-			UpdateContexMenuStatus();
-		}
+		}			
 		
-		private void EqualToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (m_EqualToolStripTextBox.TextBox.Text.Trim() == "")
-			{
-				m_equalToolStripMenuItem.Checked = false;
-			}
-			UpdateContexMenuStatus();
-
-		}
-
-		private void FilterByValueToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			UpdateContexMenuStatus();
-		}
-
-		private void GreToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (m_GraterThenToolStripTextBox.TextBox.Text.Trim() == "")
-			{
-				m_greToolStripMenuItem.Checked = false;
-			}
-			UpdateContexMenuStatus();
-
-		}
 
 		private void IsNotNullToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -359,7 +346,6 @@ namespace ColumnDepence
 				m_isNullToolStripMenuItem.Checked = false;
 			}
 			UpdateContexMenuStatus();
-
 		}
 
 		private void IsNullToolStripMenuItem_Click(object sender, EventArgs e)
@@ -369,47 +355,29 @@ namespace ColumnDepence
 				m_isNotNullToolStripMenuItem.Checked = false;
 			}
 			UpdateContexMenuStatus();
-
-		}
-
-		private void LessThenToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (m_LessThenToolStripTextBox2.TextBox.Text.Trim() == "")
-			{
-				m_lessThenToolStripMenuItem.Checked = false;
-			}
-			UpdateContexMenuStatus();
-		}
-
-		private void LikeToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (m_LikeToolStripTextBox.TextBox.Text.Trim() == "") {
-				m_LikeToolStripMenuItem.Checked = false;
-			}
-			UpdateContexMenuStatus();
 		}
 
 		private void IsTrueToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (m_isTrueToolStripMenuItem.Checked)
+			if (m_ToolStripMenuItemIsTrue.Checked)
 			{
-				m_isFalseToolStripMenuItem.Checked = false;
+				m_ToolStripMenuItemIsFalse.Checked = false;
 			}
 			UpdateContexMenuStatus();
 		}
 
 		private void IsFalseToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (m_isFalseToolStripMenuItem.Checked)
+			if (m_ToolStripMenuItemIsFalse.Checked)
 			{
-				m_isTrueToolStripMenuItem.Checked = false;
+				m_ToolStripMenuItemIsTrue.Checked = false;
 			}
 			UpdateContexMenuStatus();
 		}
 
 		private void RemoveFiltersToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			filter_dict.Remove(m_ActiveColumn.Name);
+			m_FilterDictionary.Remove(m_ActiveColumn.Name);
 
 			ResetFilterContextMenuItems();
 			UpdateContexMenuStatus();
@@ -417,23 +385,18 @@ namespace ColumnDepence
 
 		private void ResetFilterContextMenuItems()
 		{
-			m_filterByValueToolStripMenuItem.Checked = false;
-			m_equalToolStripMenuItem.Checked = false;
-			m_greToolStripMenuItem.Checked = false;
-			m_lessThenToolStripMenuItem.Checked = false;
-			m_LikeToolStripMenuItem.Checked = false;
 			m_isNotNullToolStripMenuItem.Checked = false;
 			m_isNullToolStripMenuItem.Checked = false;
-			m_isTrueToolStripMenuItem.Checked = false;
-			m_isFalseToolStripMenuItem.Checked = false;
+			m_ToolStripMenuItemIsTrue.Checked = false;
+			m_ToolStripMenuItemIsFalse.Checked = false;
 
-			m_LikeToolStripTextBox.TextBox.Text = "";
-			m_LessThenToolStripTextBox2.TextBox.Text = "";
-			m_EqualToolStripTextBox.TextBox.Text = "";
-			m_GraterThenToolStripTextBox.TextBox.Text = "";
+			m_ToolStripMenuItemLike.Text = "";
+			m_ToolStripMenuItemEqual.Text = "";
+			m_ToolStripMenuItemNotEqual.Text = "";
+			m_ToolStripMenuItemGreaterThen.Text = "";
+			m_ToolStripMenuItemLessThen.Text = "";
 
-			m_removeFiltersToolStripMenuItem.Enabled = false;
-			
+			m_removeFiltersToolStripMenuItem.Visible = false;
 		}
 
 		#endregion
@@ -453,7 +416,7 @@ namespace ColumnDepence
 				m_ShowRowInfoToolStripMenuItem
 				});
 
-			if (ValuesDataGrid.SelectedCells == null || TableInfo.Values == null )
+			if (TableInfo.Values == null )
 				return;
 
 			/// if foregn key column(s) are selected 
@@ -470,22 +433,21 @@ namespace ColumnDepence
 			{
 				// cell.ColumnIndex
 				if (TableInfo.Values.Columns.Count > cell.ColumnIndex)
-				{
-					string tableName = TableInfo.Values.Columns[cell.ColumnIndex].Table.TableName;
+				{					
 					string colName = TableInfo.Values.Columns[cell.ColumnIndex].ColumnName;
 					/// 
 					/// find parents and add to CellInfoCollection
 					/// 
-					if (TableInfo.ParentReferencedTable != null && TableInfo.ParentReferencedTable.Rows.Count > 0)
+					if (TableInfo.ChildTables != null && TableInfo.ChildTables.Rows.Count > 0)
 					{
-						DataRow[] parentColRefs = TableInfo.ParentReferencedTable.FindParents(colName);
+						DataRow[] parentColRefs = TableInfo.ChildTables.FindParents(colName);
 						if (parentColRefs != null && parentColRefs.Length > 0)
 						{
 							foreach (DataRow row in parentColRefs)
 							{
 								cellValues.Add(
-									row[TableInfo.ParentReferencedTable.ColumnTableName].ToString(),
-									row[TableInfo.ParentReferencedTable.ColumnParentColumnName].ToString(),
+									row[TableInfo.ChildTables.ColumnTableName].ToString(),
+									row[TableInfo.ChildTables.ColumnParentColumnName].ToString(),
 									cell.Value,
 									TableRelation.Child);
 							}							
@@ -494,16 +456,16 @@ namespace ColumnDepence
 					/// 
 					/// find children and add to CellInfoCollection
 					/// 
-					if (TableInfo.ChildReferencedTable != null && TableInfo.ChildReferencedTable.Rows.Count > 0)
+					if (TableInfo.ParentTables != null && TableInfo.ParentTables.Rows.Count > 0)
 					{
-						DataRow[] childColRefs = TableInfo.ChildReferencedTable.FindChilds(colName);
+						DataRow[] childColRefs = TableInfo.ParentTables.FindChilds(colName);
 						if (childColRefs != null && childColRefs.Length > 0)
 						{
 							foreach (DataRow row in childColRefs)
 							{
 								cellValues.Add(
-									row[TableInfo.ChildReferencedTable.ColumnTableName].ToString(),
-									row[TableInfo.ChildReferencedTable.ColumnParentColumnName].ToString(),
+									row[TableInfo.ParentTables.ColumnTableName].ToString(),
+									row[TableInfo.ParentTables.ColumnParentColumnName].ToString(),
 									cell.Value, 
 									TableRelation.Parent);
 							}
@@ -526,8 +488,7 @@ namespace ColumnDepence
 				if (tabRelation != table.Value.TableRelation)
 				{
 					m_contextMenuStripShownColumns.Items.Add(new ToolStripSeparator());
-					ToolStripLabel toolStripLabel = new ToolStripLabel();
-					toolStripLabel.ForeColor = Color.DarkGray;
+					ToolStripLabel toolStripLabel = new ToolStripLabel {ForeColor = Color.DarkGray};
 					toolStripLabel.Font = new Font(toolStripLabel.Font, FontStyle.Bold | FontStyle.Underline);
 					switch (table.Value.TableRelation)
 					{
@@ -543,9 +504,8 @@ namespace ColumnDepence
 					
 				}
 
-				ToolStripMenuItem tabMenuItem = new ToolStripMenuItem(table.Key);
-				tabMenuItem.Tag = table.Value;
-				tabMenuItem.Click += new EventHandler(ShowTableRowsFilterd);
+				ToolStripMenuItem tabMenuItem = new ToolStripMenuItem(table.Key) {Tag = table.Value};
+				tabMenuItem.Click += ShowTableRowsFilterd;
 				m_contextMenuStripShownColumns.Items.Add(tabMenuItem);
 
 				tabRelation = table.Value.TableRelation;
@@ -594,9 +554,7 @@ namespace ColumnDepence
 		private void ChooseColumnsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 
-			FormSelectShownColumns form = new FormSelectShownColumns();
-			form.AllColumns = AllColumns;
-			form.ShownColumns = ShownColumns;
+			FormSelectShownColumns form = new FormSelectShownColumns {AllColumns = AllColumns, ShownColumns = ShownColumns};
 			form.InitColumns();
 			if (form.ShowDialog(this) == DialogResult.OK)
 			{
@@ -628,20 +586,9 @@ namespace ColumnDepence
 					new ToolStripSeparator(),
 					m_ShowRowInfoToolStripMenuItem
 				});
-			
-			//return;
-
-			//foreach (string item in AllColumns)
-			//{
-			//    bool selected = (ShownColumns != null && ShownColumns.Contains(item));
-			//    ToolStripMenuItem mi = new ToolStripMenuItem(item);
-			//    mi.CheckOnClick = true;
-			//    mi.Checked = selected;
-			//    mi.CheckedChanged += new EventHandler(ShowColumnToolStripMenuItem_CheckedChanged);
-			//    m_contextMenuStripShownColumns.Items.Add(mi);
-			//}
 		}
 
+/*
 		void ShowColumnToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
 			if (sender is ToolStripMenuItem)
@@ -666,15 +613,15 @@ namespace ColumnDepence
 			OnShownColumnsChanged();
 			UpdateShownColumnsContextMenu();
 		}
+*/
 
 		#endregion Show Column ContextMenu
 
 		private void ShowRowInfoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (dataGridView_Values.Rows.Count == 0) return;
+			if (m_DataGridViewValues.Rows.Count == 0) return;
 
-			FormShowOneRow showOneRow = new FormShowOneRow();
-			showOneRow.DataGridValues = dataGridView_Values;
+			FormShowOneRow showOneRow = new FormShowOneRow {DataGridValues = m_DataGridViewValues};
 			showOneRow.LoadRowItnoView();
 			showOneRow.Show();			
 		}
@@ -686,63 +633,12 @@ namespace ColumnDepence
 
 		private void ClearFilter()
 		{
-			filter_dict = new Dictionary<string, ColumnDepence.Filters.ColumnFilter>();
+			m_FilterDictionary = new Dictionary<string, ColumnFilter>();
 			ResetFilterContextMenuItems();
 			ApplyFilter();
 		}
 
 		
-		//private List<ChangedCell> changedCells = null;
-		//private void dataGridView_Values_RowLeave(object sender, DataGridViewCellEventArgs e)
-		//{
-			
-		//}
-
-		//private void dataGridView_Values_RowEnter(object sender, DataGridViewCellEventArgs e)
-		//{
-			
-		//}
-
-		//private void dataGridView_Values_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-		//{
-			//if (changedCells == null) changedCells = new List<ChangedCell>();
-			//ChangedCell cc = new ChangedCell();
-			//cc.RowIndex = e.RowIndex;
-			//cc.ColumnIndex = e.ColumnIndex;
-			//if (changedCells.Contains(cc) == false)
-			//{
-			//    changedCells.Add(cc);
-			//}
-
-			//DataView dv = null;
-			//DataView dv_orig = null;
-
-			//if (this.dataGridView_Values.DataSource is DataView)
-			//{
-
-			//    DataTable dt = ((DataView)this.dataGridView_Values.DataSource).Table;
-			//    var b = dt.Rows[0].RowState;
-			//    dv = new DataView(dt, "", "", DataViewRowState.CurrentRows);
-			//    dv_orig = new DataView(dt, "", "", DataViewRowState.OriginalRows);
-
-			//}
-			//else
-			//    return;
-
-			//if (changedCells != null)
-			//{
-			//    foreach (ChangedCell item in changedCells)
-			//    {
-
-			//        Console.Write("[" + item.RowIndex + "," + item.ColumnIndex + "]= " + dv_orig[item.RowIndex][item.ColumnIndex] + "->" + dv[item.RowIndex][item.ColumnIndex] + "   , ");
-			//    }
-			//    Console.WriteLine();
-			//}
-		//}
-
-		//struct ChangedCell {
-		//    public int RowIndex { get; set; }
-		//    public int ColumnIndex { get; set; }
-		//}
+	
 	}
 }

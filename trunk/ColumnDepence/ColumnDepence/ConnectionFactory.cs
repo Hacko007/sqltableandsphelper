@@ -12,40 +12,41 @@ namespace ColumnDepence
 
 		private static void InitConnectionStringFromHistory()
 		{
-			SqlConnectionStringBuilder con = new SqlConnectionStringBuilder();
-			con.DataSource = global::ColumnDepence.Properties.Settings.Default.LastUsedServer;
-			con.InitialCatalog = global::ColumnDepence.Properties.Settings.Default.LastUsedDatabase;
-			con.UserID = global::ColumnDepence.Properties.Settings.Default.LastUsedUsername;
-			con.Password = global::ColumnDepence.Properties.Settings.Default.LastUsedPassword;
-			
+			SqlConnectionStringBuilder con = new SqlConnectionStringBuilder
+			                                 	{
+			                                 		DataSource = Properties.Settings.Default.LastUsedServer,
+			                                 		InitialCatalog = Properties.Settings.Default.LastUsedDatabase,
+			                                 		UserID = Properties.Settings.Default.LastUsedUsername,
+			                                 		Password = Properties.Settings.Default.LastUsedPassword
+			                                 	};
+
 			ConnectionString = con.ConnectionString;
 		}
 
-		private static string connectionString = null;
+		private static string m_ConnectionString ;
 		public static string ConnectionString { 
 			get {
-				if (connectionString == null) {
+				if (m_ConnectionString == null) {
 					InitConnectionStringFromHistory();
 				}
-				return connectionString; 
+				return m_ConnectionString; 
 			}
 			set
 			{
-				connectionString = value;
-				m_Instance = new SqlConnection(connectionString);				
+				m_ConnectionString = value;
+				m_Instance = new SqlConnection(m_ConnectionString);				
 			}
 		}
 
 		public static string ShortConnectionName {
-			get {
+			get
+			{
 				if (Instance == null)
 				{
 					return "";
 				}
-				else {
-					return Instance.DataSource + " . " + Instance.Database;
-				}
-			} 
+				return Instance.DataSource + " . " + Instance.Database;
+			}
 		}
 
 		#region Connection factory method
@@ -77,8 +78,11 @@ namespace ColumnDepence
 				{
 					Instance.Open();
 				}
+
+				if (Instance != null) 
+					return (Instance.State == ConnectionState.Open);
 				
-				return (Instance.State == ConnectionState.Open);
+				return false;
 			}
 			catch {
 				return false;

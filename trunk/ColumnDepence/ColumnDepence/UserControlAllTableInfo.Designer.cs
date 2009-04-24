@@ -1,4 +1,6 @@
-﻿namespace ColumnDepence
+﻿using System.Windows.Forms;
+
+namespace ColumnDepence
 {
 	partial class UserControlAllTableInfo
 	{
@@ -51,72 +53,72 @@
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
 			ColumnDepence.DbInfo.TableInfo tableInfo1 = new ColumnDepence.DbInfo.TableInfo();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlAllTableInfo));
-			this.dataGridView_Columns = new System.Windows.Forms.DataGridView();
-			this.label7 = new System.Windows.Forms.Label();
-			this.splitContainer_left = new System.Windows.Forms.SplitContainer();
-			this.dataGridView_ColumnConstrains = new System.Windows.Forms.DataGridView();
-			this.label9 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
-			this.dataGridView_Parent = new System.Windows.Forms.DataGridView();
-			this.dataGridView_Child = new System.Windows.Forms.DataGridView();
-			this.label11 = new System.Windows.Forms.Label();
-			this.splitContainer_RightBottom = new System.Windows.Forms.SplitContainer();
-			this.splitContainer_LeftSpButtom = new System.Windows.Forms.SplitContainer();
-			this.dataGridView_Sp = new System.Windows.Forms.DataGridView();
-			this.label_sp = new System.Windows.Forms.Label();
-			this.splitContainer_right = new System.Windows.Forms.SplitContainer();
-			this.splitContainer_Main = new System.Windows.Forms.SplitContainer();
-			this.toolStrip_Menu = new System.Windows.Forms.ToolStrip();
-			this.toolStripButton_LoadDef = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSplitButton_LoadMain = new System.Windows.Forms.ToolStripSplitButton();
-			this.loadAllValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.loadTop300ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripLabel_DB = new System.Windows.Forms.ToolStripLabel();
-			this.toolStripLabel_TableName = new System.Windows.Forms.ToolStripLabel();
-			this.toolStripButton_CloseTab = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_ToolBox = new System.Windows.Forms.ToolStripButton();
-			this.panel_DataView = new System.Windows.Forms.Panel();
-			this.m_contextMenuStrip_ShowTable = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.m_DataGridViewColumns = new System.Windows.Forms.DataGridView();
+			this.m_Label7 = new System.Windows.Forms.Label();
+			this.m_SplitContainerLeft = new System.Windows.Forms.SplitContainer();
+			this.m_DataGridViewColumnConstrains = new System.Windows.Forms.DataGridView();
+			this.m_Label9 = new System.Windows.Forms.Label();
+			this.m_Label10 = new System.Windows.Forms.Label();
+			this.m_DataGridViewParent = new System.Windows.Forms.DataGridView();
+			this.m_DataGridViewChild = new System.Windows.Forms.DataGridView();
+			this.m_Label11 = new System.Windows.Forms.Label();
+			this.m_SplitContainerRightBottom = new System.Windows.Forms.SplitContainer();
+			this.m_SplitContainerLeftSpButtom = new System.Windows.Forms.SplitContainer();
+			this.m_DataGridViewSp = new System.Windows.Forms.DataGridView();
+			this.m_LabelSp = new System.Windows.Forms.Label();
+			this.m_SplitContainerRight = new System.Windows.Forms.SplitContainer();
+			this.m_SplitContainerMain = new System.Windows.Forms.SplitContainer();
+			this.m_ToolStripMenu = new System.Windows.Forms.ToolStrip();
+			this.m_ToolStripButtonLoadDef = new System.Windows.Forms.ToolStripButton();
+			this.m_ToolStripSplitButtonLoadMain = new System.Windows.Forms.ToolStripSplitButton();
+			this.m_LoadAllValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.m_LoadTop300ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.m_ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.m_ToolStripLabelDb = new System.Windows.Forms.ToolStripLabel();
+			this.m_ToolStripLabelTableName = new System.Windows.Forms.ToolStripLabel();
+			this.m_ToolStripButtonCloseTab = new System.Windows.Forms.ToolStripButton();
+			this.m_ToolStripButtonToolBox = new System.Windows.Forms.ToolStripButton();
+			this.m_PanelDataView = new System.Windows.Forms.Panel();
+			this.m_ContextMenuStripShowTable = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.m_showDefinitionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_showTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.m_ContextMenuStrip_ShowDefinition = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.m_toolStripMenuItem_ShowDefinition = new System.Windows.Forms.ToolStripMenuItem();
+			this.m_ContextMenuStripShowDefinition = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.m_ToolStripMenuItemShowDefinition = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_userControlValues = new ColumnDepence.UserControlValues();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Columns)).BeginInit();
-			this.splitContainer_left.Panel1.SuspendLayout();
-			this.splitContainer_left.Panel2.SuspendLayout();
-			this.splitContainer_left.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_ColumnConstrains)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Parent)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Child)).BeginInit();
-			this.splitContainer_RightBottom.Panel1.SuspendLayout();
-			this.splitContainer_RightBottom.Panel2.SuspendLayout();
-			this.splitContainer_RightBottom.SuspendLayout();
-			this.splitContainer_LeftSpButtom.Panel1.SuspendLayout();
-			this.splitContainer_LeftSpButtom.Panel2.SuspendLayout();
-			this.splitContainer_LeftSpButtom.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Sp)).BeginInit();
-			this.splitContainer_right.Panel1.SuspendLayout();
-			this.splitContainer_right.Panel2.SuspendLayout();
-			this.splitContainer_right.SuspendLayout();
-			this.splitContainer_Main.Panel1.SuspendLayout();
-			this.splitContainer_Main.Panel2.SuspendLayout();
-			this.splitContainer_Main.SuspendLayout();
-			this.toolStrip_Menu.SuspendLayout();
-			this.panel_DataView.SuspendLayout();
-			this.m_contextMenuStrip_ShowTable.SuspendLayout();
-			this.m_ContextMenuStrip_ShowDefinition.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewColumns)).BeginInit();
+			this.m_SplitContainerLeft.Panel1.SuspendLayout();
+			this.m_SplitContainerLeft.Panel2.SuspendLayout();
+			this.m_SplitContainerLeft.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewColumnConstrains)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewParent)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewChild)).BeginInit();
+			this.m_SplitContainerRightBottom.Panel1.SuspendLayout();
+			this.m_SplitContainerRightBottom.Panel2.SuspendLayout();
+			this.m_SplitContainerRightBottom.SuspendLayout();
+			this.m_SplitContainerLeftSpButtom.Panel1.SuspendLayout();
+			this.m_SplitContainerLeftSpButtom.Panel2.SuspendLayout();
+			this.m_SplitContainerLeftSpButtom.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewSp)).BeginInit();
+			this.m_SplitContainerRight.Panel1.SuspendLayout();
+			this.m_SplitContainerRight.Panel2.SuspendLayout();
+			this.m_SplitContainerRight.SuspendLayout();
+			this.m_SplitContainerMain.Panel1.SuspendLayout();
+			this.m_SplitContainerMain.Panel2.SuspendLayout();
+			this.m_SplitContainerMain.SuspendLayout();
+			this.m_ToolStripMenu.SuspendLayout();
+			this.m_PanelDataView.SuspendLayout();
+			this.m_ContextMenuStripShowTable.SuspendLayout();
+			this.m_ContextMenuStripShowDefinition.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// dataGridView_Columns
+			// m_DataGridViewColumns
 			// 
-			this.dataGridView_Columns.AllowUserToAddRows = false;
-			this.dataGridView_Columns.AllowUserToDeleteRows = false;
+			this.m_DataGridViewColumns.AllowUserToAddRows = false;
+			this.m_DataGridViewColumns.AllowUserToDeleteRows = false;
 			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
 			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-			this.dataGridView_Columns.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-			this.dataGridView_Columns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.m_DataGridViewColumns.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+			this.m_DataGridViewColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -126,8 +128,8 @@
 			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_Columns.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-			this.dataGridView_Columns.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.m_DataGridViewColumns.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			this.m_DataGridViewColumns.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle3.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -135,10 +137,10 @@
 			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dataGridView_Columns.DefaultCellStyle = dataGridViewCellStyle3;
-			this.dataGridView_Columns.Location = new System.Drawing.Point(3, 16);
-			this.dataGridView_Columns.Name = "dataGridView_Columns";
-			this.dataGridView_Columns.ReadOnly = true;
+			this.m_DataGridViewColumns.DefaultCellStyle = dataGridViewCellStyle3;
+			this.m_DataGridViewColumns.Location = new System.Drawing.Point(3, 16);
+			this.m_DataGridViewColumns.Name = "m_DataGridViewColumns";
+			this.m_DataGridViewColumns.ReadOnly = true;
 			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle4.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -146,52 +148,52 @@
 			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_Columns.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
-			this.dataGridView_Columns.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dataGridView_Columns.Size = new System.Drawing.Size(695, 362);
-			this.dataGridView_Columns.TabIndex = 0;
-			this.dataGridView_Columns.SelectionChanged += new System.EventHandler(this.DataGridViewColumns_SelectionChanged);
+			this.m_DataGridViewColumns.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			this.m_DataGridViewColumns.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.m_DataGridViewColumns.Size = new System.Drawing.Size(695, 362);
+			this.m_DataGridViewColumns.TabIndex = 0;
+			this.m_DataGridViewColumns.SelectionChanged += new System.EventHandler(this.DataGridViewColumns_SelectionChanged);
 			// 
-			// label7
+			// m_Label7
 			// 
-			this.label7.AutoSize = true;
-			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label7.Location = new System.Drawing.Point(3, 0);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(60, 16);
-			this.label7.TabIndex = 2;
-			this.label7.Text = "Columns";
+			this.m_Label7.AutoSize = true;
+			this.m_Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_Label7.Location = new System.Drawing.Point(3, 0);
+			this.m_Label7.Name = "m_Label7";
+			this.m_Label7.Size = new System.Drawing.Size(60, 16);
+			this.m_Label7.TabIndex = 2;
+			this.m_Label7.Text = "Columns";
 			// 
-			// splitContainer_left
+			// m_SplitContainerLeft
 			// 
-			this.splitContainer_left.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.splitContainer_left.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_left.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer_left.Name = "splitContainer_left";
-			this.splitContainer_left.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.m_SplitContainerLeft.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.m_SplitContainerLeft.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_SplitContainerLeft.Location = new System.Drawing.Point(0, 0);
+			this.m_SplitContainerLeft.Name = "m_SplitContainerLeft";
+			this.m_SplitContainerLeft.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer_left.Panel1
+			// m_SplitContainerLeft.Panel1
 			// 
-			this.splitContainer_left.Panel1.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_left.Panel1.Controls.Add(this.dataGridView_Columns);
-			this.splitContainer_left.Panel1.Controls.Add(this.label7);
+			this.m_SplitContainerLeft.Panel1.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerLeft.Panel1.Controls.Add(this.m_DataGridViewColumns);
+			this.m_SplitContainerLeft.Panel1.Controls.Add(this.m_Label7);
 			// 
-			// splitContainer_left.Panel2
+			// m_SplitContainerLeft.Panel2
 			// 
-			this.splitContainer_left.Panel2.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_left.Panel2.Controls.Add(this.m_userControlValues);
-			this.splitContainer_left.Size = new System.Drawing.Size(700, 860);
-			this.splitContainer_left.SplitterDistance = 379;
-			this.splitContainer_left.SplitterWidth = 8;
-			this.splitContainer_left.TabIndex = 0;
+			this.m_SplitContainerLeft.Panel2.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerLeft.Panel2.Controls.Add(this.m_userControlValues);
+			this.m_SplitContainerLeft.Size = new System.Drawing.Size(700, 860);
+			this.m_SplitContainerLeft.SplitterDistance = 379;
+			this.m_SplitContainerLeft.SplitterWidth = 8;
+			this.m_SplitContainerLeft.TabIndex = 0;
 			// 
-			// dataGridView_ColumnConstrains
+			// m_DataGridViewColumnConstrains
 			// 
-			this.dataGridView_ColumnConstrains.AllowUserToAddRows = false;
-			this.dataGridView_ColumnConstrains.AllowUserToDeleteRows = false;
+			this.m_DataGridViewColumnConstrains.AllowUserToAddRows = false;
+			this.m_DataGridViewColumnConstrains.AllowUserToDeleteRows = false;
 			dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
-			this.dataGridView_ColumnConstrains.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
-			this.dataGridView_ColumnConstrains.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.m_DataGridViewColumnConstrains.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+			this.m_DataGridViewColumnConstrains.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -201,8 +203,8 @@
 			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_ColumnConstrains.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
-			this.dataGridView_ColumnConstrains.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.m_DataGridViewColumnConstrains.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			this.m_DataGridViewColumnConstrains.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle7.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -210,10 +212,10 @@
 			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dataGridView_ColumnConstrains.DefaultCellStyle = dataGridViewCellStyle7;
-			this.dataGridView_ColumnConstrains.Location = new System.Drawing.Point(3, 16);
-			this.dataGridView_ColumnConstrains.Name = "dataGridView_ColumnConstrains";
-			this.dataGridView_ColumnConstrains.ReadOnly = true;
+			this.m_DataGridViewColumnConstrains.DefaultCellStyle = dataGridViewCellStyle7;
+			this.m_DataGridViewColumnConstrains.Location = new System.Drawing.Point(3, 16);
+			this.m_DataGridViewColumnConstrains.Name = "m_DataGridViewColumnConstrains";
+			this.m_DataGridViewColumnConstrains.ReadOnly = true;
 			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle8.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -221,37 +223,37 @@
 			dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_ColumnConstrains.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
-			this.dataGridView_ColumnConstrains.Size = new System.Drawing.Size(488, 165);
-			this.dataGridView_ColumnConstrains.TabIndex = 0;
+			this.m_DataGridViewColumnConstrains.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
+			this.m_DataGridViewColumnConstrains.Size = new System.Drawing.Size(488, 165);
+			this.m_DataGridViewColumnConstrains.TabIndex = 0;
 			// 
-			// label9
+			// m_Label9
 			// 
-			this.label9.AutoSize = true;
-			this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label9.Location = new System.Drawing.Point(3, 0);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(122, 16);
-			this.label9.TabIndex = 3;
-			this.label9.Text = "Column Constraints";
+			this.m_Label9.AutoSize = true;
+			this.m_Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_Label9.Location = new System.Drawing.Point(3, 0);
+			this.m_Label9.Name = "m_Label9";
+			this.m_Label9.Size = new System.Drawing.Size(122, 16);
+			this.m_Label9.TabIndex = 3;
+			this.m_Label9.Text = "Column Constraints";
 			// 
-			// label10
+			// m_Label10
 			// 
-			this.label10.AutoSize = true;
-			this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label10.Location = new System.Drawing.Point(0, 0);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(64, 16);
-			this.label10.TabIndex = 4;
-			this.label10.Text = "Parent to:";
+			this.m_Label10.AutoSize = true;
+			this.m_Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_Label10.Location = new System.Drawing.Point(0, 0);
+			this.m_Label10.Name = "m_Label10";
+			this.m_Label10.Size = new System.Drawing.Size(64, 16);
+			this.m_Label10.TabIndex = 4;
+			this.m_Label10.Text = "Parent to:";
 			// 
-			// dataGridView_Parent
+			// m_DataGridViewParent
 			// 
-			this.dataGridView_Parent.AllowUserToAddRows = false;
-			this.dataGridView_Parent.AllowUserToDeleteRows = false;
+			this.m_DataGridViewParent.AllowUserToAddRows = false;
+			this.m_DataGridViewParent.AllowUserToDeleteRows = false;
 			dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
-			this.dataGridView_Parent.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
-			this.dataGridView_Parent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.m_DataGridViewParent.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
+			this.m_DataGridViewParent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -261,8 +263,8 @@
 			dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_Parent.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
-			this.dataGridView_Parent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.m_DataGridViewParent.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+			this.m_DataGridViewParent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle11.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -270,10 +272,10 @@
 			dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dataGridView_Parent.DefaultCellStyle = dataGridViewCellStyle11;
-			this.dataGridView_Parent.Location = new System.Drawing.Point(3, 16);
-			this.dataGridView_Parent.Name = "dataGridView_Parent";
-			this.dataGridView_Parent.ReadOnly = true;
+			this.m_DataGridViewParent.DefaultCellStyle = dataGridViewCellStyle11;
+			this.m_DataGridViewParent.Location = new System.Drawing.Point(3, 16);
+			this.m_DataGridViewParent.Name = "m_DataGridViewParent";
+			this.m_DataGridViewParent.ReadOnly = true;
 			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -281,17 +283,17 @@
 			dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_Parent.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
-			this.dataGridView_Parent.Size = new System.Drawing.Size(488, 165);
-			this.dataGridView_Parent.TabIndex = 1;
+			this.m_DataGridViewParent.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+			this.m_DataGridViewParent.Size = new System.Drawing.Size(488, 165);
+			this.m_DataGridViewParent.TabIndex = 1;
 			// 
-			// dataGridView_Child
+			// m_DataGridViewChild
 			// 
-			this.dataGridView_Child.AllowUserToAddRows = false;
-			this.dataGridView_Child.AllowUserToDeleteRows = false;
+			this.m_DataGridViewChild.AllowUserToAddRows = false;
+			this.m_DataGridViewChild.AllowUserToDeleteRows = false;
 			dataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
-			this.dataGridView_Child.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
-			this.dataGridView_Child.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.m_DataGridViewChild.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
+			this.m_DataGridViewChild.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -301,8 +303,8 @@
 			dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_Child.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
-			this.dataGridView_Child.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.m_DataGridViewChild.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
+			this.m_DataGridViewChild.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle15.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -310,10 +312,10 @@
 			dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dataGridView_Child.DefaultCellStyle = dataGridViewCellStyle15;
-			this.dataGridView_Child.Location = new System.Drawing.Point(6, 16);
-			this.dataGridView_Child.Name = "dataGridView_Child";
-			this.dataGridView_Child.ReadOnly = true;
+			this.m_DataGridViewChild.DefaultCellStyle = dataGridViewCellStyle15;
+			this.m_DataGridViewChild.Location = new System.Drawing.Point(6, 16);
+			this.m_DataGridViewChild.Name = "m_DataGridViewChild";
+			this.m_DataGridViewChild.ReadOnly = true;
 			dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -321,75 +323,75 @@
 			dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_Child.RowHeadersDefaultCellStyle = dataGridViewCellStyle16;
-			this.dataGridView_Child.Size = new System.Drawing.Size(485, 219);
-			this.dataGridView_Child.TabIndex = 0;
+			this.m_DataGridViewChild.RowHeadersDefaultCellStyle = dataGridViewCellStyle16;
+			this.m_DataGridViewChild.Size = new System.Drawing.Size(485, 219);
+			this.m_DataGridViewChild.TabIndex = 0;
 			// 
-			// label11
+			// m_Label11
 			// 
-			this.label11.AutoSize = true;
-			this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label11.Location = new System.Drawing.Point(3, 0);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(55, 16);
-			this.label11.TabIndex = 5;
-			this.label11.Text = "Child to:";
+			this.m_Label11.AutoSize = true;
+			this.m_Label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_Label11.Location = new System.Drawing.Point(3, 0);
+			this.m_Label11.Name = "m_Label11";
+			this.m_Label11.Size = new System.Drawing.Size(55, 16);
+			this.m_Label11.TabIndex = 5;
+			this.m_Label11.Text = "Child to:";
 			// 
-			// splitContainer_RightBottom
+			// m_SplitContainerRightBottom
 			// 
-			this.splitContainer_RightBottom.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.splitContainer_RightBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_RightBottom.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-			this.splitContainer_RightBottom.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer_RightBottom.Name = "splitContainer_RightBottom";
-			this.splitContainer_RightBottom.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.m_SplitContainerRightBottom.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.m_SplitContainerRightBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_SplitContainerRightBottom.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+			this.m_SplitContainerRightBottom.Location = new System.Drawing.Point(0, 0);
+			this.m_SplitContainerRightBottom.Name = "m_SplitContainerRightBottom";
+			this.m_SplitContainerRightBottom.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer_RightBottom.Panel1
+			// m_SplitContainerRightBottom.Panel1
 			// 
-			this.splitContainer_RightBottom.Panel1.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_RightBottom.Panel1.Controls.Add(this.label10);
-			this.splitContainer_RightBottom.Panel1.Controls.Add(this.dataGridView_Parent);
+			this.m_SplitContainerRightBottom.Panel1.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerRightBottom.Panel1.Controls.Add(this.m_Label10);
+			this.m_SplitContainerRightBottom.Panel1.Controls.Add(this.m_DataGridViewParent);
 			// 
-			// splitContainer_RightBottom.Panel2
+			// m_SplitContainerRightBottom.Panel2
 			// 
-			this.splitContainer_RightBottom.Panel2.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_RightBottom.Panel2.Controls.Add(this.splitContainer_LeftSpButtom);
-			this.splitContainer_RightBottom.Size = new System.Drawing.Size(494, 668);
-			this.splitContainer_RightBottom.SplitterDistance = 184;
-			this.splitContainer_RightBottom.SplitterWidth = 8;
-			this.splitContainer_RightBottom.TabIndex = 0;
+			this.m_SplitContainerRightBottom.Panel2.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerRightBottom.Panel2.Controls.Add(this.m_SplitContainerLeftSpButtom);
+			this.m_SplitContainerRightBottom.Size = new System.Drawing.Size(494, 668);
+			this.m_SplitContainerRightBottom.SplitterDistance = 184;
+			this.m_SplitContainerRightBottom.SplitterWidth = 8;
+			this.m_SplitContainerRightBottom.TabIndex = 0;
 			// 
-			// splitContainer_LeftSpButtom
+			// m_SplitContainerLeftSpButtom
 			// 
-			this.splitContainer_LeftSpButtom.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.splitContainer_LeftSpButtom.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_LeftSpButtom.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer_LeftSpButtom.Name = "splitContainer_LeftSpButtom";
-			this.splitContainer_LeftSpButtom.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.m_SplitContainerLeftSpButtom.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.m_SplitContainerLeftSpButtom.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_SplitContainerLeftSpButtom.Location = new System.Drawing.Point(0, 0);
+			this.m_SplitContainerLeftSpButtom.Name = "m_SplitContainerLeftSpButtom";
+			this.m_SplitContainerLeftSpButtom.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer_LeftSpButtom.Panel1
+			// m_SplitContainerLeftSpButtom.Panel1
 			// 
-			this.splitContainer_LeftSpButtom.Panel1.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_LeftSpButtom.Panel1.Controls.Add(this.label11);
-			this.splitContainer_LeftSpButtom.Panel1.Controls.Add(this.dataGridView_Child);
+			this.m_SplitContainerLeftSpButtom.Panel1.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerLeftSpButtom.Panel1.Controls.Add(this.m_Label11);
+			this.m_SplitContainerLeftSpButtom.Panel1.Controls.Add(this.m_DataGridViewChild);
 			// 
-			// splitContainer_LeftSpButtom.Panel2
+			// m_SplitContainerLeftSpButtom.Panel2
 			// 
-			this.splitContainer_LeftSpButtom.Panel2.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_LeftSpButtom.Panel2.Controls.Add(this.dataGridView_Sp);
-			this.splitContainer_LeftSpButtom.Panel2.Controls.Add(this.label_sp);
-			this.splitContainer_LeftSpButtom.Size = new System.Drawing.Size(494, 476);
-			this.splitContainer_LeftSpButtom.SplitterDistance = 238;
-			this.splitContainer_LeftSpButtom.SplitterWidth = 8;
-			this.splitContainer_LeftSpButtom.TabIndex = 6;
+			this.m_SplitContainerLeftSpButtom.Panel2.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerLeftSpButtom.Panel2.Controls.Add(this.m_DataGridViewSp);
+			this.m_SplitContainerLeftSpButtom.Panel2.Controls.Add(this.m_LabelSp);
+			this.m_SplitContainerLeftSpButtom.Size = new System.Drawing.Size(494, 476);
+			this.m_SplitContainerLeftSpButtom.SplitterDistance = 238;
+			this.m_SplitContainerLeftSpButtom.SplitterWidth = 8;
+			this.m_SplitContainerLeftSpButtom.TabIndex = 6;
 			// 
-			// dataGridView_Sp
+			// m_DataGridViewSp
 			// 
-			this.dataGridView_Sp.AllowUserToAddRows = false;
-			this.dataGridView_Sp.AllowUserToDeleteRows = false;
+			this.m_DataGridViewSp.AllowUserToAddRows = false;
+			this.m_DataGridViewSp.AllowUserToDeleteRows = false;
 			dataGridViewCellStyle17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
-			this.dataGridView_Sp.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle17;
-			this.dataGridView_Sp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.m_DataGridViewSp.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle17;
+			this.m_DataGridViewSp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -399,8 +401,8 @@
 			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_Sp.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle18;
-			this.dataGridView_Sp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.m_DataGridViewSp.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle18;
+			this.m_DataGridViewSp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle19.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -408,10 +410,10 @@
 			dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dataGridView_Sp.DefaultCellStyle = dataGridViewCellStyle19;
-			this.dataGridView_Sp.Location = new System.Drawing.Point(6, 20);
-			this.dataGridView_Sp.Name = "dataGridView_Sp";
-			this.dataGridView_Sp.ReadOnly = true;
+			this.m_DataGridViewSp.DefaultCellStyle = dataGridViewCellStyle19;
+			this.m_DataGridViewSp.Location = new System.Drawing.Point(6, 20);
+			this.m_DataGridViewSp.Name = "m_DataGridViewSp";
+			this.m_DataGridViewSp.ReadOnly = true;
 			dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle20.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -419,172 +421,172 @@
 			dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
 			dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView_Sp.RowHeadersDefaultCellStyle = dataGridViewCellStyle20;
-			this.dataGridView_Sp.Size = new System.Drawing.Size(485, 207);
-			this.dataGridView_Sp.TabIndex = 1;
+			this.m_DataGridViewSp.RowHeadersDefaultCellStyle = dataGridViewCellStyle20;
+			this.m_DataGridViewSp.Size = new System.Drawing.Size(485, 207);
+			this.m_DataGridViewSp.TabIndex = 1;
 			// 
-			// label_sp
+			// m_LabelSp
 			// 
-			this.label_sp.AutoSize = true;
-			this.label_sp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_sp.Location = new System.Drawing.Point(6, 4);
-			this.label_sp.Name = "label_sp";
-			this.label_sp.Size = new System.Drawing.Size(120, 16);
-			this.label_sp.TabIndex = 0;
-			this.label_sp.Text = "Stored procedures";
+			this.m_LabelSp.AutoSize = true;
+			this.m_LabelSp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_LabelSp.Location = new System.Drawing.Point(6, 4);
+			this.m_LabelSp.Name = "m_LabelSp";
+			this.m_LabelSp.Size = new System.Drawing.Size(120, 16);
+			this.m_LabelSp.TabIndex = 0;
+			this.m_LabelSp.Text = "Stored procedures";
 			// 
-			// splitContainer_right
+			// m_SplitContainerRight
 			// 
-			this.splitContainer_right.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.splitContainer_right.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_right.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-			this.splitContainer_right.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer_right.Name = "splitContainer_right";
-			this.splitContainer_right.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.m_SplitContainerRight.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.m_SplitContainerRight.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_SplitContainerRight.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+			this.m_SplitContainerRight.Location = new System.Drawing.Point(0, 0);
+			this.m_SplitContainerRight.Name = "m_SplitContainerRight";
+			this.m_SplitContainerRight.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer_right.Panel1
+			// m_SplitContainerRight.Panel1
 			// 
-			this.splitContainer_right.Panel1.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_right.Panel1.Controls.Add(this.dataGridView_ColumnConstrains);
-			this.splitContainer_right.Panel1.Controls.Add(this.label9);
+			this.m_SplitContainerRight.Panel1.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerRight.Panel1.Controls.Add(this.m_DataGridViewColumnConstrains);
+			this.m_SplitContainerRight.Panel1.Controls.Add(this.m_Label9);
 			// 
-			// splitContainer_right.Panel2
+			// m_SplitContainerRight.Panel2
 			// 
-			this.splitContainer_right.Panel2.Controls.Add(this.splitContainer_RightBottom);
-			this.splitContainer_right.Size = new System.Drawing.Size(494, 860);
-			this.splitContainer_right.SplitterDistance = 184;
-			this.splitContainer_right.SplitterWidth = 8;
-			this.splitContainer_right.TabIndex = 7;
+			this.m_SplitContainerRight.Panel2.Controls.Add(this.m_SplitContainerRightBottom);
+			this.m_SplitContainerRight.Size = new System.Drawing.Size(494, 860);
+			this.m_SplitContainerRight.SplitterDistance = 184;
+			this.m_SplitContainerRight.SplitterWidth = 8;
+			this.m_SplitContainerRight.TabIndex = 7;
 			// 
-			// splitContainer_Main
+			// m_SplitContainerMain
 			// 
-			this.splitContainer_Main.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.splitContainer_Main.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_Main.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer_Main.Name = "splitContainer_Main";
+			this.m_SplitContainerMain.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.m_SplitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_SplitContainerMain.Location = new System.Drawing.Point(0, 0);
+			this.m_SplitContainerMain.Name = "m_SplitContainerMain";
 			// 
-			// splitContainer_Main.Panel1
+			// m_SplitContainerMain.Panel1
 			// 
-			this.splitContainer_Main.Panel1.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_Main.Panel1.Controls.Add(this.splitContainer_left);
+			this.m_SplitContainerMain.Panel1.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerMain.Panel1.Controls.Add(this.m_SplitContainerLeft);
 			// 
-			// splitContainer_Main.Panel2
+			// m_SplitContainerMain.Panel2
 			// 
-			this.splitContainer_Main.Panel2.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer_Main.Panel2.Controls.Add(this.splitContainer_right);
-			this.splitContainer_Main.Size = new System.Drawing.Size(1204, 860);
-			this.splitContainer_Main.SplitterDistance = 700;
-			this.splitContainer_Main.SplitterWidth = 10;
-			this.splitContainer_Main.TabIndex = 0;
+			this.m_SplitContainerMain.Panel2.BackColor = System.Drawing.SystemColors.Control;
+			this.m_SplitContainerMain.Panel2.Controls.Add(this.m_SplitContainerRight);
+			this.m_SplitContainerMain.Size = new System.Drawing.Size(1204, 860);
+			this.m_SplitContainerMain.SplitterDistance = 700;
+			this.m_SplitContainerMain.SplitterWidth = 10;
+			this.m_SplitContainerMain.TabIndex = 0;
 			// 
-			// toolStrip_Menu
+			// m_ToolStripMenu
 			// 
-			this.toolStrip_Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton_LoadDef,
-            this.toolStripSplitButton_LoadMain,
-            this.toolStripSeparator1,
-            this.toolStripLabel_DB,
-            this.toolStripLabel_TableName,
-            this.toolStripButton_CloseTab,
-            this.toolStripButton_ToolBox});
-			this.toolStrip_Menu.Location = new System.Drawing.Point(0, 0);
-			this.toolStrip_Menu.Name = "toolStrip_Menu";
-			this.toolStrip_Menu.Size = new System.Drawing.Size(1204, 25);
-			this.toolStrip_Menu.TabIndex = 4;
-			this.toolStrip_Menu.Text = "toolStrip1";
+			this.m_ToolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_ToolStripButtonLoadDef,
+            this.m_ToolStripSplitButtonLoadMain,
+            this.m_ToolStripSeparator1,
+            this.m_ToolStripLabelDb,
+            this.m_ToolStripLabelTableName,
+            this.m_ToolStripButtonCloseTab,
+            this.m_ToolStripButtonToolBox});
+			this.m_ToolStripMenu.Location = new System.Drawing.Point(0, 0);
+			this.m_ToolStripMenu.Name = "m_ToolStripMenu";
+			this.m_ToolStripMenu.Size = new System.Drawing.Size(1204, 25);
+			this.m_ToolStripMenu.TabIndex = 4;
+			this.m_ToolStripMenu.Text = "toolStrip1";
 			// 
-			// toolStripButton_LoadDef
+			// m_ToolStripButtonLoadDef
 			// 
-			this.toolStripButton_LoadDef.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
-			this.toolStripButton_LoadDef.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton_LoadDef.Name = "toolStripButton_LoadDef";
-			this.toolStripButton_LoadDef.Size = new System.Drawing.Size(98, 22);
-			this.toolStripButton_LoadDef.Text = "Load Definition";
-			this.toolStripButton_LoadDef.ToolTipText = "Load this tables definition";
-			this.toolStripButton_LoadDef.Click += new System.EventHandler(this.button_RefreshDef_Click);
+			this.m_ToolStripButtonLoadDef.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+			this.m_ToolStripButtonLoadDef.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.m_ToolStripButtonLoadDef.Name = "m_ToolStripButtonLoadDef";
+			this.m_ToolStripButtonLoadDef.Size = new System.Drawing.Size(98, 22);
+			this.m_ToolStripButtonLoadDef.Text = "Load Definition";
+			this.m_ToolStripButtonLoadDef.ToolTipText = "Load this tables definition";
+			this.m_ToolStripButtonLoadDef.Click += new System.EventHandler(this.button_RefreshDef_Click);
 			// 
-			// toolStripSplitButton_LoadMain
+			// m_ToolStripSplitButtonLoadMain
 			// 
-			this.toolStripSplitButton_LoadMain.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadAllValuesToolStripMenuItem,
-            this.loadTop300ToolStripMenuItem});
-			this.toolStripSplitButton_LoadMain.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
-			this.toolStripSplitButton_LoadMain.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripSplitButton_LoadMain.Name = "toolStripSplitButton_LoadMain";
-			this.toolStripSplitButton_LoadMain.Size = new System.Drawing.Size(110, 22);
-			this.toolStripSplitButton_LoadMain.Text = "Load All Values";
-			this.toolStripSplitButton_LoadMain.Click += new System.EventHandler(this.toolStripSplitButton_LoadMain_Click);
+			this.m_ToolStripSplitButtonLoadMain.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_LoadAllValuesToolStripMenuItem,
+            this.m_LoadTop300ToolStripMenuItem});
+			this.m_ToolStripSplitButtonLoadMain.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
+			this.m_ToolStripSplitButtonLoadMain.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.m_ToolStripSplitButtonLoadMain.Name = "m_ToolStripSplitButtonLoadMain";
+			this.m_ToolStripSplitButtonLoadMain.Size = new System.Drawing.Size(110, 22);
+			this.m_ToolStripSplitButtonLoadMain.Text = "Load All Values";
+			this.m_ToolStripSplitButtonLoadMain.Click += new System.EventHandler(this.toolStripSplitButton_LoadMain_Click);
 			// 
-			// loadAllValuesToolStripMenuItem
+			// m_LoadAllValuesToolStripMenuItem
 			// 
-			this.loadAllValuesToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
-			this.loadAllValuesToolStripMenuItem.Name = "loadAllValuesToolStripMenuItem";
-			this.loadAllValuesToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-			this.loadAllValuesToolStripMenuItem.Text = "Load All Values";
-			this.loadAllValuesToolStripMenuItem.Click += new System.EventHandler(this.loadAllValuesToolStripMenuItem_Click);
+			this.m_LoadAllValuesToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
+			this.m_LoadAllValuesToolStripMenuItem.Name = "m_LoadAllValuesToolStripMenuItem";
+			this.m_LoadAllValuesToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.m_LoadAllValuesToolStripMenuItem.Text = "Load All Values";
+			this.m_LoadAllValuesToolStripMenuItem.Click += new System.EventHandler(this.loadAllValuesToolStripMenuItem_Click);
 			// 
-			// loadTop300ToolStripMenuItem
+			// m_LoadTop300ToolStripMenuItem
 			// 
-			this.loadTop300ToolStripMenuItem.Name = "loadTop300ToolStripMenuItem";
-			this.loadTop300ToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-			this.loadTop300ToolStripMenuItem.Text = "Load Top 300";
-			this.loadTop300ToolStripMenuItem.Click += new System.EventHandler(this.loadTop300ToolStripMenuItem_Click);
+			this.m_LoadTop300ToolStripMenuItem.Name = "m_LoadTop300ToolStripMenuItem";
+			this.m_LoadTop300ToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.m_LoadTop300ToolStripMenuItem.Text = "Load Top 300";
+			this.m_LoadTop300ToolStripMenuItem.Click += new System.EventHandler(this.loadTop300ToolStripMenuItem_Click);
 			// 
-			// toolStripSeparator1
+			// m_ToolStripSeparator1
 			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			this.m_ToolStripSeparator1.Name = "m_ToolStripSeparator1";
+			this.m_ToolStripSeparator1.Size = new System.Drawing.Size(6, 25);
 			// 
-			// toolStripLabel_DB
+			// m_ToolStripLabelDb
 			// 
-			this.toolStripLabel_DB.Name = "toolStripLabel_DB";
-			this.toolStripLabel_DB.Size = new System.Drawing.Size(0, 22);
+			this.m_ToolStripLabelDb.Name = "m_ToolStripLabelDb";
+			this.m_ToolStripLabelDb.Size = new System.Drawing.Size(0, 22);
 			// 
-			// toolStripLabel_TableName
+			// m_ToolStripLabelTableName
 			// 
-			this.toolStripLabel_TableName.DoubleClickEnabled = true;
-			this.toolStripLabel_TableName.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.toolStripLabel_TableName.Name = "toolStripLabel_TableName";
-			this.toolStripLabel_TableName.Size = new System.Drawing.Size(0, 22);
-			this.toolStripLabel_TableName.ToolTipText = "Doubleclick to copy to clipboard";
-			this.toolStripLabel_TableName.DoubleClick += new System.EventHandler(this.ToolStripLabelTableName_DoubleClick);
+			this.m_ToolStripLabelTableName.DoubleClickEnabled = true;
+			this.m_ToolStripLabelTableName.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_ToolStripLabelTableName.Name = "m_ToolStripLabelTableName";
+			this.m_ToolStripLabelTableName.Size = new System.Drawing.Size(0, 22);
+			this.m_ToolStripLabelTableName.ToolTipText = "Doubleclick to copy to clipboard";
+			this.m_ToolStripLabelTableName.DoubleClick += new System.EventHandler(this.ToolStripLabelTableName_DoubleClick);
 			// 
-			// toolStripButton_CloseTab
+			// m_ToolStripButtonCloseTab
 			// 
-			this.toolStripButton_CloseTab.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-			this.toolStripButton_CloseTab.Image = global::ColumnDepence.Properties.Resources.CloseImage;
-			this.toolStripButton_CloseTab.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton_CloseTab.Name = "toolStripButton_CloseTab";
-			this.toolStripButton_CloseTab.Size = new System.Drawing.Size(74, 22);
-			this.toolStripButton_CloseTab.Text = "Close Tab";
-			this.toolStripButton_CloseTab.Click += new System.EventHandler(this.button_CloseTab_Click);
+			this.m_ToolStripButtonCloseTab.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.m_ToolStripButtonCloseTab.Image = global::ColumnDepence.Properties.Resources.CloseImage;
+			this.m_ToolStripButtonCloseTab.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.m_ToolStripButtonCloseTab.Name = "m_ToolStripButtonCloseTab";
+			this.m_ToolStripButtonCloseTab.Size = new System.Drawing.Size(74, 22);
+			this.m_ToolStripButtonCloseTab.Text = "Close Tab";
+			this.m_ToolStripButtonCloseTab.Click += new System.EventHandler(this.button_CloseTab_Click);
 			// 
-			// toolStripButton_ToolBox
+			// m_ToolStripButtonToolBox
 			// 
-			this.toolStripButton_ToolBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-			this.toolStripButton_ToolBox.Image = global::ColumnDepence.Properties.Resources.ToolBoxImage;
-			this.toolStripButton_ToolBox.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton_ToolBox.Name = "toolStripButton_ToolBox";
-			this.toolStripButton_ToolBox.Size = new System.Drawing.Size(109, 22);
-			this.toolStripButton_ToolBox.Text = "Show as tool box";
-			this.toolStripButton_ToolBox.Click += new System.EventHandler(this.toolStripButton_ToolBox_Click);
+			this.m_ToolStripButtonToolBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.m_ToolStripButtonToolBox.Image = global::ColumnDepence.Properties.Resources.ToolBoxImage;
+			this.m_ToolStripButtonToolBox.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.m_ToolStripButtonToolBox.Name = "m_ToolStripButtonToolBox";
+			this.m_ToolStripButtonToolBox.Size = new System.Drawing.Size(109, 22);
+			this.m_ToolStripButtonToolBox.Text = "Show as tool box";
+			this.m_ToolStripButtonToolBox.Click += new System.EventHandler(this.ToolStripButtonToolBox_Click);
 			// 
-			// panel_DataView
+			// m_PanelDataView
 			// 
-			this.panel_DataView.Controls.Add(this.splitContainer_Main);
-			this.panel_DataView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel_DataView.Location = new System.Drawing.Point(0, 25);
-			this.panel_DataView.Name = "panel_DataView";
-			this.panel_DataView.Size = new System.Drawing.Size(1204, 860);
-			this.panel_DataView.TabIndex = 5;
+			this.m_PanelDataView.Controls.Add(this.m_SplitContainerMain);
+			this.m_PanelDataView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_PanelDataView.Location = new System.Drawing.Point(0, 25);
+			this.m_PanelDataView.Name = "m_PanelDataView";
+			this.m_PanelDataView.Size = new System.Drawing.Size(1204, 860);
+			this.m_PanelDataView.TabIndex = 5;
 			// 
-			// m_contextMenuStrip_ShowTable
+			// m_ContextMenuStripShowTable
 			// 
-			this.m_contextMenuStrip_ShowTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.m_ContextMenuStripShowTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_showDefinitionToolStripMenuItem,
             this.m_showTableToolStripMenuItem});
-			this.m_contextMenuStrip_ShowTable.Name = "m_contextMenuStrip_ShowTable";
-			this.m_contextMenuStrip_ShowTable.Size = new System.Drawing.Size(175, 48);
+			this.m_ContextMenuStripShowTable.Name = "m_ContextMenuStripShowTable";
+			this.m_ContextMenuStripShowTable.Size = new System.Drawing.Size(175, 48);
 			// 
 			// m_showDefinitionToolStripMenuItem
 			// 
@@ -602,20 +604,20 @@
 			this.m_showTableToolStripMenuItem.Text = "Show Table Values";
 			this.m_showTableToolStripMenuItem.Click += new System.EventHandler(this.ShowTableValues_Click);
 			// 
-			// m_ContextMenuStrip_ShowDefinition
+			// m_ContextMenuStripShowDefinition
 			// 
-			this.m_ContextMenuStrip_ShowDefinition.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_toolStripMenuItem_ShowDefinition});
-			this.m_ContextMenuStrip_ShowDefinition.Name = "m_ContextMenuStrip_ShowDefinition";
-			this.m_ContextMenuStrip_ShowDefinition.Size = new System.Drawing.Size(160, 26);
+			this.m_ContextMenuStripShowDefinition.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_ToolStripMenuItemShowDefinition});
+			this.m_ContextMenuStripShowDefinition.Name = "m_ContextMenuStripShowDefinition";
+			this.m_ContextMenuStripShowDefinition.Size = new System.Drawing.Size(160, 26);
 			// 
-			// m_toolStripMenuItem_ShowDefinition
+			// m_ToolStripMenuItemShowDefinition
 			// 
-			this.m_toolStripMenuItem_ShowDefinition.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
-			this.m_toolStripMenuItem_ShowDefinition.Name = "m_toolStripMenuItem_ShowDefinition";
-			this.m_toolStripMenuItem_ShowDefinition.Size = new System.Drawing.Size(159, 22);
-			this.m_toolStripMenuItem_ShowDefinition.Text = "Show Definition";
-			this.m_toolStripMenuItem_ShowDefinition.Click += new System.EventHandler(this.ToolStripMenuItem_ShowDefinition_Click);
+			this.m_ToolStripMenuItemShowDefinition.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+			this.m_ToolStripMenuItemShowDefinition.Name = "m_ToolStripMenuItemShowDefinition";
+			this.m_ToolStripMenuItemShowDefinition.Size = new System.Drawing.Size(159, 22);
+			this.m_ToolStripMenuItemShowDefinition.Text = "Show Definition";
+			this.m_ToolStripMenuItemShowDefinition.Click += new System.EventHandler(this.ToolStripMenuItem_ShowDefinition_Click);
 			// 
 			// m_userControlValues
 			// 
@@ -634,40 +636,40 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.panel_DataView);
-			this.Controls.Add(this.toolStrip_Menu);
+			this.Controls.Add(this.m_PanelDataView);
+			this.Controls.Add(this.m_ToolStripMenu);
 			this.Name = "UserControlAllTableInfo";
 			this.Size = new System.Drawing.Size(1204, 885);
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Columns)).EndInit();
-			this.splitContainer_left.Panel1.ResumeLayout(false);
-			this.splitContainer_left.Panel1.PerformLayout();
-			this.splitContainer_left.Panel2.ResumeLayout(false);
-			this.splitContainer_left.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_ColumnConstrains)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Parent)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Child)).EndInit();
-			this.splitContainer_RightBottom.Panel1.ResumeLayout(false);
-			this.splitContainer_RightBottom.Panel1.PerformLayout();
-			this.splitContainer_RightBottom.Panel2.ResumeLayout(false);
-			this.splitContainer_RightBottom.ResumeLayout(false);
-			this.splitContainer_LeftSpButtom.Panel1.ResumeLayout(false);
-			this.splitContainer_LeftSpButtom.Panel1.PerformLayout();
-			this.splitContainer_LeftSpButtom.Panel2.ResumeLayout(false);
-			this.splitContainer_LeftSpButtom.Panel2.PerformLayout();
-			this.splitContainer_LeftSpButtom.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Sp)).EndInit();
-			this.splitContainer_right.Panel1.ResumeLayout(false);
-			this.splitContainer_right.Panel1.PerformLayout();
-			this.splitContainer_right.Panel2.ResumeLayout(false);
-			this.splitContainer_right.ResumeLayout(false);
-			this.splitContainer_Main.Panel1.ResumeLayout(false);
-			this.splitContainer_Main.Panel2.ResumeLayout(false);
-			this.splitContainer_Main.ResumeLayout(false);
-			this.toolStrip_Menu.ResumeLayout(false);
-			this.toolStrip_Menu.PerformLayout();
-			this.panel_DataView.ResumeLayout(false);
-			this.m_contextMenuStrip_ShowTable.ResumeLayout(false);
-			this.m_ContextMenuStrip_ShowDefinition.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewColumns)).EndInit();
+			this.m_SplitContainerLeft.Panel1.ResumeLayout(false);
+			this.m_SplitContainerLeft.Panel1.PerformLayout();
+			this.m_SplitContainerLeft.Panel2.ResumeLayout(false);
+			this.m_SplitContainerLeft.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewColumnConstrains)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewParent)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewChild)).EndInit();
+			this.m_SplitContainerRightBottom.Panel1.ResumeLayout(false);
+			this.m_SplitContainerRightBottom.Panel1.PerformLayout();
+			this.m_SplitContainerRightBottom.Panel2.ResumeLayout(false);
+			this.m_SplitContainerRightBottom.ResumeLayout(false);
+			this.m_SplitContainerLeftSpButtom.Panel1.ResumeLayout(false);
+			this.m_SplitContainerLeftSpButtom.Panel1.PerformLayout();
+			this.m_SplitContainerLeftSpButtom.Panel2.ResumeLayout(false);
+			this.m_SplitContainerLeftSpButtom.Panel2.PerformLayout();
+			this.m_SplitContainerLeftSpButtom.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewSp)).EndInit();
+			this.m_SplitContainerRight.Panel1.ResumeLayout(false);
+			this.m_SplitContainerRight.Panel1.PerformLayout();
+			this.m_SplitContainerRight.Panel2.ResumeLayout(false);
+			this.m_SplitContainerRight.ResumeLayout(false);
+			this.m_SplitContainerMain.Panel1.ResumeLayout(false);
+			this.m_SplitContainerMain.Panel2.ResumeLayout(false);
+			this.m_SplitContainerMain.ResumeLayout(false);
+			this.m_ToolStripMenu.ResumeLayout(false);
+			this.m_ToolStripMenu.PerformLayout();
+			this.m_PanelDataView.ResumeLayout(false);
+			this.m_ContextMenuStripShowTable.ResumeLayout(false);
+			this.m_ContextMenuStripShowDefinition.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -675,37 +677,40 @@
 
 		#endregion
 
-		private System.Windows.Forms.DataGridView dataGridView_Columns;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.SplitContainer splitContainer_left;
-		private System.Windows.Forms.DataGridView dataGridView_ColumnConstrains;
-		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.DataGridView dataGridView_Parent;
-		private System.Windows.Forms.DataGridView dataGridView_Child;
-		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.SplitContainer splitContainer_RightBottom;
-		private System.Windows.Forms.SplitContainer splitContainer_right;
-		private System.Windows.Forms.SplitContainer splitContainer_Main;
-		private System.Windows.Forms.ToolStrip toolStrip_Menu;
-		private System.Windows.Forms.ToolStripButton toolStripButton_LoadDef;
-		private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton_LoadMain;
-		private System.Windows.Forms.ToolStripMenuItem loadAllValuesToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem loadTop300ToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripLabel toolStripLabel_DB;
-		private System.Windows.Forms.ToolStripLabel toolStripLabel_TableName;
-		private System.Windows.Forms.ToolStripButton toolStripButton_CloseTab;
-		private System.Windows.Forms.ToolStripButton toolStripButton_ToolBox;
-		private System.Windows.Forms.Panel panel_DataView;
-		private System.Windows.Forms.ContextMenuStrip m_contextMenuStrip_ShowTable;
-		private System.Windows.Forms.ToolStripMenuItem m_showTableToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem m_showDefinitionToolStripMenuItem;
+		private DataGridView m_DataGridViewColumns;
+		private Label m_Label7;
+		private SplitContainer m_SplitContainerLeft;
+		private DataGridView m_DataGridViewColumnConstrains;
+		private Label m_Label9;
+		private Label m_Label10;
+		private DataGridView m_DataGridViewParent;
+		private DataGridView m_DataGridViewChild;
+		private Label m_Label11;
+		private SplitContainer m_SplitContainerRightBottom;
+		private SplitContainer m_SplitContainerRight;
+		private SplitContainer m_SplitContainerMain;
+		private ToolStrip m_ToolStripMenu;
+		private ToolStripButton m_ToolStripButtonLoadDef;
+		private ToolStripSplitButton m_ToolStripSplitButtonLoadMain;
+		private ToolStripMenuItem m_LoadAllValuesToolStripMenuItem;
+		private ToolStripMenuItem m_LoadTop300ToolStripMenuItem;
+		private ToolStripSeparator m_ToolStripSeparator1;
+		private ToolStripLabel m_ToolStripLabelDb;
+		private ToolStripLabel m_ToolStripLabelTableName;
+		private ToolStripButton m_ToolStripButtonCloseTab;
+		private ToolStripButton m_ToolStripButtonToolBox;
+		private Panel m_PanelDataView;
+		private ContextMenuStrip m_ContextMenuStripShowTable;
+		private ToolStripMenuItem m_showTableToolStripMenuItem;
+		private ToolStripMenuItem m_showDefinitionToolStripMenuItem;
 		private UserControlValues m_userControlValues;
-		private System.Windows.Forms.SplitContainer splitContainer_LeftSpButtom;
-		private System.Windows.Forms.DataGridView dataGridView_Sp;
-		private System.Windows.Forms.Label label_sp;
-		private System.Windows.Forms.ContextMenuStrip m_ContextMenuStrip_ShowDefinition;
-		private System.Windows.Forms.ToolStripMenuItem m_toolStripMenuItem_ShowDefinition;
+		private SplitContainer m_SplitContainerLeftSpButtom;
+		private DataGridView m_DataGridViewSp;
+		private Label m_LabelSp;
+		private ContextMenuStrip m_ContextMenuStripShowDefinition;
+		private ToolStripMenuItem m_ToolStripMenuItemShowDefinition;
+		private Form m_toolbox;
+		private bool m_getAllRows ;
+		private ColumnDependencies m_ParentForm;
 	}
 }

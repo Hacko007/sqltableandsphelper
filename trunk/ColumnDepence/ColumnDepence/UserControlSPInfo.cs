@@ -4,19 +4,18 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace ColumnDepence
 {
 	/// <summary>
 	/// Show inforamtion about stored procedures.
 	/// </summary>
-	public partial class UserControlSPInfo : UserControl
+	public partial class UserControlSpInfo : UserControl
 	{
 		public event TabPageDelegate CloseTabPage;
 		public event OpenTableDelegate OpenTableTab;
-		public event OpenSPDelegate OpenSpTab;
-		private Form toolbox = null;
-		private int tryToLoadCounter = 1;
+		public event OpenSpDelegate OpenSpTab;
 
 		#region Properties
 		public ColumnDependencies FormMain
@@ -30,50 +29,38 @@ namespace ColumnDepence
 		/// <summary>
 		/// Get or Sets Stored Procedures Name
 		/// </summary>
-		public string SPName { get; set; }
-		public string SPDefinition
+		public string SpName { get; set; }
+		public string SpDefinition
 		{
 			get
 			{
-				return m_richTextBox_Definition.Text;
+				return m_RichTextBoxDefinition.Text;
 			}
 			set
 			{
-				m_richTextBox_Definition.Text = value;
+				m_RichTextBoxDefinition.Text = value;
 			}
 		}
 		public object DataViewParamsDataSource
 		{
-			get
-			{
-				if (m_dataGridView_Params == null)
-					return null;
-				else
-				{
-					return m_dataGridView_Params.DataSource;
-				}
+			get {
+				return m_DataGridViewParams == null ? null : m_DataGridViewParams.DataSource;
 			}
 			set
 			{
-				if (m_dataGridView_Params == null) return;
-				m_dataGridView_Params.DataSource = value;
+				if (m_DataGridViewParams == null) return;
+				m_DataGridViewParams.DataSource = value;
 			}
 		}
 		public object DataViewDependentTablesDataSource
 		{
-			get
-			{
-				if (m_dataGridView_DepTables== null)
-					return null;
-				else
-				{
-					return m_dataGridView_DepTables.DataSource;
-				}
+			get {
+				return m_DataGridViewDepTables== null ? null : m_DataGridViewDepTables.DataSource;
 			}
 			set
 			{
-				if (m_dataGridView_DepTables== null) return;
-				m_dataGridView_DepTables.DataSource = value;
+				if (m_DataGridViewDepTables== null) return;
+				m_DataGridViewDepTables.DataSource = value;
 			}
 		}
 		public bool ShowDependenciesInfo 
@@ -84,15 +71,18 @@ namespace ColumnDepence
 
 		#endregion Properties
 
-		public UserControlSPInfo()
+		public UserControlSpInfo()
 		{
 			InitializeComponent();
-			SPName = (SPName == null) ? "" : SPName;
-
-			m_richTextBox_Definition.AutoWordSelection = true;			
-			m_richTextBox_Definition.ZoomFactor = 1.2f;
+			SpName = SpName ?? "";
+			m_tryToLoadCounter = 1;
+			m_RichTextBoxDefinition.AutoWordSelection = true;			
+			m_RichTextBoxDefinition.ZoomFactor = 1.2f;
 			ShowDependenciesInfo = false;
-			m_splitContainer_Main.Panel1Collapsed = true;
+			m_SplitContainerMain.Panel1Collapsed = true;
+			
+			m_BackgroundWorkerFindText.DoWork += BackgroundWorkerFindTextDoWork;
+			m_BackgroundWorkerFindText.WorkerSupportsCancellation = true;
 		}
 
 		/// <summary>
@@ -100,29 +90,31 @@ namespace ColumnDepence
 		/// </summary>
 		internal void InitControl()
 		{
-			this.SPName = this.SPName.Replace("dbo.", "");
+			SpName = SpName.Replace("dbo.", "");
 			Cursor = Cursors.WaitCursor;
 			Application.DoEvents();
 			FillParameters();
 			Application.DoEvents();
 			FillDependecies();
 			Application.DoEvents();
-			FillSPDefinition();
+			FillSpDefinition();
 			Cursor = Cursors.Default;
 			m_toolStripLabelConnection.Text = ConnectionFactory.ShortConnectionName;
 		}
 
 
-		internal UserControlSPInfo Clone()
+		internal UserControlSpInfo Clone()
 		{
-			UserControlSPInfo sp = new UserControlSPInfo();
-			sp.SPName = this.SPName; 
-			sp.SPDefinition = this.SPDefinition;
-			sp.DataViewDependentTablesDataSource = this.DataViewDependentTablesDataSource;
-			sp.DataViewParamsDataSource = this.DataViewParamsDataSource;
-			sp.ShowDependenciesInfo = this.ShowDependenciesInfo;
+			UserControlSpInfo sp = new UserControlSpInfo
+			                       	{
+			                       		SpName = SpName,
+			                       		SpDefinition = SpDefinition,
+			                       		DataViewDependentTablesDataSource = DataViewDependentTablesDataSource,
+			                       		DataViewParamsDataSource = DataViewParamsDataSource,
+			                       		ShowDependenciesInfo = ShowDependenciesInfo
+			                       	};
 			sp.SyntaxHighLight();
-			sp.InitCoulomnsInDVDepTables();
+			sp.InitCoulomnsInDvDepTables();
 			return sp;
 		}
 	
@@ -131,7 +123,7 @@ namespace ColumnDepence
 		{
 			if (CloseTabPage != null)
 			{
-				CloseTabPage(SPName);
+				CloseTabPage(SpName);
 			}
 		}
 		protected virtual void RaiseOpenTableTab(string tableName, bool isDefinitionShown)
@@ -154,23 +146,23 @@ namespace ColumnDepence
 		/// <summary>
 		/// Refreshes textbox with SPs definition.
 		/// </summary>
-		void FillSPDefinition()
+		void FillSpDefinition()
 		{			
-			string sql_str = "	Declare @id int "
-		+ @"
+			const string sqlStr = "	Declare @id int "
+			                       + @"
 SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @SPSEARCH AND OBJECTPROPERTY(id, 'IsProcedure') = 1 "
-		+ @"
+			                       + @"
  SELECT [text]    FROM syscomments     "
-		+ " WHERE id= @id ";
+			                       + " WHERE id= @id ";
 
-			SqlCommand com = new SqlCommand(sql_str, ConnectionFactory.Instance);
+			SqlCommand com = new SqlCommand(sqlStr, ConnectionFactory.Instance);
 			com.Parameters.Add("@SPSEARCH", SqlDbType.NVarChar);
-			com.Parameters["@SPSEARCH"].Value = "%" + SPName + "%";
+			com.Parameters["@SPSEARCH"].Value = "%" + SpName + "%";
 
-			m_richTextBox_Definition.Text = "";
+			m_RichTextBoxDefinition.Text = "";
 
 			FormMain.StatusInfo1 = "Loading SP definition ...";
-			FormMain.StatusInfo2 = tryToLoadCounter + " try";
+			FormMain.StatusInfo2 = m_tryToLoadCounter + " try";
 			Application.DoEvents();
 
 			try
@@ -185,7 +177,7 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				{
 					while (reader.Read())
 					{
-						m_richTextBox_Definition.Text += reader[0];
+						m_RichTextBoxDefinition.Text += reader[0];
 						Application.DoEvents();
 					}
 				}
@@ -193,21 +185,22 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				{
 					// Always call Close when done reading.
 					reader.Close();
-					tryToLoadCounter = 1;
+					m_tryToLoadCounter = 1;
 				}
 			}catch
 			{
-				if(tryToLoadCounter <4)
+				if(m_tryToLoadCounter <4)
 				{
 					Application.DoEvents();
-					tryToLoadCounter++;
-					FillSPDefinition();		
+					m_tryToLoadCounter++;
+					FillSpDefinition();		
 					return;
 				}
 				
 			}
 			ConnectionFactory.CloseConnection();
-			FormMain.StatusInfo1 = "Syntax highligting";			
+			FormMain.StatusInfo1 = "Syntax highligting";
+			Application.DoEvents();		
 			SyntaxHighLight();
 			FormMain.StatusInfo1 = "";
 			FormMain.StatusInfo2 = "";
@@ -218,22 +211,22 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 		/// Fill datagrid with inforamtion about SP's parameters
 		/// </summary>
 		void FillParameters() {
-			string sql_str = @"SELECT 
+			const string sqlStr = @"SELECT 
 			PARAMETER_NAME ,
 			DATA_TYPE, 
 		CASE 
 			WHEN CHARACTER_MAXIMUM_LENGTH is not null THEN CHARACTER_MAXIMUM_LENGTH
 			ELSE NUMERIC_PRECISION END AS [LENGTH], PARAMETER_MODE 
 		FROM INFORMATION_SCHEMA.PARAMETERS "
-		+ "WHERE SPECIFIC_NAME LIKE @SPSEARCH Order by ORDINAL_POSITION ";
+			                       + "WHERE SPECIFIC_NAME LIKE @SPSEARCH Order by ORDINAL_POSITION ";
 
-			DataSet ds = FillDataSet(sql_str);
+			DataSet ds = FillDataSet(sqlStr);
 			if (ds != null && ds.Tables.Count > 0)
 			{
-				m_dataGridView_Params.DataSource = ds.Tables[0];
-				m_dataGridView_Params.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-				m_dataGridView_Params.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-				//m_dataGridView_Params.Columns[1].ContextMenuStrip = m_contextMenuStrip_ShowTable;
+				m_DataGridViewParams.DataSource = ds.Tables[0];
+				m_DataGridViewParams.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+				m_DataGridViewParams.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+				//m_DataGridViewParams.Columns[1].ContextMenuStrip = m_contextMenuStrip_ShowTable;
 			}
 		}
 
@@ -250,10 +243,12 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 					ConnectionFactory.Instance.Open();
 				}
 
-				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance);
-				com.CommandType = CommandType.StoredProcedure;
+				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance)
+				                 	{
+				                 		CommandType = CommandType.StoredProcedure
+				                 	};
 				com.Parameters.Add("@objname", SqlDbType.NVarChar, 517);
-				com.Parameters[0].Value = SPName;
+				com.Parameters[0].Value = SpName;
 
 				using (SqlDataAdapter adapter = new SqlDataAdapter(com))
 				{
@@ -270,15 +265,15 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 						dt.Columns.Add("MySel", typeof(bool), "IIF(selected = 'yes', 1 , 0)");
 						dt.Columns.Add("MyType", typeof(string), "IIF(type = 'stored procedure', 'SP' , 'TAB')");
 
-						m_dataGridView_DepTables.DataSource = dt;
-						InitCoulomnsInDVDepTables();
+						m_DataGridViewDepTables.DataSource = dt;
+						InitCoulomnsInDvDepTables();
 
 					}
 				}
 			}
 			catch (SqlException)
 			{
-				MessageBox.Show("Checke if " + SPName + " exists in database");
+				MessageBox.Show("Checke if " + SpName + " exists in database");
 			}
 			catch { }
 			finally
@@ -287,30 +282,30 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 			}
 		}
 
-		internal void InitCoulomnsInDVDepTables()
+		internal void InitCoulomnsInDvDepTables()
 		{
-			m_dataGridView_DepTables.Columns["type"].Visible = false;
-			m_dataGridView_DepTables.Columns["updated"].Visible = false;
-			m_dataGridView_DepTables.Columns["selected"].Visible = false;
-			m_dataGridView_DepTables.Columns["MyUpd"].HeaderText = "Updated";
-			m_dataGridView_DepTables.Columns["MySel"].HeaderText = "Selected";
-			m_dataGridView_DepTables.Columns["MyType"].HeaderText = "Type";
+			m_DataGridViewDepTables.Columns["type"].Visible = false;
+			m_DataGridViewDepTables.Columns["updated"].Visible = false;
+			m_DataGridViewDepTables.Columns["selected"].Visible = false;
+			m_DataGridViewDepTables.Columns["MyUpd"].HeaderText = "Updated";
+			m_DataGridViewDepTables.Columns["MySel"].HeaderText = "Selected";
+			m_DataGridViewDepTables.Columns["MyType"].HeaderText = "Type";
 
-			m_dataGridView_DepTables.Columns["name"].HeaderText = "Dependent Object";
-			m_dataGridView_DepTables.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-			m_dataGridView_DepTables.Columns["name"].ContextMenuStrip = m_ContextMenuStrip_ShowDefinition;
+			m_DataGridViewDepTables.Columns["name"].HeaderText = "Dependent Object";
+			m_DataGridViewDepTables.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+			m_DataGridViewDepTables.Columns["name"].ContextMenuStrip = m_ContextMenuStripShowDefinition;
 
-			m_dataGridView_DepTables.Columns["column"].HeaderText = "Column";
-			m_dataGridView_DepTables.Columns["column"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+			m_DataGridViewDepTables.Columns["column"].HeaderText = "Column";
+			m_DataGridViewDepTables.Columns["column"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
 		}
 
 
 		/// <summary>
 		/// Execute sql string and return result in DataSet
 		/// </summary>
-		/// <param name="sql_cmd_str">SQL to execute</param>
+		/// <param name="sqlCmdStr">SQL to execute</param>
 		/// <returns>Result of SQL executtion</returns>
-		DataSet FillDataSet(string sql_cmd_str)
+		DataSet FillDataSet(string sqlCmdStr)
 		{
 			try
 			{
@@ -319,11 +314,11 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 					ConnectionFactory.Instance.Open();
 				}
 
-				SqlCommand com = new SqlCommand(sql_cmd_str, ConnectionFactory.Instance);
-				if (sql_cmd_str.IndexOf("@SPSEARCH") > -1)
+				SqlCommand com = new SqlCommand(sqlCmdStr, ConnectionFactory.Instance);
+				if (sqlCmdStr.IndexOf("@SPSEARCH") > -1)
 				{
 					com.Parameters.Add("@SPSEARCH", SqlDbType.NVarChar);
-					com.Parameters["@SPSEARCH"].Value = SPName;
+					com.Parameters["@SPSEARCH"].Value = SpName;
 				}
 				using (SqlDataAdapter adapter = new SqlDataAdapter(com))
 				{
@@ -350,26 +345,26 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 		/// </summary>
 		private void SyntaxHighLight()
 		{
-			int start = 0;
-			int end = m_richTextBox_Definition.Text.Length;
+			const int start = 0;
+			
 			/// 
 			/// Backup the users current selection point.
 			/// 
-			int selectionStart = m_richTextBox_Definition.SelectionStart;
-			int selectionLength = m_richTextBox_Definition.SelectionLength;
+			int selectionStart = m_RichTextBoxDefinition.SelectionStart;
+			int selectionLength = m_RichTextBoxDefinition.SelectionLength;
 			/// 
 			/// Split the text into tokens.
 			/// 
 			Regex r = new Regex(@"([ \t{}();\n,])|(--.*\n)", RegexOptions.Compiled| RegexOptions.IgnorePatternWhitespace);			
-			string[] tokens = r.Split(m_richTextBox_Definition.Text);
+			string[] tokens = r.Split(m_RichTextBoxDefinition.Text);
 			int index = start;
 			foreach (string token in tokens)
 			{
 				/// Set the token's default color and font.
-				m_richTextBox_Definition.SelectionStart = index;
-				m_richTextBox_Definition.SelectionLength = token.Length;
-				m_richTextBox_Definition.SelectionColor = Color.Black;
-				m_richTextBox_Definition.SelectionFont = new Font("Courier New", 10, FontStyle.Regular);
+				m_RichTextBoxDefinition.SelectionStart = index;
+				m_RichTextBoxDefinition.SelectionLength = token.Length;
+				m_RichTextBoxDefinition.SelectionColor = Color.Black;
+				m_RichTextBoxDefinition.SelectionFont = new Font("Courier New", 10, FontStyle.Regular);
 
 				bool colored = false;
 				/// 
@@ -385,8 +380,8 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 					if (keywords[i] == token.ToLower())
 					{
 						// Apply alternative color and font to highlight keyword. 
-						m_richTextBox_Definition.SelectionColor = Color.Blue;
-						m_richTextBox_Definition.SelectionFont = new Font("Courier New", 10,
+						m_RichTextBoxDefinition.SelectionColor = Color.Blue;
+						m_RichTextBoxDefinition.SelectionFont = new Font("Courier New", 10,
 						FontStyle.Bold);
 						colored = true;
 						break;
@@ -400,14 +395,13 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				if(!colored)
 				for (int i = 0; i < types.Length; i++)
 				{
-					if (types[i] == token.ToLower())
-					{
-						// Apply alternative color and font to highlight keyword. 
-						m_richTextBox_Definition.SelectionColor = Color.DarkGreen;
-						m_richTextBox_Definition.SelectionFont = new Font("Courier New", 10,FontStyle.Bold);
-						colored = true;
-						break;
-					}
+					if (types[i] != token.ToLower()) continue;
+
+					// Apply alternative color and font to highlight keyword. 
+					m_RichTextBoxDefinition.SelectionColor = Color.DarkGreen;
+					m_RichTextBoxDefinition.SelectionFont = new Font("Courier New", 10,FontStyle.Bold);
+					colored = true;
+					break;
 				}
 
 				/// 
@@ -419,21 +413,19 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				if (!colored)
 					for (int i = 0; i < sql.Length; i++)
 					{
-						if (sql[i] == token.ToLower())
-						{
-							// Apply alternative color and font to highlight keyword. 
-							m_richTextBox_Definition.SelectionColor = Color.Green;
-							m_richTextBox_Definition.SelectionFont = new Font("Courier New", 10, FontStyle.Bold);
-							colored = true;
-							break;
-						}
+						if (sql[i] != token.ToLower()) continue;
+
+						// Apply alternative color and font to highlight keyword. 
+						m_RichTextBoxDefinition.SelectionColor = Color.Green;
+						m_RichTextBoxDefinition.SelectionFont = new Font("Courier New", 10, FontStyle.Bold);						
+						break;
 					}
 				/// 
 				/// One line comments
 				/// 
 				if(token.StartsWith("--")){
-					m_richTextBox_Definition.SelectionColor = Color.Gray;
-					m_richTextBox_Definition.SelectionFont = new Font("Arial", 10, FontStyle.Regular);
+					m_RichTextBoxDefinition.SelectionColor = Color.Gray;
+					m_RichTextBoxDefinition.SelectionFont = new Font("Arial", 10, FontStyle.Regular);
 				}else
 
 				/// 
@@ -441,15 +433,15 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				/// 
 				if (token.StartsWith("@"))
 				{
-					m_richTextBox_Definition.SelectionColor = Color.DarkBlue;
-					m_richTextBox_Definition.SelectionFont = new Font("Courier New", 10, FontStyle.Bold);
+					m_RichTextBoxDefinition.SelectionColor = Color.DarkBlue;
+					m_RichTextBoxDefinition.SelectionFont = new Font("Courier New", 10, FontStyle.Bold);
 				}
 
 				index += token.Length;
 			}
 			// Restore the users current selection point. 
-			m_richTextBox_Definition.SelectionStart = selectionStart;
-			m_richTextBox_Definition.SelectionLength = selectionLength;
+			m_RichTextBoxDefinition.SelectionStart = selectionStart;
+			m_RichTextBoxDefinition.SelectionLength = selectionLength;
 
 		}
 
@@ -459,12 +451,12 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 		{
 			try
 			{
-				if (m_dataGridView_DepTables.SelectedCells.Count > 0)
+				if (m_DataGridViewDepTables.SelectedCells.Count > 0)
 				{
-					string val = m_dataGridView_DepTables.SelectedCells[0].Value.ToString();
-					bool is_sp = "SP" == m_dataGridView_DepTables.SelectedCells[0].OwningRow.Cells["MyType"].Value.ToString();
+					string val = m_DataGridViewDepTables.SelectedCells[0].Value.ToString();
+					bool isSp = "SP" == m_DataGridViewDepTables.SelectedCells[0].OwningRow.Cells["MyType"].Value.ToString();
 
-					if (is_sp) {
+					if (isSp) {
 						RaiseOpenSpTab(val);
 					}
 					else
@@ -480,34 +472,36 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 
 		private void ToolStripButtonShowAsToolBox_Click(object sender, EventArgs e)
 		{
-			if (toolbox == null)
+			if (m_Toolbox == null)
 			{
-				toolbox = new Form();
-				toolbox.Text = SPName;
+				m_Toolbox = new Form
+				          	{
+				          		Text = SpName
+				          	};
 				m_toolStripButtonClose.Visible = false;
 				m_toolStripButtonShowAsToolBox.Text = "Show as tab page";
 				Dock = DockStyle.Fill;
-				toolbox.Controls.Add(this);
-				toolbox.FormBorderStyle = FormBorderStyle.SizableToolWindow;
-				toolbox.Size = new Size(800, 600);
-				toolbox.Show();
+				m_Toolbox.Controls.Add(this);
+				m_Toolbox.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+				m_Toolbox.Size = new Size(800, 600);
+				m_Toolbox.Show();
 				RaiseCloseTabPage();
-				toolbox.Owner = FormMain;
+				m_Toolbox.Owner = FormMain;
 			}
 			else
 			{
 				try
 				{
-					if (toolbox.Controls.Count > 0 && toolbox.Controls[0] is UserControlSPInfo)
+					if (m_Toolbox.Controls.Count > 0 && m_Toolbox.Controls[0] is UserControlSpInfo)
 					{
-						UserControlSPInfo spClone = ((UserControlSPInfo)toolbox.Controls[0]).Clone();
-						toolbox.Close();
-						FormMain.CreateSPTabPage(SPName, spClone);
+						UserControlSpInfo spClone = ((UserControlSpInfo)m_Toolbox.Controls[0]).Clone();
+						m_Toolbox.Close();
+						FormMain.CreateSpTabPage(SpName, spClone);
 					}
 				}
 				catch
 				{
-					FormMain.CreateSPTabPage(this.SPName);
+					FormMain.CreateSpTabPage(SpName);
 				}
 			}
 		}
@@ -519,46 +513,69 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 
 		private void ToolStripButtonShowParamInfo_CheckedChanged(object sender, EventArgs e)
 		{
-			m_splitContainer_Main.Panel1Collapsed = !m_toolStripButtonShowParamInfo.Checked;
+			m_SplitContainerMain.Panel1Collapsed = !m_toolStripButtonShowParamInfo.Checked;
 		}
 
 		#endregion ToolStripMenuItem events
 
+		#region FindText methods
 		private void ToolStripTextBoxFind_TextChanged(object sender, EventArgs e)
-		{
-			m_richTextBox_Definition.SelectAll();			
-			m_richTextBox_Definition.SelectionBackColor = Color.White;				
+		{			
+			m_BackgroundWorkerFindText.CancelAsync();
+			
+			m_RichTextBoxDefinition.SelectAll();
+			m_RichTextBoxDefinition.SelectionBackColor = Color.White;
 
 			if (m_toolStripTextBoxFind.Text.Trim().Length == 0)
 			{
 				LastFindIndex = 0;
 				return;
 			}
-			else
-			{
-				FindText(m_toolStripTextBoxFind.Text, 0, true);
-			}
+
+			if (m_BackgroundWorkerFindText.IsBusy == false)
+				m_BackgroundWorkerFindText.RunWorkerAsync(m_toolStripTextBoxFind.Text);
+
 		}
 
-		private void FindText(string searchString, int startingFrom , bool scrollToString)
+		private void BackgroundWorkerFindTextDoWork(object sender, DoWorkEventArgs e)
 		{
-			
-			LastFindIndex = m_richTextBox_Definition.Find(searchString, startingFrom, RichTextBoxFinds.None );
-			
-			/// Add color
-			if (LastFindIndex >= 0) 
-			{
-				m_richTextBox_Definition.SelectionStart = LastFindIndex;
-				m_richTextBox_Definition.SelectionLength = searchString.Length;
-				m_richTextBox_Definition.SelectionBackColor = Color.LightGreen;
-				if(scrollToString)
-					m_richTextBox_Definition.ScrollToCaret();
+			if (m_RichTextBoxDefinition != null)
+				m_RichTextBoxDefinition.Invoke(new FindTextDelegate(FindText), new object[] { e.Argument.ToString(), 0, true, sender as BackgroundWorker,e});
+		}
 
-				FindText(searchString, LastFindIndex + 1, false);
+		private delegate void FindTextDelegate(string searchString, int startingFrom, bool scrollToString, BackgroundWorker worker, DoWorkEventArgs e);
+
+		private void FindText(string searchString, int startingFrom, bool scrollToString, BackgroundWorker worker, DoWorkEventArgs e)
+		{
+			try
+			{
+				if (worker.CancellationPending)
+				{
+					e.Cancel = true;
+					return;
+				}
+
+
+				LastFindIndex = m_RichTextBoxDefinition.Find(searchString, startingFrom, RichTextBoxFinds.None);
+
+				/// Add color
+				if (LastFindIndex >= 0)
+				{
+					m_RichTextBoxDefinition.SelectionStart = LastFindIndex;
+					m_RichTextBoxDefinition.SelectionLength = searchString.Length;
+					m_RichTextBoxDefinition.SelectionBackColor = Color.LightGreen;
+					if (scrollToString)
+						m_RichTextBoxDefinition.ScrollToCaret();
+
+					FindText(searchString, LastFindIndex + 1, false, worker,e);
+				}
 			}
+			catch { }
 		}		
 
 		public int LastFindIndex { get; set; }
+
+		#endregion FindText methods
 
 	}
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ColumnDepence.Filters;
+﻿using System.Collections.Generic;
 
 namespace ColumnDepence.DbInfo
 {
@@ -34,8 +30,7 @@ namespace ColumnDepence.DbInfo
 			}
 			if (ColumnValues[columnName] == null)
 			{
-				ColumnValues[columnName] = new List<object>();
-				ColumnValues[columnName].Add(value);
+				ColumnValues[columnName] = new List<object> {value};
 			}
 			if (false == ColumnValues[columnName].Contains(value)) {
 				ColumnValues[columnName].Add(value);
@@ -44,35 +39,38 @@ namespace ColumnDepence.DbInfo
 
 		public Dictionary<string, ColumnFilter> GetColumnFilters()
 		{
-			Dictionary<string, ColumnFilter>  filter_dict = new Dictionary<string, ColumnFilter>();
+			Dictionary<string, ColumnFilter>  filterDict = new Dictionary<string, ColumnFilter>();
 			
-			if (ColumnValues == null || ColumnValues.Count == 0) return filter_dict;
+			if (ColumnValues == null || ColumnValues.Count == 0) return filterDict;
 
 			foreach (var column in ColumnValues)
 			{
-				ColumnFilter cf = new ColumnFilter() { ColumnName = column.Key };
-				cf.Rules = new Dictionary<ColumnDepence.Filters.FilterRule, ColumnDepence.Filters.RuleBase>();
+				ColumnFilter cf = new ColumnFilter
+				                  	{
+				                  		ColumnName = column.Key,
+				                  		Rules = new Dictionary<FilterRule, RuleBase>()
+				                  	};
 
 				if (column.Value.Count == 1) {
-					cf.Rules.Add(FilterRule.Eq, new Eq()
-					{
-						ColumnName = column.Key,
-						Value = column.Value[0].ToString()
-					});
+					cf.Rules.Add(FilterRule.Eq, new Eq
+					                            	{
+					                            		ColumnName = column.Key,
+					                            		Value = column.Value[0].ToString()
+					                            	});
 				}
 				else
 				{
-					cf.Rules.Add(FilterRule.InValues, new InValues()
-					{
-						ColumnName = column.Key,
-						Values = column.Value
-					});				
+					cf.Rules.Add(FilterRule.InValues, new InValues
+					                                  	{
+					                                  		ColumnName = column.Key,
+					                                  		Values = column.Value
+					                                  	});				
 				}
 				
-				filter_dict.Add(column.Key, cf);
+				filterDict.Add(column.Key, cf);
 			}
 
-			return filter_dict;
+			return filterDict;
 		}
 	}
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace ColumnDepence.Filters
+namespace ColumnDepence
 {
 	public	class ColumnFilter
 	{
@@ -35,9 +32,8 @@ namespace ColumnDepence.Filters
 			{
 				return false;
 			}
-			else {
-				return Rules.ContainsKey(fr);
-			}
+			
+			return Rules.ContainsKey(fr);			
 		}
 
 		public string GetRuleValue(FilterRule fr) {
@@ -45,10 +41,8 @@ namespace ColumnDepence.Filters
 			{
 				return "";
 			}
-			else
-			{
-				return Rules[fr].Value;
-			}
+			
+			return Rules[fr].Value;
 		}
 	}
 
@@ -56,6 +50,7 @@ namespace ColumnDepence.Filters
 	{
 		Like,
 		Eq,
+		NotEq,
 		Less,
 		Greater,
 		IsNull,
@@ -76,13 +71,13 @@ namespace ColumnDepence.Filters
 	public class Like : RuleBase
 	{
 		public Like() {
-			this.FilterRule = FilterRule.Like;
+			FilterRule = FilterRule.Like;
 		}
-		public Like(string column_name, string value)
+		public Like(string columnName, string value)
 		{
-			this.FilterRule = FilterRule.Like;
-			this.Value = value;
-			this.ColumnName = column_name;
+			FilterRule = FilterRule.Like;
+			Value = value;
+			ColumnName = columnName;
 		}
 		public override string Filter
 		{
@@ -96,15 +91,33 @@ namespace ColumnDepence.Filters
 		{
 			this.FilterRule = FilterRule.Eq;
 		}
-		public Eq(string column_name, string value)
+		public Eq(string columnName, string value)
 		{
 			this.FilterRule = FilterRule.Eq;
 			this.Value = value;
-			this.ColumnName = column_name;
+			this.ColumnName = columnName;
 		}
 		public override string Filter
 		{
 			get { return string.Format(" ({0} = '{1}') ", this.ColumnName, this.Value); }
+		}
+	}
+
+	public class NotEq : RuleBase
+	{
+		public NotEq()
+		{
+			this.FilterRule = FilterRule.NotEq;
+		}
+		public NotEq(string columnName, string value)
+		{
+			this.FilterRule = FilterRule.NotEq;
+			this.Value = value;
+			this.ColumnName = columnName;
+		}
+		public override string Filter
+		{
+			get { return string.Format(" ({0} <> '{1}') ", this.ColumnName, this.Value); }
 		}
 	}
 
@@ -114,11 +127,11 @@ namespace ColumnDepence.Filters
 		{
 			this.FilterRule = FilterRule.Greater;
 		}
-		public Greater(string column_name, string value)
+		public Greater(string columnName, string value)
 		{
 			this.FilterRule = FilterRule.Greater;
 			this.Value = value;
-			this.ColumnName = column_name;
+			this.ColumnName = columnName;
 		}
 		public override string Filter
 		{
@@ -132,11 +145,11 @@ namespace ColumnDepence.Filters
 		{
 			this.FilterRule = FilterRule.Less;
 		}
-		public Less(string column_name, string value)
+		public Less(string columnName, string value)
 		{
 			this.FilterRule = FilterRule.Less;
 			this.Value = value;
-			this.ColumnName = column_name;
+			this.ColumnName = columnName;
 		}
 		public override string Filter
 		{
@@ -150,26 +163,27 @@ namespace ColumnDepence.Filters
 		{
 			this.FilterRule = FilterRule.IsNull;
 		}
-		public IsNull(string column_name)
+		public IsNull(string columnName)
 		{
 			this.FilterRule = FilterRule.IsNull;
-			this.ColumnName = column_name;
+			this.ColumnName = columnName;
 		}
 		public override string Filter
 		{
 			get { return string.Format(" ({0} IS NULL ) ", this.ColumnName); }
 		}
 	}
+
 	public class IsNotNull : RuleBase
 	{
 		public IsNotNull()
 		{
 			this.FilterRule = FilterRule.IsNotNull;
 		}
-		public IsNotNull(string column_name)
+		public IsNotNull(string columnName)
 		{
 			this.FilterRule = FilterRule.IsNotNull;
-			this.ColumnName = column_name;
+			this.ColumnName = columnName;
 		}
 		public override string Filter
 		{
@@ -183,10 +197,10 @@ namespace ColumnDepence.Filters
 		{
 			this.FilterRule = FilterRule.IsFalse;
 		}
-		public IsFalse(string column_name)
+		public IsFalse(string columnName)
 		{
 			this.FilterRule = FilterRule.IsFalse;
-			this.ColumnName = column_name;
+			this.ColumnName = columnName;
 		}
 		public override string Filter
 		{
@@ -200,10 +214,10 @@ namespace ColumnDepence.Filters
 		{
 			this.FilterRule = FilterRule.IsTrue;
 		}
-		public IsTrue(string column_name)
+		public IsTrue(string columnName)
 		{
 			this.FilterRule = FilterRule.IsTrue;
-			this.ColumnName = column_name;
+			this.ColumnName = columnName;
 		}
 		public override string Filter
 		{
@@ -236,40 +250,4 @@ namespace ColumnDepence.Filters
 			}
 		}
 	}
-
-
-	/*
-	 	if (m_equalToolStripMenuItem.Checked)
-			{
-				filter = string.Format(" {0} = '{1}' ", col, m_EqualToolStripTextBox.TextBox.Text);
-			}
-			if (m_LikeToolStripMenuItem.Checked)
-			{
-				filter += (filter == "") ? "" : " AND ";
-				filter += string.Format(" ({0} LIKE '%{1}%') ", col, m_LikeToolStripTextBox.TextBox.Text);
-			} 
-			
-			if (m_greToolStripMenuItem.Checked)
-			{
-				filter += (filter == "") ? "" : " AND ";
-				filter += string.Format(" ({0} > '{1}') ", col, m_GraterThenToolStripTextBox.TextBox.Text);
-			}
-			if (m_isNotNullToolStripMenuItem.Checked)
-			{
-				filter += (filter == "") ? "" : " AND ";
-				filter += string.Format(" ({0} is NOT NULL) ", col);
-			}
-			if (m_isNullToolStripMenuItem.Checked)
-			{
-				filter += (filter == "") ? "" : " AND ";
-				filter += string.Format(" ({0} is NULL) ", col);
-			}
-			if (m_lessThenToolStripMenuItem.Checked)
-			{
-				filter += (filter == "") ? "" : " AND ";
-				filter += string.Format(" ({0} < '{1}') ", col, m_LessThenToolStripTextBox2.TextBox.Text);
-			}
-
-
-	 */
 }
