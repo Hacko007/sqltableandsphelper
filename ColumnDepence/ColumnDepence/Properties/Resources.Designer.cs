@@ -96,17 +96,17 @@ namespace ColumnDepence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT    COL1.name AS Referenced_Column , COL2.name AS Parent_Column ,tb2.name AS TableName 
-        ///FROM  sys.columns AS COL1 INNER JOIN
+        ///   Looks up a localized string similar to SELECT COL2.name AS Parent_Column , COL1.name AS Referenced_Column , tb.name AS TableName 
+        /// FROM sys.columns AS COL1 INNER JOIN
         ///                      sys.columns AS COL2 INNER JOIN
         ///                      sys.tables AS tb2 INNER JOIN
         ///                      sys.foreign_key_columns AS FK INNER JOIN
         ///                      sys.tables AS tb ON FK.parent_object_id = tb.object_id ON tb2.object_id = FK.referenced_object_id ON COL2.column_id = FK.referenced_column_id AND
-        ///                       COL2.object_id =  [rest of string was truncated]&quot;;.
+        ///                       COL2.object_id = FK. [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string SqlChildReferences {
+        public static string SqlGetChildTables {
             get {
-                return ResourceManager.GetString("SqlChildReferences", resourceCulture);
+                return ResourceManager.GetString("SqlGetChildTables", resourceCulture);
             }
         }
         
@@ -116,24 +116,24 @@ namespace ColumnDepence.Properties {
         ///  INFORMATION_SCHEMA.TABLE_CONSTRAINTS TB on (CN.TABLE_NAME = TB.TABLE_NAME AND CN.CONSTRAINT_NAME = TB.CONSTRAINT_NAME) 
         /// WHERE  CN.TABLE_NAME = @TABSEARCH.
         /// </summary>
-        public static string SqlColumnConstrains {
+        public static string SqlGetColumnConstrains {
             get {
-                return ResourceManager.GetString("SqlColumnConstrains", resourceCulture);
+                return ResourceManager.GetString("SqlGetColumnConstrains", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT COL2.name AS Parent_Column , COL1.name AS Referenced_Column , tb.name AS TableName 
-        /// FROM sys.columns AS COL1 INNER JOIN
+        ///   Looks up a localized string similar to SELECT    COL1.name AS Referenced_Column , COL2.name AS Parent_Column ,tb2.name AS TableName 
+        ///FROM  sys.columns AS COL1 INNER JOIN
         ///                      sys.columns AS COL2 INNER JOIN
         ///                      sys.tables AS tb2 INNER JOIN
         ///                      sys.foreign_key_columns AS FK INNER JOIN
         ///                      sys.tables AS tb ON FK.parent_object_id = tb.object_id ON tb2.object_id = FK.referenced_object_id ON COL2.column_id = FK.referenced_column_id AND
-        ///                       COL2.object_id = FK. [rest of string was truncated]&quot;;.
+        ///                       COL2.object_id =  [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string SqlParentReferenes {
+        public static string SqlGetParentTables {
             get {
-                return ResourceManager.GetString("SqlParentReferenes", resourceCulture);
+                return ResourceManager.GetString("SqlGetParentTables", resourceCulture);
             }
         }
         

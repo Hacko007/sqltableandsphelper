@@ -10,19 +10,12 @@ namespace ColumnDepence
 	public delegate void TabPageDelegate(string tabPageKey);
 	public delegate void OpenTableDelegate(object sender, string tableName, bool isDefinitionShown);
 	public delegate void OpenTableFilteredDelegate(object sender, string tableName, bool isDefinitionShown, TableFilterData cellInfo);
-	public delegate void OpenSPDelegate(object sender, string spName);
+	public delegate void OpenSpDelegate(object sender, string spName);
 
 
 	public partial class ColumnDependencies : Form
 	{
-		
-		private static ColumnDependencies m_This;
-
-		public static ColumnDependencies FormMain
-		{
-			get { return m_This; }
-			set { m_This = value; }
-		}
+		public static ColumnDependencies FormMain { get; set; }
 
 		public ColumnDependencies()
 		{
@@ -32,7 +25,7 @@ namespace ColumnDepence
 			Application.DoEvents();
 			FillAutoCompleteCustomSource();
 			SetTitle();
-			m_This = this;
+			FormMain = this;
 		}
 
 
@@ -42,8 +35,8 @@ namespace ColumnDepence
 		public static bool TableExists(string tableName) {
 			try
 			{
-				string sql_str = @"SELECT CASE WHEN EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME LIKE @TableName ) THEN cast(1 as BIT) ELSE cast(0 as BIT) END";
-				SqlCommand cmd = new SqlCommand(sql_str, ConnectionFactory.Instance);
+				const string sqlStr = @"SELECT CASE WHEN EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME LIKE @TableName ) THEN cast(1 as BIT) ELSE cast(0 as BIT) END";
+				SqlCommand cmd = new SqlCommand(sqlStr, ConnectionFactory.Instance);
 				cmd.Parameters.Add("@TableName", SqlDbType.VarChar, 150);
 				cmd.Parameters["@TableName"].Value = tableName;
 				
@@ -72,8 +65,10 @@ namespace ColumnDepence
 				if (ConnectionFactory.Instance.State != ConnectionState.Open)
 					ConnectionFactory.Instance.Open();
 
-				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance);
-				com.CommandType = CommandType.StoredProcedure;
+				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance)
+				                 	{
+				                 		CommandType = CommandType.StoredProcedure
+				                 	};
 				com.Parameters.Add("@objname", SqlDbType.NVarChar, 517);
 				com.Parameters[0].Value = tableName;
 
@@ -81,7 +76,7 @@ namespace ColumnDepence
 				{
 					DataSet ds = new DataSet();
 					adapter.Fill(ds);
-					return (ds != null && ds.Tables.Count > 0);
+					return (ds.Tables.Count > 0);
 				}
 			}
 			catch
@@ -100,56 +95,56 @@ namespace ColumnDepence
 			/// 
 			/// Table auto complete
 			/// 
-			string sql_str = @"SELECT DISTINCT TB.TABLE_NAME  FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TB  ORDER BY TB.TABLE_NAME";
+			string sqlStr = @"SELECT DISTINCT TB.TABLE_NAME  FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TB  ORDER BY TB.TABLE_NAME";
 
-			DataSet ds = FillDataSet(sql_str);
+			DataSet ds = FillDataSet(sqlStr);
 
 			if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
 			{
 				DataTable dt = ds.Tables[0];
-				AutoCompleteStringCollection tab_strs = new AutoCompleteStringCollection();
+				AutoCompleteStringCollection tabStrs = new AutoCompleteStringCollection();
 				foreach (DataRow row in dt.Rows)
 				{
 					try
 					{
-						tab_strs.Add(row[0].ToString());
+						tabStrs.Add(row[0].ToString());
 					}
 					catch { }
 				}
-				txtTableName.AutoCompleteCustomSource = tab_strs;
+				txtTableName.AutoCompleteCustomSource = tabStrs;
 			}
 
 			/// 
 			/// SP auto complete
 			/// 
 
-			sql_str = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE='PROCEDURE' ORDER BY ROUTINE_NAME";
-			ds = FillDataSet(sql_str);
+			sqlStr = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE='PROCEDURE' ORDER BY ROUTINE_NAME";
+			ds = FillDataSet(sqlStr);
 
 			if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
 			{
 				DataTable dt = ds.Tables[0];
-				AutoCompleteStringCollection tab_strs_sp = new AutoCompleteStringCollection();
+				AutoCompleteStringCollection tabStrsSp = new AutoCompleteStringCollection();
 				foreach (DataRow row in dt.Rows)
 				{
 					try
 					{
-						tab_strs_sp.Add(row[0].ToString());
+						tabStrsSp.Add(row[0].ToString());
 					}
 					catch { }
 				}
-				m_textBox_SpSearch.AutoCompleteCustomSource = tab_strs_sp;
+				m_textBox_SpSearch.AutoCompleteCustomSource = tabStrsSp;
 			}
 		}
 
-		public DataSet FillDataSet(string sql_cmd_str)
+		public DataSet FillDataSet(string sqlCmdStr)
 		{
 			try
 			{
 				if (ConnectionFactory.OpenConnection())
 				{
-					SqlCommand com = new SqlCommand(sql_cmd_str, ConnectionFactory.Instance);
-					if (sql_cmd_str.IndexOf("@TABSEARCH") > -1)
+					SqlCommand com = new SqlCommand(sqlCmdStr, ConnectionFactory.Instance);
+					if (sqlCmdStr.IndexOf("@TABSEARCH") > -1)
 					{
 						com.Parameters.Add("@TABSEARCH", SqlDbType.NVarChar);
 						com.Parameters["@TABSEARCH"].Value = TableName;
@@ -191,25 +186,24 @@ namespace ColumnDepence
 			return null;			
 		}
 
-		public void CreateSPTabPage(string SPName)
+		public void CreateSpTabPage(string spName)
 		{
-			CreateSPTabPage( SPName, null);
+			CreateSpTabPage( spName, null);
 		}
 
-		public void CreateSPTabPage(string SPName, UserControlSPInfo spInfo)
+		public void CreateSpTabPage(string spName, UserControlSpInfo spInfo)
 		{
 			m_textBox_SpSearch.Enabled = false;
 
-			if (tabControl_TableInfo.TabPages.ContainsKey(SPName))
+			if (tabControl_TableInfo.TabPages.ContainsKey(spName))
 			{
-				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[SPName];
+				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[spName];
 			}
 			else
 			{
 				if (spInfo == null)
 				{
-					spInfo = new UserControlSPInfo();
-					spInfo.SPName = SPName;
+					spInfo = new UserControlSpInfo {SpName = spName};
 					spInfo.InitControl();
 				}
 				spInfo.Dock = DockStyle.Fill;
@@ -218,11 +212,11 @@ namespace ColumnDepence
 				spInfo.OpenTableTab += OpenTableTab;
 				spInfo.CloseTabPage += CloseTabPage;
 
-				tabControl_TableInfo.TabPages.Add(SPName, SPName);
-				tabControl_TableInfo.TabPages[SPName].Controls.Add(spInfo);
-				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[SPName];
+				tabControl_TableInfo.TabPages.Add(spName, spName);
+				tabControl_TableInfo.TabPages[spName].Controls.Add(spInfo);
+				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[spName];
 
-				m_userControlHistoryList_Sp.AddValue(SPName);
+				m_userControlHistoryList_Sp.AddValue(spName);
 
 			}
 			m_textBox_SpSearch.Enabled = true;
@@ -260,7 +254,7 @@ namespace ColumnDepence
 
 		void OpenSpTab(object sender, string spName)
 		{
-			CreateSPTabPage(spName.Replace("dbo.", ""));
+			CreateSpTabPage(spName.Replace("dbo.", ""));
 		}
 
 
@@ -293,7 +287,7 @@ namespace ColumnDepence
 						return;
 			
 					UserControlAllTableInfo allInfo = tabControl_TableInfo.SelectedTab.Controls[0] as UserControlAllTableInfo;
-					allInfo.SetFilter(filter);
+					if (allInfo != null) allInfo.SetFilter(filter);
 				}
 				catch { }
 			}
@@ -380,7 +374,7 @@ namespace ColumnDepence
 
 		private void Button_SPDef_Click(object sender, EventArgs e)
 		{
-			CreateSPTabPage(m_textBox_SpSearch.Text.Trim());
+			CreateSpTabPage(m_textBox_SpSearch.Text.Trim());
 		}
 
 		private void m_userControlHistoryList_Tables_SelectedIndexChanged(object sender, string value)
@@ -470,7 +464,7 @@ namespace ColumnDepence
 			{
 				if (StoredProcedureExists(TableName))
 				{
-					CreateSPTabPage(m_textBox_SpSearch.Text.Trim());
+					CreateSpTabPage(m_textBox_SpSearch.Text.Trim());
 					m_textBox_SpSearch.Focus();
 				}
 			}

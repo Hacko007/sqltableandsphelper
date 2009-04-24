@@ -185,6 +185,7 @@
 			// 
 			// m_comboBoxConnectionHistory
 			// 
+			this.m_comboBoxConnectionHistory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.m_comboBoxConnectionHistory.FormattingEnabled = true;
 			this.m_comboBoxConnectionHistory.Location = new System.Drawing.Point(15, 15);
 			this.m_comboBoxConnectionHistory.Name = "m_comboBoxConnectionHistory";
@@ -247,5 +248,6 @@
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.ComboBox m_comboBoxConnectionHistory;
 		private System.Windows.Forms.Label m_labelInfo;
+		private readonly StackSetting connectionHistorySetting;
 	}
 }

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ColumnDepence
@@ -40,16 +35,11 @@ namespace ColumnDepence
 			set { m_RowIndex = value; }
 		}
 
-		//private DataRow m_ActiveRow;
 		public DataRow ActiveRow {
 			get {
 				try
 				{
-					if (RowIndex == -1)
-						return null;
-					//m_ActiveRow = DataTable.Rows[RowIndex];
-
-					return DataTable.Rows[RowIndex]; ;
+					return (RowIndex == -1) ? null : DataTable.Rows[RowIndex];
 				}
 				catch {
 					return null;
@@ -82,20 +72,19 @@ namespace ColumnDepence
 			m_ButtonUpdate.Enabled = false;
 			m_ButtonCancel.Enabled = false;
 
-			if (DataTable != null) {
-				m_labelTabName.Text = DataTable.TableName;
-				this.Text = "Show one row in " + DataTable.TableName;
-			}
+			if (DataTable == null) return;
+
+			m_labelTabName.Text = DataTable.TableName;
+			Text = "Show one row in " + DataTable.TableName;
 		}
 
 
 		private void ButtonPrev_Click(object sender, EventArgs e)
 		{
-			if (RowIndex > 0)
-			{
-				RowIndex--;
-				LoadRowItnoView();
-			}
+			if (RowIndex <= 0) return;
+
+			RowIndex--;
+			LoadRowItnoView();
 		}
 
 		private void ButtonNext_Click(object sender, EventArgs e)

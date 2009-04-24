@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 
 namespace ColumnDepence.DbInfo
@@ -10,21 +6,21 @@ namespace ColumnDepence.DbInfo
 	public class TableInfo
 	{
 		public DataTableColumnConstrains ColumnConstrains { get; set; }
-		public DataTableReferencedColumnTable ParentReferencedTable { get; set; }
-		public DataTableReferencedColumnTable ChildReferencedTable { get; set; }
+		public DataTableChildTables ChildTables { get; set; }
+		public DataTableParentTables ParentTables { get; set; }
 		public DataTable Values { get; set; }
 
 		public TableInfo() {
 			ColumnConstrains = new DataTableColumnConstrains();
-			ParentReferencedTable = new DataTableReferencedColumnTable();
-			ChildReferencedTable = new DataTableReferencedColumnTable();
+			ChildTables = new DataTableChildTables();
+			ParentTables = new DataTableParentTables();
 			Values = new DataTable();
 		}
 
 		public void LoadTableInfo(string tableName) { 
 			LoadColumnConstrains(tableName);
-			LoadChildReferencedTable(tableName);
-			LoadParentReferencedTable(tableName);
+			LoadParentTables(tableName);
+			LoadChildTables(tableName);
 		}
 
 
@@ -34,7 +30,7 @@ namespace ColumnDepence.DbInfo
 
 			ColumnConstrains =(DataTableColumnConstrains) FillDataTable(
 				tableName, 
-				global::ColumnDepence.Properties.Resources.SqlColumnConstrains,   
+				Properties.Resources.SqlGetColumnConstrains,   
 				new DataTableColumnConstrains());
 			if(ColumnConstrains == null)
 			{
@@ -45,44 +41,44 @@ namespace ColumnDepence.DbInfo
 			ColumnConstrains.IsDataLoaded = true;
 		}
 
-		private void LoadParentReferencedTable(string tableName)
+		private void LoadChildTables(string tableName)
 		{
-			if (ParentReferencedTable != null && ParentReferencedTable.IsDataLoaded) return;
+			if (ChildTables != null && ChildTables.IsDataLoaded) return;
 
-			ParentReferencedTable = (DataTableReferencedColumnTable)FillDataTable(
+			ChildTables = (DataTableChildTables)FillDataTable(
 				tableName,
-				global::ColumnDepence.Properties.Resources.SqlParentReferenes,
-				new DataTableReferencedColumnTable());
-			if (ParentReferencedTable == null)
+				Properties.Resources.SqlGetChildTables,
+				new DataTableChildTables());
+			if (ChildTables == null)
 			{
-				ParentReferencedTable = new DataTableReferencedColumnTable();
+				ChildTables = new DataTableChildTables();
 				return;
 			}
 
-			ParentReferencedTable.IsDataLoaded = true;
+			ChildTables.IsDataLoaded = true;
 		}
 
 
-		private void LoadChildReferencedTable(string tableName)
+		private void LoadParentTables(string tableName)
 		{
-			if (ChildReferencedTable != null && ChildReferencedTable.IsDataLoaded) return;
+			if (ParentTables != null && ParentTables.IsDataLoaded) return;
 
-			ChildReferencedTable = (DataTableReferencedColumnTable)FillDataTable(
+			ParentTables = (DataTableParentTables)FillDataTable(
 				tableName,
-				global::ColumnDepence.Properties.Resources.SqlChildReferences,
-				new DataTableReferencedColumnTable());
-			if (ChildReferencedTable == null)
+				Properties.Resources.SqlGetParentTables,
+				new DataTableParentTables());
+			if (ParentTables == null)
 			{
-				ChildReferencedTable = new DataTableReferencedColumnTable();
+				ParentTables = new DataTableParentTables();
 				return;
 			}
 
-			ChildReferencedTable.IsDataLoaded = true;
+			ParentTables.IsDataLoaded = true;
 		}
 
 
 
-		public static DataTable FillDataTable(string tableName, string sql_cmd_str, DataTable dataTable)
+		public static DataTable FillDataTable(string tableName, string sqlCmdStr, DataTable dataTable)
 		{
 			try
 			{
@@ -90,8 +86,8 @@ namespace ColumnDepence.DbInfo
 
 				ConnectionFactory.OpenConnection();
 
-				SqlCommand com = new SqlCommand(sql_cmd_str, ConnectionFactory.Instance);
-				if (sql_cmd_str.IndexOf("@TABSEARCH") > -1)
+				SqlCommand com = new SqlCommand(sqlCmdStr, ConnectionFactory.Instance);
+				if (sqlCmdStr.IndexOf("@TABSEARCH") > -1)
 				{
 					com.Parameters.Add("@TABSEARCH", SqlDbType.NVarChar);
 					com.Parameters["@TABSEARCH"].Value = tableName;

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 
 namespace ColumnDepence
 {
-	public class ConnectionStringItem
+
+	public class ConnectionStringItem 
 	{
 
 		public SqlConnectionStringBuilder SqlConnectionStringBuilder { get; set; }
@@ -16,10 +13,7 @@ namespace ColumnDepence
 		{
 			get
 			{
-				if (SqlConnectionStringBuilder == null)
-					return "";
-
-				return SqlConnectionStringBuilder.ConnectionString;
+				return SqlConnectionStringBuilder == null ? "" : SqlConnectionStringBuilder.ConnectionString;
 			}
 
 			set 
@@ -28,6 +22,18 @@ namespace ColumnDepence
 			}
 		}
 
+		public string SqlDbOnlyConnectionString
+		{
+			get
+			{
+				return SqlConnectionStringBuilder == null ? "" : SqlConnectionStringBuilder.ConnectionString;
+			}
+
+			set
+			{
+				SqlConnectionStringBuilder = new SqlConnectionStringBuilder(value) {InitialCatalog = ""};
+			}
+		}
 
 		public string Display
 		{
@@ -42,5 +48,37 @@ namespace ColumnDepence
 			}
 		}
 
-	}
+		public string DisplayDbOnly
+		{
+			get
+			{
+				if (SqlConnectionStringBuilder == null)
+					return "";
+
+				return SqlConnectionStringBuilder.DataSource					
+					+ " . " + SqlConnectionStringBuilder.UserID;
+			}
+		}
+
+		public override bool Equals(object obj)
+		{
+			if ((obj is ConnectionStringItem) == false || (SqlConnectionStringBuilder == null)) return false;
+
+			ConnectionStringItem item2 = obj as ConnectionStringItem;
+
+			return Equals(item2);
+		}
+
+		public bool Equals(ConnectionStringItem other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			
+			return ReferenceEquals(this, other) || Equals(other.SqlConnectionStringBuilder, SqlConnectionStringBuilder);
+		}
+
+		public override int GetHashCode()
+		{
+			return (SqlConnectionStringBuilder != null ? SqlConnectionStringBuilder.GetHashCode() : 0);
+		}
+	}	
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
+﻿using System.Data;
 using System.Windows.Forms;
 
 namespace ColumnDepence.DbInfo
@@ -23,28 +19,34 @@ namespace ColumnDepence.DbInfo
 			IsDataLoaded = false;
 		}
 
-		public DataRow[] FindChilds(string ParentColumnName)
+		public DataRow[] FindChilds(string parentColumnName)
 		{
-			return Select(this.ColumnParentColumnName.ColumnName + "='" + ParentColumnName + "'");			
+			return Select(ColumnParentColumnName.ColumnName + "='" + parentColumnName + "'");			
 		}
-		public DataRow[] FindParents(string ChildColumnName)
+		public DataRow[] FindParents(string childColumnName)
 		{
-			return Select(this.ColumnChildColumnName.ColumnName + "='" + ChildColumnName + "'");			
+			return Select(ColumnChildColumnName.ColumnName + "='" + childColumnName + "'");			
 		}
 
 		private void InitColumns()
 		{
-			ColumnParentColumnName = new DataColumn("Parent_Column", typeof(string));
-			ColumnParentColumnName.Caption = "Parent";
+			ColumnParentColumnName = new DataColumn("Parent_Column", typeof(string))
+			                         	{
+			                         		Caption = "Parent column"
+			                         	};
 
-			ColumnChildColumnName = new DataColumn("Referenced_Column", typeof(string));
-			ColumnChildColumnName.Caption = "Child";			
+			ColumnChildColumnName = new DataColumn("Referenced_Column", typeof(string))
+			                        	{
+			                        		Caption = "Child column"
+			                        	};
 
-			ColumnTableName = new DataColumn("TableName", typeof(string));
-			ColumnTableName.Caption = "Table";
+			ColumnTableName = new DataColumn("TableName", typeof(string))
+			                  	{
+			                  		Caption = "Table"
+			                  	};
 
-			this.Columns.Clear();
-			this.Columns.AddRange(new DataColumn[] { ColumnTableName, ColumnParentColumnName, ColumnChildColumnName });
+			Columns.Clear();
+			Columns.AddRange(new[] { ColumnTableName, ColumnParentColumnName, ColumnChildColumnName });
 		}
 
 		public void SetColumns(DataGridView dataGridView) {
@@ -63,7 +65,8 @@ namespace ColumnDepence.DbInfo
 				dataGridView.Columns[1].ContextMenuStrip = null;
 				dataGridView.Columns[2].ContextMenuStrip = null;
 			}
-			catch { }
+			catch
+			{ }
 		}
 	}
 }

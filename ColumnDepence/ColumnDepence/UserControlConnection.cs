@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
-using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace ColumnDepence
 {
 	public partial class UserControlConnection : UserControl
 	{
-		private readonly StackSetting connectionHistorySetting;
+		private readonly StackSetting m_connectionHistorySetting;
 
 		public UserControlConnection()
 		{
 			InitializeComponent();
-			connectionHistorySetting = new StackSetting {SettingName = "ConnectionHistory"};
+			m_connectionHistorySetting = new StackSetting {SettingName = "ConnectionHistory"};
 
 			FillConnectionHistoryList();
 		}
@@ -28,7 +26,7 @@ namespace ColumnDepence
 
 			if (ConnectionFactory.ConnectionString == null) return;
 
-			connectionHistorySetting.AddValue(ConnectionFactory.ConnectionString);
+			m_connectionHistorySetting.AddValue(ConnectionFactory.ConnectionString);
 			FillConnectionHistoryList();						
 		}	
 		
@@ -36,8 +34,8 @@ namespace ColumnDepence
 		{
 			try
 			{
-				var ConnectionCollection = connectionHistorySetting.DataSource.Select(item => new ConnectionStringItem { SqlConnectionString = item }).ToList();
-				m_comboBoxConnectionHistory.DataSource = ConnectionCollection;
+				var connectionCollection = m_connectionHistorySetting.DataSource.Select(item => new ConnectionStringItem { SqlConnectionString = item }).ToList();
+				m_comboBoxConnectionHistory.DataSource = connectionCollection;
 				m_comboBoxConnectionHistory.DisplayMember = "Display";
 			}
 			catch { }
@@ -109,7 +107,7 @@ namespace ColumnDepence
 				{
 					if (ConnectionFactory.ConnectionString != null)
 					{
-						connectionHistorySetting.RemoveValue(ConnectionFactory.ConnectionString);
+						m_connectionHistorySetting.RemoveValue(ConnectionFactory.ConnectionString);
 						FillConnectionHistoryList();
 					}
 
@@ -131,12 +129,10 @@ namespace ColumnDepence
 		/// </summary>		
 		private void ButtonClear_Click(object sender, EventArgs e)
 		{
+			if (m_connectionHistorySetting == null) return;
 
-			if (connectionHistorySetting != null)
-			{
-				connectionHistorySetting.Clear();
-				FillConnectionHistoryList();
-			}			
+			m_connectionHistorySetting.Clear();
+			FillConnectionHistoryList();
 		}
 		#endregion 
 
