@@ -1,43 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Collections.Specialized;
 
 namespace ColumnDepence
 {
-	
-
 	public partial class UserControlHistoryList : UserControl
 	{
-		public delegate void SelectedIndexChangedHandler(object sender , string value);	
-		public event SelectedIndexChangedHandler SelectedIndexChanged;
+		public delegate void SelectedIndexChangedHandler(object sender, string value);
 
-		private StackSetting dataSource;
+		private string m_SettingName ;
 
 		public UserControlHistoryList()
 		{
 			InitializeComponent();
-			this.dataSource = new StackSetting();
-			this.dataSource.MaxSize = 30;
+			m_SettingName = null;
+			m_DataSource = new StackSetting {MaxSize = 30};
 		}
-
-		public void AddValue(string value) {
-			dataSource.AddValue(value);
-			m_comboBox_LatestUsed.DataSource = dataSource.DataSource;
-		}
-
-		private void RaiseSelectedIndexChanged() {
-			if (SelectedIndexChanged != null) {
-				SelectedIndexChanged(this, m_comboBox_LatestUsed.SelectedValue.ToString());
-			}
-		}
-
-		private string m_SettingName = null;
 
 		public string SettingName
 		{
@@ -45,17 +22,32 @@ namespace ColumnDepence
 
 			set
 			{
-				this.m_SettingName = value;
-				this.dataSource.SettingName = value;
-				this.dataSource.FillTableHistoryList();
-				this.m_comboBox_LatestUsed.DataSource = this.dataSource.DataSource;
+				m_SettingName = value;
+				m_DataSource.SettingName = value;
+				m_DataSource.FillTableHistoryList();
+				m_ComboBoxLatestUsed.DataSource = m_DataSource.DataSource;
+			}
+		}
 
+		public event SelectedIndexChangedHandler SelectedIndexChanged;
+
+		public void AddValue(string value)
+		{
+			m_DataSource.AddValue(value);
+			m_ComboBoxLatestUsed.DataSource = m_DataSource.DataSource;
+		}
+
+		private void RaiseSelectedIndexChanged()
+		{
+			if (SelectedIndexChanged != null)
+			{
+				SelectedIndexChanged(this, m_ComboBoxLatestUsed.SelectedValue.ToString());
 			}
 		}
 
 		private void m_comboBox_LatestUsed_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.RaiseSelectedIndexChanged();
+			RaiseSelectedIndexChanged();
 		}
 	}
 }

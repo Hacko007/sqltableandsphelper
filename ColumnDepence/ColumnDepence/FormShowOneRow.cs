@@ -8,8 +8,12 @@ namespace ColumnDepence
 	{
 		public DataGridView DataGridValues { get; set; }
 		public DataTable DataTable {
-			get {
-				if (DataGridValues == null || (DataGridValues.DataSource is DataTable) == false )
+			get
+			{
+
+				if (DataGridValues != null && (DataGridValues.DataSource is DataView))
+					return ((DataView) DataGridValues.DataSource).Table;
+				if (DataGridValues == null || (DataGridValues.DataSource is DataTable) == false)
 					return null;
 
 				return DataGridValues.DataSource as DataTable;
@@ -78,6 +82,23 @@ namespace ColumnDepence
 			Text = "Show one row in " + DataTable.TableName;
 		}
 
+		/// <summary>
+		/// Resize window to fit all columns or to fit 
+		/// desktops working area.
+		/// </summary>
+		public void ResizeWindow()
+		{
+			if(ActiveRow == null)return;
+			if (m_dataGridViewValue == null || m_dataGridViewValue.RowCount == 0) return;
+
+			int height = ((m_dataGridViewValue.RowTemplate.Height * m_dataGridViewValue.RowCount) + m_dataGridViewValue.ColumnHeadersHeight);
+			height += 100;
+			Height = Math.Min(height, Screen.FromControl(this).WorkingArea.Height);
+			if(Height == Screen.FromControl(this).WorkingArea.Height)
+			{
+				Top = 0;
+			}
+		}
 
 		private void ButtonPrev_Click(object sender, EventArgs e)
 		{

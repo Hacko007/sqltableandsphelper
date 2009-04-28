@@ -9,17 +9,22 @@ namespace ColumnDepence
 {
 	public partial class FormConnectToDb : Form
 	{
-
 		public FormConnectToDb()
 		{
 			InitializeComponent();
-			connectionHistorySetting = new StackSetting
-			                           	{
-			                           		SettingName = "ConnectionHistory"
-			                           	};
+			m_ConnectionHistorySetting = new StackSetting
+			                             	{
+			                             		SettingName = "ConnectionHistory"
+			                             	};
+			m_DatabaseHistrory = new StackSetting
+			{
+				SettingName = "DatabaseHistory"
+			};
 
 			FillConnectionHistoryList();
+			FillComboBoxDatabase();
 		}
+
 
 		public ColumnDependencies FormMain
 		{
@@ -33,11 +38,13 @@ namespace ColumnDepence
 
 		private string GetConnectionString(int timeout)
 		{
-			SqlConnectionStringBuilder connBulider = new SqlConnectionStringBuilder();
-
-			connBulider.DataSource = m_comboBoxServerName.Text.Trim();
-			connBulider.InitialCatalog = m_comboBoxDatabase.Text.Trim();
-			connBulider.ConnectTimeout = timeout;
+			SqlConnectionStringBuilder connBulider =
+				new SqlConnectionStringBuilder
+					{
+						DataSource = m_comboBoxServerName.Text.Trim(),
+						InitialCatalog = m_comboBoxDatabase.Text.Trim(),
+						ConnectTimeout = timeout
+					};
 
 			if (m_checkBoxWindowsAuth.Checked)
 			{
@@ -57,7 +64,7 @@ namespace ColumnDepence
 
 			if (ConnectionFactory.ConnectionString == null) return;
 
-			connectionHistorySetting.AddValue(ConnectionFactory.ConnectionString);
+			m_ConnectionHistorySetting.AddValue(ConnectionFactory.ConnectionString);
 			FillConnectionHistoryList();
 		}
 
@@ -65,7 +72,7 @@ namespace ColumnDepence
 		{
 			try
 			{
-				var connectionCollection = connectionHistorySetting.DataSource
+				var connectionCollection = m_ConnectionHistorySetting.DataSource
 					.Select(item => new ConnectionStringItem {SqlConnectionString = item})					
 					.ToList();
 				
@@ -84,6 +91,23 @@ namespace ColumnDepence
 			}
 			catch { }
 
+		}
+		private void FillComboBoxDatabase()
+		{
+			try
+			{
+				
+				string selected = m_comboBoxDatabase.Text;
+				m_comboBoxDatabase.AutoCompleteSource = AutoCompleteSource.ListItems;
+				m_comboBoxDatabase.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+				if (m_DatabaseHistrory != null && m_DatabaseHistrory.DataSource != null)
+					m_comboBoxDatabase.DataSource = m_DatabaseHistrory.DataSource;
+
+				m_comboBoxDatabase.Text = selected;
+			}
+			catch 
+			{
+			}
 		}
 
 		public bool Connect()
@@ -116,21 +140,17 @@ namespace ColumnDepence
 			if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
 			{
 				DataTable dt = ds.Tables[0];
-				AutoCompleteStringCollection tabStrs = new AutoCompleteStringCollection();
+				m_DatabaseHistrory.Clear();
 				foreach (DataRow row in dt.Rows)
 				{
 					try
-					{
-						tabStrs.Add(row[0].ToString());
+					{						
+						m_DatabaseHistrory.AddValue(row[0].ToString());
 					}
 					catch { }
 				}
 
-				string selected = m_comboBoxDatabase.Text;
-				m_comboBoxDatabase.AutoCompleteSource = AutoCompleteSource.ListItems;
-				m_comboBoxDatabase.AutoCompleteMode= AutoCompleteMode.SuggestAppend;
-				m_comboBoxDatabase.DataSource = tabStrs;
-				m_comboBoxDatabase.Text = selected;
+				FillComboBoxDatabase();
 
 			}
 

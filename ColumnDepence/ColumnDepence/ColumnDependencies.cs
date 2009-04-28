@@ -165,12 +165,12 @@ namespace ColumnDepence
 		}
 		
 
-		private void button_GetAllRows_Click_1(object sender, EventArgs e)
+		private void ButtonGetAllRows_Click(object sender, EventArgs e)
 		{
 			CreateTabPageWithValues(TableName,null);
 		}
 
-		private void button_TabDef_Click(object sender, EventArgs e)
+		private void ButtonTableDefinition_Click(object sender, EventArgs e)
 		{
 			CreateTabPageWithDefinition(TableName,null);
 		}
@@ -293,8 +293,7 @@ namespace ColumnDepence
 			}
 			else
 			{
-				UserControlAllTableInfo allInfo = new UserControlAllTableInfo();
-				allInfo.Dock = DockStyle.Fill;
+				UserControlAllTableInfo allInfo = new UserControlAllTableInfo {Dock = DockStyle.Fill};
 				allInfo.CloseTabPage += CloseTabPage;
 				allInfo.OpenSpTab += OpenSpTab;
 				allInfo.OpenTableTab += OpenTableTab;
@@ -414,7 +413,7 @@ namespace ColumnDepence
 			{
 				case Keys.F5:
 					m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
-					button_TabDef_Click(button_TabDef, EventArgs.Empty);
+					ButtonTableDefinition_Click(button_TabDef, EventArgs.Empty);
 					break;
 				case Keys.F6:
 					m_tabControl_Search.SelectedTab = m_tabPage_SpSearch;

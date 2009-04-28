@@ -2,46 +2,50 @@
 
 namespace ColumnDepence
 {
-	public	class ColumnFilter
+	public class ColumnFilter
 	{
 		public string ColumnName { get; set; }
 		public Dictionary<FilterRule, RuleBase> Rules { get; set; }
 
-		public TRule Add<TRule>(TRule rule) where TRule : RuleBase {
+		public TRule Add<TRule>(TRule rule) where TRule : RuleBase
+		{
 			if (Rules.ContainsKey(rule.FilterRule))
 			{
 				Rules[rule.FilterRule] = rule;
 			}
-			else {
+			else
+			{
 				Rules.Add(rule.FilterRule, rule);
 			}
 
 			return rule;
 		}
-		
-		public void Remove(FilterRule fr) 
+
+		public void Remove(FilterRule fr)
 		{
 			if (Rules != null && Rules.ContainsKey(fr))
 			{
 				Rules.Remove(fr);
-			}			
+			}
 		}
 
-		public bool HasFilter(FilterRule fr) {
+		public bool HasFilter(FilterRule fr)
+		{
 			if (Rules == null || Rules.Count == 0)
 			{
 				return false;
 			}
-			
-			return Rules.ContainsKey(fr);			
+
+			return Rules.ContainsKey(fr);
 		}
 
-		public string GetRuleValue(FilterRule fr) {
+		public string GetRuleValue(FilterRule fr)
+		{
 			if (Rules == null || Rules.Count == 0 || !Rules.ContainsKey(fr))
 			{
 				return "";
 			}
-			
+
 			return Rules[fr].Value;
 		}
 	}
@@ -61,7 +65,7 @@ namespace ColumnDepence
 	}
 
 	public abstract class RuleBase
-	{		
+	{
 		public abstract string Filter { get; }
 		public FilterRule FilterRule { get; set; }
 		public string ColumnName { get; set; }
@@ -70,18 +74,21 @@ namespace ColumnDepence
 
 	public class Like : RuleBase
 	{
-		public Like() {
+		public Like()
+		{
 			FilterRule = FilterRule.Like;
 		}
+
 		public Like(string columnName, string value)
 		{
 			FilterRule = FilterRule.Like;
 			Value = value;
 			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} LIKE '%{1}%') ", this.ColumnName, this.Value); }
+			get { return string.Format(" ({0} LIKE '%{1}%') ", ColumnName, Value); }
 		}
 	}
 
@@ -89,17 +96,19 @@ namespace ColumnDepence
 	{
 		public Eq()
 		{
-			this.FilterRule = FilterRule.Eq;
+			FilterRule = FilterRule.Eq;
 		}
+
 		public Eq(string columnName, string value)
 		{
-			this.FilterRule = FilterRule.Eq;
-			this.Value = value;
-			this.ColumnName = columnName;
+			FilterRule = FilterRule.Eq;
+			Value = value;
+			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} = '{1}') ", this.ColumnName, this.Value); }
+			get { return string.Format(" ({0} = '{1}') ", ColumnName, Value); }
 		}
 	}
 
@@ -107,17 +116,19 @@ namespace ColumnDepence
 	{
 		public NotEq()
 		{
-			this.FilterRule = FilterRule.NotEq;
+			FilterRule = FilterRule.NotEq;
 		}
+
 		public NotEq(string columnName, string value)
 		{
-			this.FilterRule = FilterRule.NotEq;
-			this.Value = value;
-			this.ColumnName = columnName;
+			FilterRule = FilterRule.NotEq;
+			Value = value;
+			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} <> '{1}') ", this.ColumnName, this.Value); }
+			get { return string.Format(" ({0} <> '{1}') ", ColumnName, Value); }
 		}
 	}
 
@@ -125,17 +136,19 @@ namespace ColumnDepence
 	{
 		public Greater()
 		{
-			this.FilterRule = FilterRule.Greater;
+			FilterRule = FilterRule.Greater;
 		}
+
 		public Greater(string columnName, string value)
 		{
-			this.FilterRule = FilterRule.Greater;
-			this.Value = value;
-			this.ColumnName = columnName;
+			FilterRule = FilterRule.Greater;
+			Value = value;
+			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} > '{1}') ", this.ColumnName, this.Value); }
+			get { return string.Format(" ({0} > '{1}') ", ColumnName, Value); }
 		}
 	}
 
@@ -143,17 +156,19 @@ namespace ColumnDepence
 	{
 		public Less()
 		{
-			this.FilterRule = FilterRule.Less;
+			FilterRule = FilterRule.Less;
 		}
+
 		public Less(string columnName, string value)
 		{
-			this.FilterRule = FilterRule.Less;
-			this.Value = value;
-			this.ColumnName = columnName;
+			FilterRule = FilterRule.Less;
+			Value = value;
+			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} < '{1}') ", this.ColumnName, this.Value); }
+			get { return string.Format(" ({0} < '{1}') ", ColumnName, Value); }
 		}
 	}
 
@@ -161,16 +176,18 @@ namespace ColumnDepence
 	{
 		public IsNull()
 		{
-			this.FilterRule = FilterRule.IsNull;
+			FilterRule = FilterRule.IsNull;
 		}
+
 		public IsNull(string columnName)
 		{
-			this.FilterRule = FilterRule.IsNull;
-			this.ColumnName = columnName;
+			FilterRule = FilterRule.IsNull;
+			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} IS NULL ) ", this.ColumnName); }
+			get { return string.Format(" ({0} IS NULL ) ", ColumnName); }
 		}
 	}
 
@@ -178,16 +195,18 @@ namespace ColumnDepence
 	{
 		public IsNotNull()
 		{
-			this.FilterRule = FilterRule.IsNotNull;
+			FilterRule = FilterRule.IsNotNull;
 		}
+
 		public IsNotNull(string columnName)
 		{
-			this.FilterRule = FilterRule.IsNotNull;
-			this.ColumnName = columnName;
+			FilterRule = FilterRule.IsNotNull;
+			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} IS NOT NULL ) ", this.ColumnName); }
+			get { return string.Format(" ({0} IS NOT NULL ) ", ColumnName); }
 		}
 	}
 
@@ -195,16 +214,18 @@ namespace ColumnDepence
 	{
 		public IsFalse()
 		{
-			this.FilterRule = FilterRule.IsFalse;
+			FilterRule = FilterRule.IsFalse;
 		}
+
 		public IsFalse(string columnName)
 		{
-			this.FilterRule = FilterRule.IsFalse;
-			this.ColumnName = columnName;
+			FilterRule = FilterRule.IsFalse;
+			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} = 0 ) ", this.ColumnName); }
+			get { return string.Format(" ({0} = 0 ) ", ColumnName); }
 		}
 	}
 
@@ -212,41 +233,46 @@ namespace ColumnDepence
 	{
 		public IsTrue()
 		{
-			this.FilterRule = FilterRule.IsTrue;
+			FilterRule = FilterRule.IsTrue;
 		}
+
 		public IsTrue(string columnName)
 		{
-			this.FilterRule = FilterRule.IsTrue;
-			this.ColumnName = columnName;
+			FilterRule = FilterRule.IsTrue;
+			ColumnName = columnName;
 		}
+
 		public override string Filter
 		{
-			get { return string.Format(" ({0} = 1 ) ", this.ColumnName); }
+			get { return string.Format(" ({0} = 1 ) ", ColumnName); }
 		}
 	}
 
 	public class InValues : RuleBase
 	{
-		public List<object> Values { get; set; }
-		
 		public InValues()
 		{
-			this.FilterRule = FilterRule.InValues;
+			FilterRule = FilterRule.InValues;
 			Values = new List<object>();
-		}		
+		}
+
+		public List<object> Values { get; set; }
+
 		public override string Filter
 		{
-			get {
+			get
+			{
 				string filter = "";
 				foreach (object item in Values)
 				{
-					filter += string.Format(" ({0} = '{1}') OR", this.ColumnName, item); 
+					filter += string.Format(" ({0} = '{1}') OR", ColumnName, item);
 				}
-				if (filter.Length > 3) {
+				if (filter.Length > 3)
+				{
 					filter = filter.Substring(0, filter.Length - 3); //remove last OR
 					filter = "( " + filter + " )";
 				}
-				return filter; 										
+				return filter;
 			}
 		}
 	}

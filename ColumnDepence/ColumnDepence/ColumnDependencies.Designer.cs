@@ -108,7 +108,7 @@
 			this.button_TabDef.TabIndex = 1;
 			this.button_TabDef.Text = "Table &Definition";
 			this.button_TabDef.UseVisualStyleBackColor = true;
-			this.button_TabDef.Click += new System.EventHandler(this.button_TabDef_Click);
+			this.button_TabDef.Click += new System.EventHandler(this.ButtonTableDefinition_Click);
 			// 
 			// button_GetAllRows
 			// 
@@ -121,7 +121,7 @@
 			this.button_GetAllRows.TabIndex = 2;
 			this.button_GetAllRows.Text = "&All rows";
 			this.button_GetAllRows.UseVisualStyleBackColor = true;
-			this.button_GetAllRows.Click += new System.EventHandler(this.button_GetAllRows_Click_1);
+			this.button_GetAllRows.Click += new System.EventHandler(this.ButtonGetAllRows_Click);
 			// 
 			// txtTableName
 			// 

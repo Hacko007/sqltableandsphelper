@@ -40,7 +40,7 @@ namespace ColumnDepence
 
 		private void UserControlValuesShownColumnsChanged(object sender, EventArgs e)
 		{
-			FillDataGridValues(m_userControlValues.ValuesDataGrid);
+			FillDataGridValues();
 		}
 
 		private void UserControlValuesOpenTableFilteredTab(object sender, string tableName, bool isDefinitionShown,
@@ -95,7 +95,7 @@ namespace ColumnDepence
 			m_SplitContainerLeft.Panel2.Controls.Add(m_userControlValues);
 			m_userControlValues.TableCount = GetTableCountStr();
 			Application.DoEvents();
-			FillDataGridValues(m_userControlValues.ValuesDataGrid);
+			FillDataGridValues();
 			Application.DoEvents();
 
 			TableInfo.LoadTableInfo(TableName);
@@ -179,7 +179,7 @@ namespace ColumnDepence
 			m_userControlValues.TableCount = GetTableCountStr();
 			Application.DoEvents();
 
-			FillDataGridValues(m_userControlValues.ValuesDataGrid);
+			FillDataGridValues();
 			m_userControlValues.UserDeletingRow -= DataGridViewValueUserDeletingRow;
 			m_userControlValues.UserDeletingRow += DataGridViewValueUserDeletingRow;
 			m_userControlValues.TableInfo = TableInfo;
@@ -272,13 +272,8 @@ namespace ColumnDepence
 				Connection.Close();
 			}
 		}
-
-		/// <summary>
-		/// TODO: add SqlDependency to this queuery  
-		/// <see cref="http://msdn.microsoft.com/en-us/library/a52dhwx7.aspx"/>
-		/// </summary>
-		/// <param name="dataGrid"></param>
-		private void FillDataGridValues(DataGridView dataGrid)
+		
+		private void FillDataGridValues()
 		{
 			string selectedColumns = m_userControlValues.GetColumnSelect();
 			string rowFilter = m_userControlValues.GetFilter();
@@ -298,12 +293,12 @@ namespace ColumnDepence
 
 			if (TableInfo.Values == null) return;
 
-			dataGrid.DataSource = TableInfo.Values;
+			m_userControlValues.ValuesDataGrid.DataSource = TableInfo.Values;
 			if (selectedColumns == "*") m_userControlValues.AllColumns = new List<string>();
-			for (int i = 0; i < dataGrid.Columns.Count; i++)
+			for (int i = 0; i < m_userControlValues.ValuesDataGrid.Columns.Count; i++)
 			{
-				dataGrid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-				if (selectedColumns == "*") m_userControlValues.AllColumns.Add(dataGrid.Columns[i].Name);
+				m_userControlValues.ValuesDataGrid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+				if (selectedColumns == "*") m_userControlValues.AllColumns.Add(m_userControlValues.ValuesDataGrid.Columns[i].Name);
 			}
 			if (selectedColumns == "*")
 			{
