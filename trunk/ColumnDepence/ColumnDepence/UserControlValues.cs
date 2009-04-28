@@ -623,6 +623,7 @@ namespace ColumnDepence
 
 			FormShowOneRow showOneRow = new FormShowOneRow {DataGridValues = m_DataGridViewValues};
 			showOneRow.LoadRowItnoView();
+			showOneRow.ResizeWindow();
 			showOneRow.Show();			
 		}
 

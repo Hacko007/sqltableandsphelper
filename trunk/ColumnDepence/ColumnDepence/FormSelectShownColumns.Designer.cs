@@ -45,7 +45,7 @@
 			this.m_radioButtonAll.TabStop = true;
 			this.m_radioButtonAll.Text = "All";
 			this.m_radioButtonAll.UseVisualStyleBackColor = true;
-			this.m_radioButtonAll.CheckedChanged += new System.EventHandler(this.m_radioButtonAll_CheckedChanged);
+			this.m_radioButtonAll.CheckedChanged += new System.EventHandler(this.RadioButtonAll_CheckedChanged);
 			// 
 			// m_radioButtonNone
 			// 
@@ -57,7 +57,7 @@
 			this.m_radioButtonNone.TabStop = true;
 			this.m_radioButtonNone.Text = "None";
 			this.m_radioButtonNone.UseVisualStyleBackColor = true;
-			this.m_radioButtonNone.CheckedChanged += new System.EventHandler(this.m_radioButtonNone_CheckedChanged);
+			this.m_radioButtonNone.CheckedChanged += new System.EventHandler(this.RadioButtonNone_CheckedChanged);
 			// 
 			// m_checkedListBoxSelectedColumns
 			// 
@@ -80,7 +80,7 @@
 			this.m_buttonOK.TabIndex = 3;
 			this.m_buttonOK.Text = "OK";
 			this.m_buttonOK.UseVisualStyleBackColor = true;
-			this.m_buttonOK.Click += new System.EventHandler(this.m_buttonOK_Click);
+			this.m_buttonOK.Click += new System.EventHandler(this.ButtonOK_Click);
 			// 
 			// m_buttonCancel
 			// 

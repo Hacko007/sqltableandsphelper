@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Specialized;
+using ColumnDepence.Properties;
 
 namespace ColumnDepence
 {
@@ -63,7 +64,7 @@ namespace ColumnDepence
 		{
 			if (SettingName == null) return;
 
-			Properties.Settings.Default[SettingName] = new StringCollection();
+			Settings.Default[SettingName] = new StringCollection();
 
 			try
 			{
@@ -88,8 +89,8 @@ namespace ColumnDepence
 				/// 
 				m_TableHistoryQueue.Enqueue(ItemName);
 
-				((StringCollection)Properties.Settings.Default[SettingName]).AddRange(m_TableHistoryQueue.ToArray());
-				Properties.Settings.Default.Save();
+				((StringCollection)Settings.Default[SettingName]).AddRange(m_TableHistoryQueue.ToArray());
+				Settings.Default.Save();
 				FillTableHistoryList();
 			}
 			catch { }
@@ -98,26 +99,32 @@ namespace ColumnDepence
 
 		public void FillTableHistoryList()
 		{
-			if (SettingName == null || Properties.Settings.Default[SettingName] == null) return;
-
-			StringCollection collection = (StringCollection)Properties.Settings.Default[SettingName];
-
-			m_TableHistoryQueue = new Queue<string>();
-			int c = 0;
-
-			for (int i = collection.Count - 1; i > -1; i--)
+			try
 			{
-				string tab = collection[i];
-				if (!m_TableHistoryQueue.Contains(tab))
-				{
-					m_TableHistoryQueue.Enqueue(tab);
-					if (c >= MaxSize) break; c++;
-				}
-			}
+				if (SettingName == null) return;
+				if (Settings.Default[SettingName] == null) return;
 
-			StringCollection sc = new StringCollection();
-			sc.AddRange( m_TableHistoryQueue.ToArray());
-			DataSource = m_TableHistoryQueue.ToArray();
+				StringCollection collection = (StringCollection) Settings.Default[SettingName];
+
+				m_TableHistoryQueue = new Queue<string>();
+				int c = 0;
+
+				for (int i = collection.Count - 1; i > -1; i--)
+				{
+					string tab = collection[i];
+					if (m_TableHistoryQueue.Contains(tab)) continue;
+
+					m_TableHistoryQueue.Enqueue(tab);
+					if (c >= MaxSize) break;
+					c++;
+				}
+
+				StringCollection sc = new StringCollection();
+				sc.AddRange(m_TableHistoryQueue.ToArray());
+				DataSource = m_TableHistoryQueue.ToArray();
+			}catch
+			{
+			}
 		}
 
 
@@ -127,8 +134,8 @@ namespace ColumnDepence
 		{
 			try
 			{
-				((StringCollection)Properties.Settings.Default[SettingName]).Remove(value);
-				Properties.Settings.Default.Save();
+				((StringCollection)Settings.Default[SettingName]).Remove(value);
+				Settings.Default.Save();
 				FillTableHistoryList();
 			}
 			catch { }
@@ -136,8 +143,8 @@ namespace ColumnDepence
 
 		internal void Clear()
 		{
-			Properties.Settings.Default[SettingName] = new StringCollection();
-			Properties.Settings.Default.Save();
+			Settings.Default[SettingName] = new StringCollection();
+			Settings.Default.Save();
 			FillTableHistoryList();
 		}
 	}

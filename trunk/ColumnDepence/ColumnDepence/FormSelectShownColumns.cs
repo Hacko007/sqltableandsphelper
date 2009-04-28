@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ColumnDepence
@@ -32,30 +27,29 @@ namespace ColumnDepence
 			}
 		}
 
-		private void m_radioButtonAll_CheckedChanged(object sender, EventArgs e)
+		private void RadioButtonAll_CheckedChanged(object sender, EventArgs e)
 		{
-			if (m_checkedListBoxSelectedColumns.Items.Count > 0) {
-				for (int i = 0; i < m_checkedListBoxSelectedColumns.Items.Count; i++)
-				{
-					m_checkedListBoxSelectedColumns.SetItemChecked(i, true);
-				}
-			}
-		}
+			if (m_checkedListBoxSelectedColumns.Items.Count <= 0) return;
 
-		private void m_radioButtonNone_CheckedChanged(object sender, EventArgs e)
-		{
-			if (m_checkedListBoxSelectedColumns.Items.Count > 0)
+			for (int i = 0; i < m_checkedListBoxSelectedColumns.Items.Count; i++)
 			{
-				for (int i = 0; i < m_checkedListBoxSelectedColumns.Items.Count; i++)
-				{
-					m_checkedListBoxSelectedColumns.SetItemChecked(i, false);
-				}
+				m_checkedListBoxSelectedColumns.SetItemChecked(i, true);
 			}
 		}
 
-		private void m_buttonOK_Click(object sender, EventArgs e)
+		private void RadioButtonNone_CheckedChanged(object sender, EventArgs e)
 		{
-			this.DialogResult = DialogResult.OK;
+			if (m_checkedListBoxSelectedColumns.Items.Count <= 0) return;
+
+			for (int i = 0; i < m_checkedListBoxSelectedColumns.Items.Count; i++)
+			{
+				m_checkedListBoxSelectedColumns.SetItemChecked(i, false);
+			}
+		}
+
+		private void ButtonOK_Click(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.OK;
 
 			ShownColumns = new List<string>();
 			foreach (var item in m_checkedListBoxSelectedColumns.CheckedItems)

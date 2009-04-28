@@ -28,28 +28,28 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.m_comboBox_LatestUsed = new System.Windows.Forms.ComboBox();
+			this.m_ComboBoxLatestUsed = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
-			// m_comboBox_LatestUsed
+			// m_ComboBoxLatestUsed
 			// 
-			this.m_comboBox_LatestUsed.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_comboBox_LatestUsed.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.m_comboBox_LatestUsed.DropDownWidth = 300;
-			this.m_comboBox_LatestUsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_comboBox_LatestUsed.FormattingEnabled = true;
-			this.m_comboBox_LatestUsed.ItemHeight = 16;
-			this.m_comboBox_LatestUsed.Location = new System.Drawing.Point(0, 0);
-			this.m_comboBox_LatestUsed.Name = "m_comboBox_LatestUsed";
-			this.m_comboBox_LatestUsed.Size = new System.Drawing.Size(22, 24);
-			this.m_comboBox_LatestUsed.TabIndex = 5;
-			this.m_comboBox_LatestUsed.SelectedIndexChanged += new System.EventHandler(this.m_comboBox_LatestUsed_SelectedIndexChanged);
+			this.m_ComboBoxLatestUsed.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_ComboBoxLatestUsed.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.m_ComboBoxLatestUsed.DropDownWidth = 300;
+			this.m_ComboBoxLatestUsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_ComboBoxLatestUsed.FormattingEnabled = true;
+			this.m_ComboBoxLatestUsed.ItemHeight = 16;
+			this.m_ComboBoxLatestUsed.Location = new System.Drawing.Point(0, 0);
+			this.m_ComboBoxLatestUsed.Name = "m_ComboBoxLatestUsed";
+			this.m_ComboBoxLatestUsed.Size = new System.Drawing.Size(22, 24);
+			this.m_ComboBoxLatestUsed.TabIndex = 5;
+			this.m_ComboBoxLatestUsed.SelectedIndexChanged += new System.EventHandler(this.m_comboBox_LatestUsed_SelectedIndexChanged);
 			// 
 			// UserControlHistoryList
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.m_comboBox_LatestUsed);
+			this.Controls.Add(this.m_ComboBoxLatestUsed);
 			this.Name = "UserControlHistoryList";
 			this.Size = new System.Drawing.Size(22, 27);
 			this.ResumeLayout(false);
@@ -58,6 +58,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.ComboBox m_comboBox_LatestUsed;
+		private System.Windows.Forms.ComboBox m_ComboBoxLatestUsed;
+		private StackSetting m_DataSource;
 	}
 }
