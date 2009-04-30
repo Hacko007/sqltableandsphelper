@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.ComponentModel;
+using ColumnDepence.DbInfo;
 
 namespace ColumnDepence
 {
@@ -18,6 +19,9 @@ namespace ColumnDepence
 		public event OpenSpDelegate OpenSpTab;
 
 		#region Properties
+
+		public SpInfo SpInfo { get; set; }
+
 		public ColumnDependencies FormMain
 		{
 			get
@@ -75,6 +79,7 @@ namespace ColumnDepence
 		{
 			InitializeComponent();
 			SpName = SpName ?? "";
+			SpInfo = new SpInfo(SpName);
 			m_tryToLoadCounter = 1;
 			m_RichTextBoxDefinition.AutoWordSelection = true;			
 			m_RichTextBoxDefinition.ZoomFactor = 1.2f;
@@ -91,6 +96,8 @@ namespace ColumnDepence
 		internal void InitControl()
 		{
 			SpName = SpName.Replace("dbo.", "");
+			SpInfo = new SpInfo(SpName);
+
 			Cursor = Cursors.WaitCursor;
 			Application.DoEvents();
 			FillParameters();
@@ -107,7 +114,8 @@ namespace ColumnDepence
 		{
 			UserControlSpInfo sp = new UserControlSpInfo
 			                       	{
-			                       		SpName = SpName,
+										SpName = SpName,
+										SpInfo= SpInfo,
 			                       		SpDefinition = SpDefinition,
 			                       		DataViewDependentTablesDataSource = DataViewDependentTablesDataSource,
 			                       		DataViewParamsDataSource = DataViewParamsDataSource,
@@ -211,23 +219,7 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 		/// Fill datagrid with inforamtion about SP's parameters
 		/// </summary>
 		void FillParameters() {
-			const string sqlStr = @"SELECT 
-			PARAMETER_NAME ,
-			DATA_TYPE, 
-		CASE 
-			WHEN CHARACTER_MAXIMUM_LENGTH is not null THEN CHARACTER_MAXIMUM_LENGTH
-			ELSE NUMERIC_PRECISION END AS [LENGTH], PARAMETER_MODE 
-		FROM INFORMATION_SCHEMA.PARAMETERS "
-			                       + "WHERE SPECIFIC_NAME LIKE @SPSEARCH Order by ORDINAL_POSITION ";
-
-			DataSet ds = FillDataSet(sqlStr);
-			if (ds != null && ds.Tables.Count > 0)
-			{
-				m_DataGridViewParams.DataSource = ds.Tables[0];
-				m_DataGridViewParams.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-				m_DataGridViewParams.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-				//m_DataGridViewParams.Columns[1].ContextMenuStrip = m_contextMenuStrip_ShowTable;
-			}
+			m_DataGridViewParams.DataSource = SpInfo.ParameterInfo;
 		}
 
 		/// <summary>
@@ -235,51 +227,7 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 		/// </summary>
 		void FillDependecies()
 		{
-
-			try
-			{
-				if (ConnectionFactory.Instance.State != ConnectionState.Open)
-				{
-					ConnectionFactory.Instance.Open();
-				}
-
-				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance)
-				                 	{
-				                 		CommandType = CommandType.StoredProcedure
-				                 	};
-				com.Parameters.Add("@objname", SqlDbType.NVarChar, 517);
-				com.Parameters[0].Value = SpName;
-
-				using (SqlDataAdapter adapter = new SqlDataAdapter(com))
-				{
-					DataSet ds = new DataSet();
-					adapter.Fill(ds);
-
-
-					if (ds.Tables.Count > 0)
-					{
-
-						DataTable dt = ds.Tables[0];
-
-						dt.Columns.Add("MyUpd", typeof(bool), "IIF(updated = 'yes', 1 , 0)");
-						dt.Columns.Add("MySel", typeof(bool), "IIF(selected = 'yes', 1 , 0)");
-						dt.Columns.Add("MyType", typeof(string), "IIF(type = 'stored procedure', 'SP' , 'TAB')");
-
-						m_DataGridViewDepTables.DataSource = dt;
-						InitCoulomnsInDvDepTables();
-
-					}
-				}
-			}
-			catch (SqlException)
-			{
-				MessageBox.Show("Checke if " + SpName + " exists in database");
-			}
-			catch { }
-			finally
-			{				
-				ConnectionFactory.CloseConnection();
-			}
+			m_DataGridViewDepTables.DataSource = SpInfo.Dependencies;
 		}
 
 		internal void InitCoulomnsInDvDepTables()
@@ -576,6 +524,13 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 		public int LastFindIndex { get; set; }
 
 		#endregion FindText methods
+
+		private void ToolStripButtonExecSp_Click(object sender, EventArgs e)
+		{
+			FormRunSp formRunSp = new FormRunSp {SpInfo = SpInfo};
+			formRunSp.InitDataGridView();
+			formRunSp.Show();
+		}
 
 	}
 

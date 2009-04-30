@@ -32,6 +32,7 @@ namespace ColumnDepence
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlSpInfo));
 			this.m_SplitContainerMain = new System.Windows.Forms.SplitContainer();
 			this.m_SplitContainerTop = new System.Windows.Forms.SplitContainer();
 			this.m_DataGridViewParams = new System.Windows.Forms.DataGridView();
@@ -45,6 +46,7 @@ namespace ColumnDepence
 			this.m_toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripButtonShowAsToolBox = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripButtonShowParamInfo = new System.Windows.Forms.ToolStripButton();
+			this.m_ToolStripButtonExecSp = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.m_toolStripLabelFind = new System.Windows.Forms.ToolStripLabel();
 			this.m_toolStripTextBoxFind = new System.Windows.Forms.ToolStripTextBox();
@@ -180,6 +182,7 @@ namespace ColumnDepence
             this.m_toolStripButtonClose,
             this.m_toolStripButtonShowAsToolBox,
             this.m_toolStripButtonShowParamInfo,
+            this.m_ToolStripButtonExecSp,
             this.m_toolStripSeparator1,
             this.m_toolStripLabelFind,
             this.m_toolStripTextBoxFind,
@@ -220,6 +223,16 @@ namespace ColumnDepence
 			this.m_toolStripButtonShowParamInfo.Size = new System.Drawing.Size(116, 22);
 			this.m_toolStripButtonShowParamInfo.Text = "Show ralationships";
 			this.m_toolStripButtonShowParamInfo.CheckedChanged += new System.EventHandler(this.ToolStripButtonShowParamInfo_CheckedChanged);
+			// 
+			// m_ToolStripButtonExecSp
+			// 
+			this.m_ToolStripButtonExecSp.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripButtonExecSp.Image")));
+			this.m_ToolStripButtonExecSp.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.m_ToolStripButtonExecSp.Name = "m_ToolStripButtonExecSp";
+			this.m_ToolStripButtonExecSp.Size = new System.Drawing.Size(81, 22);
+			this.m_ToolStripButtonExecSp.Text = "Execute SP";
+			this.m_ToolStripButtonExecSp.ToolTipText = "Execute Stored Procedure";
+			this.m_ToolStripButtonExecSp.Click += new System.EventHandler(this.ToolStripButtonExecSp_Click);
 			// 
 			// m_toolStripSeparator1
 			// 
@@ -297,5 +310,6 @@ namespace ColumnDepence
 		private readonly BackgroundWorker m_BackgroundWorkerFindText = new BackgroundWorker();
 		private int m_tryToLoadCounter ;
 		private Form m_Toolbox ;
+		private ToolStripButton m_ToolStripButtonExecSp;
 	}
 }
