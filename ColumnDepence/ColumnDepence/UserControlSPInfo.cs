@@ -156,6 +156,7 @@ namespace ColumnDepence
 		/// </summary>
 		void FillSpDefinition()
 		{			
+			if(SpName == "")return;
 			if(ConnectionFactory.OpenConnection()== false) return;
 
 			const string sqlStr = "	Declare @id int "
@@ -176,8 +177,7 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 			Application.DoEvents();
 
 			try
-			{
-				ConnectionFactory.Instance.Open();
+			{				
 				SqlDataReader reader = com.ExecuteReader();
 				if (reader == null)
 				{
