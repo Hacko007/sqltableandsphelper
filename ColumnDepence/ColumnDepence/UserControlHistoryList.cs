@@ -24,7 +24,6 @@ namespace ColumnDepence
 			{
 				m_SettingName = value;
 				m_DataSource.SettingName = value;
-				m_DataSource.FillTableHistoryList();
 				m_ComboBoxLatestUsed.DataSource = m_DataSource.DataSource;
 			}
 		}

@@ -10,33 +10,24 @@ namespace ColumnDepence
 	/// </summary>
 	public class StackSetting
 	{
+		private readonly Dictionary<int,string> m_ValueDictionary ;
+		private string m_SettingName;
 
-		/// <summary>
-		/// Add or move value on/to top of stack.		
-		/// </summary>
-		/// <param name="value"></param>
-		public void AddValue(string value)
+
+		public StackSetting()
 		{
-			ItemName = value;
-			UpdateTableHistory();
+			MaxSize = 20;
+			m_ValueDictionary = new Dictionary<int, string>();
+			DataSource = new string[]{};
 		}
 
-		public string[] DataSource { get; set; }
-
-		private int m_MaxSize = 100;
 		
 		/// <summary>
 		/// Gets or sets Max count of unique elements in stack
 		/// </summary>
-		public int MaxSize {
-			get { return m_MaxSize; }
-			set { m_MaxSize = value; }
-		}
+		public int MaxSize { get; set; }
 
-    
-
-
-		private string m_SettingName;
+		public string[] DataSource { get; set; }
 
 		/// <summary>
 		/// Gets or Sets which Setting Name to use from 
@@ -54,11 +45,115 @@ namespace ColumnDepence
 			}
 		}
 
+		private StringCollection SettingStringCollection
+		{
+			get
+			{
+				if (Settings.Default[SettingName] == null)
+					Settings.Default[SettingName] = new StringCollection();
+				       	
+				return (StringCollection) Settings.Default[SettingName];
+			}
+		}
 
-		private string ItemName { get; set; }
+		/// <summary>
+		/// Clear and save all elements from history
+		/// </summary>
+		internal void Clear()
+		{
+			Settings.Default[SettingName] = new StringCollection();
+			Settings.Default.Save();
+			FillTableHistoryList();
+		}
 
-		private Queue<string> m_TableHistoryQueue = new Queue<string>();
+		/// <summary>
+		/// Add or move value to top of stack.		
+		/// </summary>
+		/// <param name="value"></param>
+		public void AddValue(string value)
+		{
+			AddFirst(value);
+		}
 
+		/// <summary>
+		/// Remove by zero based index
+		/// </summary>
+		/// <param name="index"></param>
+		internal void Remove(int index)
+		{
+			try
+			{
+				if (0 > index || SettingStringCollection.Count <= index)
+					return;
+
+				SettingStringCollection.RemoveAt(index);
+				Settings.Default.Save();
+				FillTableHistoryList();
+			}
+			catch { }
+		}
+
+		/// <summary>
+		/// Remove this value from history
+		/// </summary>
+		/// <param name="value"></param>
+		internal void Remove(string value)
+		{
+			try
+			{
+				if(SettingStringCollection.Contains(value)== false) 
+					return;
+
+				SettingStringCollection.Remove(value);
+				Settings.Default.Save();
+				FillTableHistoryList();
+			}
+			catch { }
+		}
+
+
+		#region Private methods
+		
+		private void AddFirst(string value)
+		{			
+			List<string> values = m_ValueDictionary.Values.ToList();
+			int index = 1;
+			m_ValueDictionary.Clear();
+			
+			m_ValueDictionary.Add(index, value);
+			index++;
+
+			foreach (string item in values)
+			{
+				if (m_ValueDictionary.ContainsValue(item)) continue;
+
+				m_ValueDictionary.Add(index, item);
+				index++;
+
+				if (index >= MaxSize) break;
+			}
+			UpdateTableHistory();		
+		}
+
+		private void FillTableHistoryList()
+		{
+			try
+			{
+				if (SettingName == null) return;
+				if (Settings.Default[SettingName] == null) return;
+
+				StringCollection collection = (StringCollection) Settings.Default[SettingName];
+				m_ValueDictionary.Clear();
+				foreach (string value in collection)
+				{
+					m_ValueDictionary.Add(m_ValueDictionary.Count , value );
+				}
+
+				DataSource = m_ValueDictionary.Values.ToArray();
+			}catch
+			{
+			}
+		}
 
 		private void UpdateTableHistory()
 		{
@@ -68,28 +163,7 @@ namespace ColumnDepence
 
 			try
 			{
-				/// 
-				/// Remove table from queue if in queue
-				/// 
-				m_TableHistoryQueue.Enqueue(ItemName);
-				var hist = m_TableHistoryQueue.ToArray().Where(tab => tab != ItemName);
-				
-				m_TableHistoryQueue.Clear();
-				if (hist != null && hist.Count() > 0)
-				{					
-					foreach (string tab in hist)
-					{
-						if (!m_TableHistoryQueue.Contains(tab))
-							m_TableHistoryQueue.Enqueue(tab);
-					}
-				}
-
-				/// 
-				/// Add table on top
-				/// 
-				m_TableHistoryQueue.Enqueue(ItemName);
-
-				((StringCollection)Settings.Default[SettingName]).AddRange(m_TableHistoryQueue.ToArray());
+				((StringCollection)Settings.Default[SettingName]).AddRange(m_ValueDictionary.Values.ToArray());
 				Settings.Default.Save();
 				FillTableHistoryList();
 			}
@@ -97,55 +171,7 @@ namespace ColumnDepence
 
 		}
 
-		public void FillTableHistoryList()
-		{
-			try
-			{
-				if (SettingName == null) return;
-				if (Settings.Default[SettingName] == null) return;
+		#endregion Private methods
 
-				StringCollection collection = (StringCollection) Settings.Default[SettingName];
-
-				m_TableHistoryQueue = new Queue<string>();
-				int c = 0;
-
-				for (int i = collection.Count - 1; i > -1; i--)
-				{
-					string tab = collection[i];
-					if (m_TableHistoryQueue.Contains(tab)) continue;
-
-					m_TableHistoryQueue.Enqueue(tab);
-					if (c >= MaxSize) break;
-					c++;
-				}
-
-				StringCollection sc = new StringCollection();
-				sc.AddRange(m_TableHistoryQueue.ToArray());
-				DataSource = m_TableHistoryQueue.ToArray();
-			}catch
-			{
-			}
-		}
-
-
-
-
-		internal void RemoveValue(string value)
-		{
-			try
-			{
-				((StringCollection)Settings.Default[SettingName]).Remove(value);
-				Settings.Default.Save();
-				FillTableHistoryList();
-			}
-			catch { }
-		}
-
-		internal void Clear()
-		{
-			Settings.Default[SettingName] = new StringCollection();
-			Settings.Default.Save();
-			FillTableHistoryList();
-		}
 	}
 }

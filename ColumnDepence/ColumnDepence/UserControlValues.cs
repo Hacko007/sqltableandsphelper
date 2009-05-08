@@ -310,6 +310,8 @@ namespace ColumnDepence
 
 			try
 			{
+				if(TableInfo.Values.TableName == "") return;
+
 				DataView dv = new DataView {Table = TableInfo.Values, RowFilter = filter};
 				m_DataGridViewValues.DataSource = dv;
 				ShownRows = dv.Count;			

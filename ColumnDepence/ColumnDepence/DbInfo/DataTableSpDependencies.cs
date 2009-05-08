@@ -16,10 +16,7 @@ public	class DataTableSpDependencies:DataTable
 
 			try
 			{
-				if (ConnectionFactory.Instance.State != ConnectionState.Open)
-				{
-					ConnectionFactory.Instance.Open();
-				}
+				if (ConnectionFactory.OpenConnection() == false) return;
 
 				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance)
 				{
