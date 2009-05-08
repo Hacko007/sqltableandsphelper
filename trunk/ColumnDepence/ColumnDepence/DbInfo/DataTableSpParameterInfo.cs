@@ -96,10 +96,7 @@ namespace ColumnDepence.DbInfo
 		{
 			try
 			{
-				if (ConnectionFactory.Instance.State != ConnectionState.Open)
-				{
-					ConnectionFactory.Instance.Open();
-				}
+				if (ConnectionFactory.OpenConnection() == false) return null;
 
 				SqlCommand com = new SqlCommand(sqlCmdStr, ConnectionFactory.Instance);
 				if (sqlCmdStr.IndexOf("@SPSEARCH") > -1)

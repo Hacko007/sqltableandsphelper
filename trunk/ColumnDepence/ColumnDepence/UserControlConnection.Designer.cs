@@ -32,7 +32,7 @@
 			this.m_label_testconnection = new System.Windows.Forms.Label();
 			this.m_comboBoxConnectionHistory = new System.Windows.Forms.ComboBox();
 			this.m_buttonNewConnection = new System.Windows.Forms.Button();
-			this.m_buttonClear = new System.Windows.Forms.Button();
+			this.m_buttonRemove = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// m_button_Connect
@@ -78,22 +78,22 @@
 			this.m_buttonNewConnection.UseVisualStyleBackColor = true;
 			this.m_buttonNewConnection.Click += new System.EventHandler(this.ButtonNewConnection_Click);
 			// 
-			// m_buttonClear
+			// m_buttonRemove
 			// 
-			this.m_buttonClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_buttonClear.Location = new System.Drawing.Point(664, 6);
-			this.m_buttonClear.Name = "m_buttonClear";
-			this.m_buttonClear.Size = new System.Drawing.Size(86, 27);
-			this.m_buttonClear.TabIndex = 13;
-			this.m_buttonClear.Text = "Clear";
-			this.m_buttonClear.UseVisualStyleBackColor = true;
-			this.m_buttonClear.Click += new System.EventHandler(this.ButtonClear_Click);
+			this.m_buttonRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_buttonRemove.Location = new System.Drawing.Point(664, 6);
+			this.m_buttonRemove.Name = "m_buttonRemove";
+			this.m_buttonRemove.Size = new System.Drawing.Size(86, 27);
+			this.m_buttonRemove.TabIndex = 13;
+			this.m_buttonRemove.Text = "Remove";
+			this.m_buttonRemove.UseVisualStyleBackColor = true;
+			this.m_buttonRemove.Click += new System.EventHandler(this.ButtonRemove_Click);
 			// 
 			// UserControlConnection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.m_buttonClear);
+			this.Controls.Add(this.m_buttonRemove);
 			this.Controls.Add(this.m_buttonNewConnection);
 			this.Controls.Add(this.m_comboBoxConnectionHistory);
 			this.Controls.Add(this.m_button_Connect);
@@ -111,6 +111,6 @@
 		private System.Windows.Forms.Label m_label_testconnection;
 		private System.Windows.Forms.ComboBox m_comboBoxConnectionHistory;
 		private System.Windows.Forms.Button m_buttonNewConnection;
-		private System.Windows.Forms.Button m_buttonClear;
+		private System.Windows.Forms.Button m_buttonRemove;
 	}
 }

@@ -156,6 +156,8 @@ namespace ColumnDepence
 		/// </summary>
 		void FillSpDefinition()
 		{			
+			if(ConnectionFactory.OpenConnection()== false) return;
+
 			const string sqlStr = "	Declare @id int "
 			                       + @"
 SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @SPSEARCH AND OBJECTPROPERTY(id, 'IsProcedure') = 1 "

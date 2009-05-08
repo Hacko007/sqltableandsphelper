@@ -35,6 +35,8 @@ namespace ColumnDepence
 		public static bool TableExists(string tableName) {
 			try
 			{
+				if (tableName == "") return false;
+
 				const string sqlStr = @"SELECT CASE WHEN EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME LIKE @TableName ) THEN cast(1 as BIT) ELSE cast(0 as BIT) END";
 				SqlCommand cmd = new SqlCommand(sqlStr, ConnectionFactory.Instance);
 				cmd.Parameters.Add("@TableName", SqlDbType.VarChar, 150);
@@ -61,6 +63,8 @@ namespace ColumnDepence
 		{
 			try
 			{
+				if (tableName == "") return false;
+
 				if (ConnectionFactory.Instance == null) return false;
 				if (ConnectionFactory.Instance.State != ConnectionState.Open)
 					ConnectionFactory.Instance.Open();
@@ -167,11 +171,13 @@ namespace ColumnDepence
 
 		private void ButtonGetAllRows_Click(object sender, EventArgs e)
 		{
+			if(TableName == "") return;
 			CreateTabPageWithValues(TableName,null);
 		}
 
 		private void ButtonTableDefinition_Click(object sender, EventArgs e)
 		{
+			if (TableName == "") return;
 			CreateTabPageWithDefinition(TableName,null);
 		}
 
@@ -193,6 +199,8 @@ namespace ColumnDepence
 
 		public void CreateSpTabPage(string spName, UserControlSpInfo spInfo)
 		{
+			if(spName == "") return;
+
 			m_textBox_SpSearch.Enabled = false;
 
 			if (tabControl_TableInfo.TabPages.ContainsKey(spName))

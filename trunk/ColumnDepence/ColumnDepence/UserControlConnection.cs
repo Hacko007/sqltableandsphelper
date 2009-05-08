@@ -107,7 +107,7 @@ namespace ColumnDepence
 				{
 					if (ConnectionFactory.ConnectionString != null)
 					{
-						m_connectionHistorySetting.RemoveValue(ConnectionFactory.ConnectionString);
+						m_connectionHistorySetting.Remove(ConnectionFactory.ConnectionString);
 						FillConnectionHistoryList();
 					}
 
@@ -125,15 +125,22 @@ namespace ColumnDepence
 		}
 		
 		/// <summary>
-		/// Clear connection history
+		/// Remove selected connection history
 		/// </summary>		
-		private void ButtonClear_Click(object sender, EventArgs e)
+		private void ButtonRemove_Click(object sender, EventArgs e)
 		{
-			if (m_connectionHistorySetting == null) return;
+			if (m_connectionHistorySetting == null || m_comboBoxConnectionHistory.SelectedIndex < 0) return;
 
-			m_connectionHistorySetting.Clear();
-			FillConnectionHistoryList();
+			try
+			{
+				m_connectionHistorySetting.Remove(m_comboBoxConnectionHistory.SelectedIndex);
+				FillConnectionHistoryList();
+			}
+			catch
+			{
+			}
 		}
+
 		#endregion 
 
 		
