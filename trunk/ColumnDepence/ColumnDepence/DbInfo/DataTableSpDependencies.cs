@@ -16,6 +16,7 @@ public	class DataTableSpDependencies:DataTable
 
 			try
 			{
+				if (SpName == "") return;
 				if (ConnectionFactory.OpenConnection() == false) return;
 
 				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance)
