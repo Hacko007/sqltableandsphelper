@@ -88,6 +88,13 @@ namespace ColumnDepence.Properties {
             }
         }
         
+        public static System.Drawing.Bitmap m_ToolStripButtonExecSp_Image {
+            get {
+                object obj = ResourceManager.GetObject("m_ToolStripButtonExecSp_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         public static System.Drawing.Icon programIcon {
             get {
                 object obj = ResourceManager.GetObject("programIcon", resourceCulture);

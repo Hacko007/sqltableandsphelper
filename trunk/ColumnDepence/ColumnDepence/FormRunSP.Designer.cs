@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRunSp));
 			this.m_DataGridViewInputParameters = new System.Windows.Forms.DataGridView();
 			this.m_ColumnParameterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,14 +53,14 @@
 			// 
 			this.m_DataGridViewInputParameters.AllowUserToAddRows = false;
 			this.m_DataGridViewInputParameters.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.m_DataGridViewInputParameters.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.m_DataGridViewInputParameters.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			this.m_DataGridViewInputParameters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.m_DataGridViewInputParameters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.m_ColumnParameterName,
@@ -119,7 +119,7 @@
 			// 
 			// m_toolStripButtonExec
 			// 
-			this.m_toolStripButtonExec.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButtonExec.Image")));
+			this.m_toolStripButtonExec.Image = global::ColumnDepence.Properties.Resources.m_ToolStripButtonExecSp_Image;
 			this.m_toolStripButtonExec.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_toolStripButtonExec.Name = "m_toolStripButtonExec";
 			this.m_toolStripButtonExec.Size = new System.Drawing.Size(81, 22);
@@ -129,7 +129,7 @@
 			// 
 			// m_ToolStripButtonClearInputValues
 			// 
-			this.m_ToolStripButtonClearInputValues.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripButtonClearInputValues.Image")));
+			this.m_ToolStripButtonClearInputValues.Image = global::ColumnDepence.Properties.Resources.CloseImage;
 			this.m_ToolStripButtonClearInputValues.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonClearInputValues.Name = "m_ToolStripButtonClearInputValues";
 			this.m_ToolStripButtonClearInputValues.Size = new System.Drawing.Size(79, 22);
@@ -181,7 +181,7 @@
 			this.m_TableLayoutPanel.Name = "m_TableLayoutPanel";
 			this.m_TableLayoutPanel.RowCount = 1;
 			this.m_TableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.m_TableLayoutPanel.Size = new System.Drawing.Size(800, 148);
+			this.m_TableLayoutPanel.Size = new System.Drawing.Size(150, 46);
 			this.m_TableLayoutPanel.TabIndex = 1;
 			// 
 			// FormRunSp
@@ -191,6 +191,7 @@
 			this.ClientSize = new System.Drawing.Size(800, 344);
 			this.Controls.Add(this.m_SplitContainer);
 			this.Controls.Add(this.m_ToolStrip);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormRunSp";
 			this.Text = "FormRunSp";
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewInputParameters)).EndInit();

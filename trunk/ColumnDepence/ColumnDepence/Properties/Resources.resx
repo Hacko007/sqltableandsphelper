@@ -162,4 +162,7 @@ FROM  sys.columns AS COL1 INNER JOIN
                        COL2.object_id = FK.referenced_object_id ON COL1.column_id = FK.parent_column_id AND COL1.object_id = FK.parent_object_id  
   WHERE tb2.name = @TABSEARCH</value>
   </data>
+  <data name="m_ToolStripButtonExecSp_Image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\m_ToolStripButtonExecSp.Image.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
