@@ -32,7 +32,6 @@ namespace ColumnDepence
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlSpInfo));
 			this.m_SplitContainerMain = new System.Windows.Forms.SplitContainer();
 			this.m_SplitContainerTop = new System.Windows.Forms.SplitContainer();
 			this.m_DataGridViewParams = new System.Windows.Forms.DataGridView();
@@ -226,7 +225,7 @@ namespace ColumnDepence
 			// 
 			// m_ToolStripButtonExecSp
 			// 
-			this.m_ToolStripButtonExecSp.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripButtonExecSp.Image")));
+			this.m_ToolStripButtonExecSp.Image = global::ColumnDepence.Properties.Resources.m_ToolStripButtonExecSp_Image;
 			this.m_ToolStripButtonExecSp.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonExecSp.Name = "m_ToolStripButtonExecSp";
 			this.m_ToolStripButtonExecSp.Size = new System.Drawing.Size(81, 22);
