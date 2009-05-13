@@ -38,7 +38,7 @@ namespace ColumnDepence
 			this.m_labelParam = new System.Windows.Forms.Label();
 			this.m_DataGridViewDepTables = new System.Windows.Forms.DataGridView();
 			this.m_labelDepTab = new System.Windows.Forms.Label();
-			this.m_RichTextBoxDefinition = new System.Windows.Forms.RichTextBox();
+			this.m_RichTextBoxDefinition = new SqlRichTextBox();
 			this.m_ContextMenuStripShowDefinition = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.m_showDefinitionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -293,7 +293,7 @@ namespace ColumnDepence
 		private System.Windows.Forms.DataGridView m_DataGridViewParams;
 		private System.Windows.Forms.Label m_labelParam;
 		private System.Windows.Forms.Label m_labelDepTab;
-		private System.Windows.Forms.RichTextBox m_RichTextBoxDefinition;
+		private SqlRichTextBox m_RichTextBoxDefinition;
 		private System.Windows.Forms.DataGridView m_DataGridViewDepTables;
 		private System.Windows.Forms.ContextMenuStrip m_ContextMenuStripShowDefinition;
 		private System.Windows.Forms.ToolStripMenuItem m_showDefinitionToolStripMenuItem;
@@ -306,7 +306,6 @@ namespace ColumnDepence
 		private System.Windows.Forms.ToolStripSeparator m_toolStripSeparator2;
 		private System.Windows.Forms.ToolStripLabel m_toolStripLabelConnection;
 		private System.Windows.Forms.ToolStripLabel m_toolStripLabelFind;
-		private readonly BackgroundWorker m_BackgroundWorkerFindText = new BackgroundWorker();
 		private int m_tryToLoadCounter ;
 		private Form m_Toolbox ;
 		private ToolStripButton m_ToolStripButtonExecSp;
