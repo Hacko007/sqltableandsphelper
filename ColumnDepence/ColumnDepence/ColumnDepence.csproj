@@ -125,6 +125,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormRunSP.resx">
       <DependentUpon>FormRunSP.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSelectShownColumns.resx">
       <DependentUpon>FormSelectShownColumns.cs</DependentUpon>
@@ -175,6 +176,9 @@
     </Compile>
     <Compile Include="StackSetting.cs" />
     <Compile Include="DbInfo\TableInfo.cs" />
+    <Compile Include="SqlRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControlAllTableInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>

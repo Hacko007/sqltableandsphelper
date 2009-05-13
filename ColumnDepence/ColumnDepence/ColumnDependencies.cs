@@ -172,13 +172,21 @@ namespace ColumnDepence
 		private void ButtonGetAllRows_Click(object sender, EventArgs e)
 		{
 			if(TableName == "") return;
+
+			m_tabPage_TabSearch.Enabled = false;
 			CreateTabPageWithValues(TableName,null);
+			m_tabPage_TabSearch.Enabled = true;
+
 		}
 
 		private void ButtonTableDefinition_Click(object sender, EventArgs e)
 		{
 			if (TableName == "") return;
+
+			m_tabPage_TabSearch.Enabled = false;
 			CreateTabPageWithDefinition(TableName,null);
+			m_tabPage_TabSearch.Enabled = true;
+
 		}
 
 		public UserControlAllTableInfo GetSelectedAllTableInfo()
@@ -200,8 +208,7 @@ namespace ColumnDepence
 		public void CreateSpTabPage(string spName, UserControlSpInfo spInfo)
 		{
 			if(spName == "") return;
-
-			m_textBox_SpSearch.Enabled = false;
+			m_tabPage_SpSearch.Enabled = false;
 
 			if (tabControl_TableInfo.TabPages.ContainsKey(spName))
 			{
@@ -223,11 +230,13 @@ namespace ColumnDepence
 				tabControl_TableInfo.TabPages.Add(spName, spName);
 				tabControl_TableInfo.TabPages[spName].Controls.Add(spInfo);
 				tabControl_TableInfo.SelectedTab = tabControl_TableInfo.TabPages[spName];
-
+				
+				spInfo.SyntaxHighLight();
 				m_userControlHistoryList_Sp.AddValue(spName);
 
 			}
-			m_textBox_SpSearch.Enabled = true;
+			m_tabPage_SpSearch.Enabled = true;
+
 		}
 
 		void OpenTableFilteredTab(object sender, string tableName, bool isDefinitionShown,TableFilterData cellInfo)
@@ -441,9 +450,7 @@ namespace ColumnDepence
 			if (e.Shift) return;
 			if (e.KeyValue == 13  /* Keys.Return ||  Keys.Enter*/ )
 			{
-				txtTableName.Enabled = false;
-				button_TabDef.Enabled = false;
-				button_GetAllRows.Enabled = false;
+				m_tabPage_TabSearch.Enabled = false;
 				if (TableExists(TableName))
 				{
 					if (e.Control)
@@ -457,9 +464,7 @@ namespace ColumnDepence
 						CreateTabPageWithDefinition(TableName,null);
 					}
 				}
-				txtTableName.Enabled = true;
-				button_TabDef.Enabled = true;
-				button_GetAllRows.Enabled = true;
+				m_tabPage_TabSearch.Enabled = true;				
 				txtTableName.Focus();
 			}
 		}
