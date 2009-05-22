@@ -1,4 +1,6 @@
-﻿namespace ColumnDepence
+﻿using ColumnDepence.DbInfo;
+
+namespace ColumnDepence
 {
 	partial class FormRunSp
 	{
@@ -219,5 +221,6 @@
 		private System.Windows.Forms.DataGridViewCheckBoxColumn m_ColumnSetNull;
 		private System.Windows.Forms.DataGridViewTextBoxColumn m_ColumnValue;
 		private System.Windows.Forms.TableLayoutPanel m_TableLayoutPanel;
+		private SpInfo m_SpInfo;
 	}
 }

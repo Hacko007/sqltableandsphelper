@@ -15,8 +15,8 @@ namespace ColumnDepence
 
 		public event EventHandler ShownColumnsChanged;
 		public event OpenTableFilteredDelegate OpenTableFilteredTab;
-
 		public event DataGridViewRowCancelEventHandler UserDeletingRow;
+
 		public UserControlValues()
 		{
 			InitializeComponent();
@@ -28,11 +28,45 @@ namespace ColumnDepence
 			CreateFilterPopup();
 		}
 
-		private UserControlToolStripLabelTextBox m_ToolStripMenuItemLike;
-		private UserControlToolStripLabelTextBox m_ToolStripMenuItemEqual;
-		private UserControlToolStripLabelTextBox m_ToolStripMenuItemNotEqual;
-		private UserControlToolStripLabelTextBox m_ToolStripMenuItemGreaterThen;
-		private UserControlToolStripLabelTextBox m_ToolStripMenuItemLessThen;
+
+		public void FillDataGridValues()
+		{
+			TableInfo.ValuesLoadedWithFilter = false;
+			string selectedColumns = GetColumnSelect();
+			string rowFilter = GetFilter();
+			if (selectedColumns == null) return;
+			int maxRows = Math.Max(10, Properties.Settings.Default.MaxRowsLoaded);
+
+			string sqlCmd = "SELECT TOP " + maxRows + "  " + selectedColumns + " FROM  " + TableInfo.TableName;							
+
+			if (rowFilter != "")
+			{
+				sqlCmd += " WHERE " + rowFilter;
+				TableInfo.ValuesLoadedWithFilter = true;
+			}
+
+			TableInfo.Values = new DataTable(TableInfo.TableName);
+			TableInfo.Values = TableInfo.FillDataTable(TableInfo.TableName, sqlCmd, TableInfo.Values);
+
+			if (TableInfo.Values == null) return;
+
+			ValuesDataGrid.DataSource = TableInfo.Values;
+			if (selectedColumns == "*") AllColumns = new List<string>();
+			for (int i = 0; i < ValuesDataGrid.Columns.Count; i++)
+			{
+				ValuesDataGrid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+				if (selectedColumns == "*") AllColumns.Add(ValuesDataGrid.Columns[i].Name);
+			}
+			if (selectedColumns == "*")
+			{
+				ShownColumns = new List<string>();
+				ShownColumns.AddRange(AllColumns);
+			}
+			ApplyFilter();
+			UpdateShownColumnsContextMenu();
+		}
+
+
 
 		public DataGridView ValuesDataGrid { get { return m_DataGridViewValues; } }
 
@@ -277,7 +311,7 @@ namespace ColumnDepence
 			else
 				m_FilterDictionary[col].Remove(FilterRule.IsFalse);
 
-			m_removeFiltersToolStripMenuItem.Visible = hasFilter;
+			m_removeFiltersToolStripMenuItem.Enabled = hasFilter;
 			m_ToolStripSeparator2.Visible = hasFilter;
 
 			m_ActiveColumn.HeaderText = (hasFilter) ? "["+ m_ActiveColumn.Name + "]" : m_ActiveColumn.Name;
@@ -308,16 +342,6 @@ namespace ColumnDepence
 		{			
 			string filter = GetFilter();
 
-			try
-			{
-				if(TableInfo.Values.TableName == "") return;
-
-				DataView dv = new DataView {Table = TableInfo.Values, RowFilter = filter};
-				m_DataGridViewValues.DataSource = dv;
-				ShownRows = dv.Count;			
-			}
-			catch { }									
-
 			if (filter == "")
 			{
 				m_labelFilter.Text = "";
@@ -328,9 +352,16 @@ namespace ColumnDepence
 				m_labelFilter.Text = "Filter: " + filter;
 				m_buttonRemoveFilter.Visible = true;
 			}
-			
-			
 
+			try
+			{
+				if(TableInfo.Values.TableName == "") return;
+
+				DataView dv = new DataView {Table = TableInfo.Values, RowFilter = filter};
+				m_DataGridViewValues.DataSource = dv;
+				ShownRows = dv.Count;			
+			}
+			catch { }									
 		}
 
 		#region Filter Menu Events
@@ -383,6 +414,10 @@ namespace ColumnDepence
 
 			ResetFilterContextMenuItems();
 			UpdateContexMenuStatus();
+			if (TableInfo.ValuesLoadedWithFilter)
+			{
+				FillDataGridValues();
+			}
 		}
 
 		private void ResetFilterContextMenuItems()
@@ -398,7 +433,7 @@ namespace ColumnDepence
 			m_ToolStripMenuItemGreaterThen.Text = "";
 			m_ToolStripMenuItemLessThen.Text = "";
 
-			m_removeFiltersToolStripMenuItem.Visible = false;
+			m_removeFiltersToolStripMenuItem.Enabled = false;
 		}
 
 		#endregion
@@ -409,6 +444,13 @@ namespace ColumnDepence
 
 		private void ContextMenuStripShownColumns_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
+			Point cliecked = PointToClient(Cursor.Position);
+			DataGridView.HitTestInfo hti = m_DataGridViewValues.HitTest(cliecked.X-2, cliecked.Y-15);
+			if (hti.Type != DataGridViewHitTestType.Cell)
+			{
+			    e.Cancel = true;
+			    return;
+			}
 
 			m_contextMenuStripShownColumns.Items.Clear();
 			m_contextMenuStripShownColumns.Items.AddRange(new ToolStripItem[]{
@@ -590,32 +632,6 @@ namespace ColumnDepence
 				});
 		}
 
-/*
-		void ShowColumnToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-		{
-			if (sender is ToolStripMenuItem)
-			{
-				ToolStripMenuItem item = (ToolStripMenuItem)sender;
-				string col_name = item.Text;
-				if (item.Checked )
-				{ 
-					if(ShownColumns == null) ShownColumns = new List<string>();
-
-					if (!ShownColumns.Contains(col_name)) {
-						ShownColumns.Add(col_name);
-					}
-				}
-				else
-				{
-					if (ShownColumns != null && ShownColumns.Contains(col_name)) {
-						ShownColumns.Remove(col_name);
-					}
-				}
-			}
-			OnShownColumnsChanged();
-			UpdateShownColumnsContextMenu();
-		}
-*/
 
 		#endregion Show Column ContextMenu
 
@@ -639,6 +655,9 @@ namespace ColumnDepence
 			m_FilterDictionary = new Dictionary<string, ColumnFilter>();
 			ResetFilterContextMenuItems();
 			ApplyFilter();
+			if (TableInfo.ValuesLoadedWithFilter) {
+				FillDataGridValues();
+			}
 		}
 
 		

@@ -11,10 +11,9 @@ namespace ColumnDepence
 	{
 		public FormRunSp()
 		{
-			InitializeComponent();
+			InitializeComponent();			
 		}
 
-		private SpInfo m_SpInfo;
 		public SpInfo SpInfo
 		{
 			get { return m_SpInfo; }
@@ -42,6 +41,14 @@ namespace ColumnDepence
 			SqlCommand cmd = new SqlCommand(SpInfo.SpName, ConnectionFactory.Instance)
 			                 	{CommandType = CommandType.StoredProcedure};
 
+			const string retParam = "ReturnValue";
+			cmd.Parameters.Add(new SqlParameter(retParam,null));
+			cmd.Parameters[retParam].Direction = ParameterDirection.ReturnValue;
+			object retValue ;
+
+			m_DataGridViewInputParameters.EndEdit();
+
+
 			foreach (DataGridViewRow row in m_DataGridViewInputParameters.Rows)
 			{
 				string paramName = row.Cells[m_ColumnParameterName.Index].Value.ToString();
@@ -64,13 +71,32 @@ namespace ColumnDepence
 				try
 				{
 					adapter.Fill(DataSetResult);
+					retValue = adapter.SelectCommand.Parameters[retParam].Value;
 				}catch(SqlException exception)
 				{
-					MessageBox.Show(exception.ToString());
+					MessageBox.Show(exception.Message);
 					return;
 				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+					return;
+				}
+
 			}
-			if (DataSetResult.Tables.Count == 0) return;
+			if (retValue != null)
+			{
+				const string columnName = "Return Value";
+				DataSetResult.Tables.Add(columnName).Columns.Add(columnName);
+				DataSetResult.Tables[columnName].Rows.Add(retValue);
+			}
+
+			if (DataSetResult.Tables.Count == 0)
+			{
+				const string columnName = "No Value";
+				DataSetResult.Tables.Add(columnName).Columns.Add(columnName);
+				DataSetResult.Tables[columnName].Rows.Add("No value returned");
+			}
 
 
 			/// 
@@ -78,6 +104,7 @@ namespace ColumnDepence
 			/// 
 			m_TableLayoutPanel.RowCount = DataSetResult.Tables.Count;
 			m_TableLayoutPanel.RowStyles.Clear();
+			m_TableLayoutPanel.Controls.Clear();
 
 			float percentage = (float)100 / DataSetResult.Tables.Count;
 			int rowNr = 0;
@@ -85,14 +112,16 @@ namespace ColumnDepence
 			{
 				
 				m_TableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, percentage ));
-				
+
 				m_TableLayoutPanel.Controls.Add(
 					new DataGridView
 						{
 							DataSource = table,
 							Width = Width,
-							Dock = DockStyle.Fill
-					},0, rowNr );
+							Dock = DockStyle.Fill,
+							AllowUserToAddRows = false,
+							AllowUserToDeleteRows = false
+						}, 0, rowNr);
 				rowNr++;
 			}
 			m_SplitContainer.Panel2Collapsed = false;
@@ -166,6 +195,7 @@ namespace ColumnDepence
 
 		private void DataGridViewInputParameters_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
+			
 			if (e.ColumnIndex != m_ColumnSetNull.Index) return;
 			try
 			{

@@ -18,16 +18,32 @@ namespace ColumnDepence
 		public UserControlAllTableInfo()
 		{
 			InitializeComponent();
-			TableName = "";
+			TableInfo = new TableInfo();			
 			m_getAllRows = false;
 			m_userControlValues.ShownColumnsChanged += UserControlValuesShownColumnsChanged;
 			m_userControlValues.OpenTableFilteredTab += UserControlValuesOpenTableFilteredTab;
-			TableInfo = new TableInfo();
+			TableName = "";
 		}
 
 
-		public TableInfo TableInfo { get; set; }
-		public string TableName { get; set; }
+		public TableInfo TableInfo { 
+			get { return m_userControlValues.TableInfo; }
+			set { m_userControlValues.TableInfo = value; }
+		}
+
+		public string TableName
+		{
+			get
+			{
+				return TableInfo.TableName;
+			}
+			set
+			{
+				TableInfo.TableName = value;
+				m_userControlValues.TableInfo.TableName = value;
+			}
+		}
+
 		public SqlConnection Connection { get; set; }
 		public bool ShowAllTableInfo { get; set; }
 
@@ -56,7 +72,7 @@ namespace ColumnDepence
 		{
 			ShowAllTableInfo = showAllData;
 			Connection = ConnectionFactory.Instance;
-			TableName = tableName;
+			TableName = tableName;			
 			m_ParentForm = parentForm;
 
 			SetToolStripLabel();
@@ -98,15 +114,19 @@ namespace ColumnDepence
 			FillDataGridValues();
 			Application.DoEvents();
 
-			TableInfo.LoadTableInfo(TableName);
+			TableInfo.LoadTableInfo();
 			RefreshDataGrids();
 			Application.DoEvents();
 			FillSpDependecies();
-			m_userControlValues.TableInfo = TableInfo;
 			Application.DoEvents();
 			Cursor.Current = Cursors.Default;
 
 			ColumnDependencies.FormMain.StatusInfo1 = TableName + " definition loaded";
+			ArrangeDataGridViews();
+		}
+
+		private void ArrangeDataGridViews()
+		{
 			try
 			{
 				/// 
@@ -119,10 +139,10 @@ namespace ColumnDepence
 				m_SplitContainerLeft.SplitterDistance -= FreeSpace(m_DataGridViewColumns) - emptySpace;
 				if (m_userControlValues.ValuesDataGrid.Rows.Count == 0)
 					m_SplitContainerLeft.SplitterDistance = Math.Min(m_SplitContainerLeft.Height - 80,
-					                                                m_SplitContainerLeft.SplitterDistance);
+					                                                 m_SplitContainerLeft.SplitterDistance);
 				else
 					m_SplitContainerLeft.SplitterDistance = Math.Min(m_SplitContainerLeft.Height - 250,
-					                                                m_SplitContainerLeft.SplitterDistance);
+					                                                 m_SplitContainerLeft.SplitterDistance);
 
 				/// Right split containeer
 
@@ -182,11 +202,10 @@ namespace ColumnDepence
 			FillDataGridValues();
 			m_userControlValues.UserDeletingRow -= DataGridViewValueUserDeletingRow;
 			m_userControlValues.UserDeletingRow += DataGridViewValueUserDeletingRow;
-			m_userControlValues.TableInfo = TableInfo;
 			Application.DoEvents();
 			Cursor.Current = Cursors.Default;
 
-			TableInfo.LoadTableInfo(TableName);
+			TableInfo.LoadTableInfo();
 		}
 
 		private void DataGridViewColumns_SelectionChanged(object sender, EventArgs e)
@@ -275,38 +294,8 @@ namespace ColumnDepence
 		
 		private void FillDataGridValues()
 		{
-			string selectedColumns = m_userControlValues.GetColumnSelect();
-			string rowFilter = m_userControlValues.GetFilter();
-			if (selectedColumns == null) return;
-
-			string sqlCmd = (m_getAllRows)
-			                	? "SELECT  TOP 5000 " + selectedColumns + " FROM  " + TableName
-			                	: "SELECT  TOP 300 " + selectedColumns + " FROM  " + TableName;
-
-			if (rowFilter != "")
-			{
-				sqlCmd += " WHERE " + rowFilter;
-			}
-
-			TableInfo.Values = new DataTable(TableName);
-			TableInfo.Values = TableInfo.FillDataTable(TableName, sqlCmd, TableInfo.Values);
-
-			if (TableInfo.Values == null) return;
-
-			m_userControlValues.ValuesDataGrid.DataSource = TableInfo.Values;
-			if (selectedColumns == "*") m_userControlValues.AllColumns = new List<string>();
-			for (int i = 0; i < m_userControlValues.ValuesDataGrid.Columns.Count; i++)
-			{
-				m_userControlValues.ValuesDataGrid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-				if (selectedColumns == "*") m_userControlValues.AllColumns.Add(m_userControlValues.ValuesDataGrid.Columns[i].Name);
-			}
-			if (selectedColumns == "*")
-			{
-				m_userControlValues.ShownColumns = new List<string>();
-				m_userControlValues.ShownColumns.AddRange(m_userControlValues.AllColumns);
-			}
-			m_userControlValues.ApplyFilter();
-			m_userControlValues.UpdateShownColumnsContextMenu();
+			m_userControlValues.FillDataGridValues();
+			//TableInfo = m_userControlValues.TableInfo;
 		}
 
 		private void FillDataGridColumnConstrains()
@@ -379,8 +368,10 @@ namespace ColumnDepence
 					ConnectionFactory.Instance.Open();
 				}
 
-				var com = new SqlCommand("sp_depends", ConnectionFactory.Instance);
-				com.CommandType = CommandType.StoredProcedure;
+				var com = new SqlCommand("sp_depends", ConnectionFactory.Instance)
+				          	{
+				          		CommandType = CommandType.StoredProcedure
+				          	};
 				com.Parameters.Add("@objname", SqlDbType.NVarChar, 517);
 				com.Parameters[0].Value = TableName;
 
@@ -397,12 +388,13 @@ namespace ColumnDepence
 						dt.Columns.Add("MyType", typeof (string), "IIF(type = 'stored procedure', 'SP' , 'TAB')");
 
 						m_DataGridViewSp.DataSource = dt;
+						// ReSharper disable PossibleNullReferenceException
 						m_DataGridViewSp.Columns["type"].Visible = false;
 						m_DataGridViewSp.Columns["MyType"].HeaderText = "Type";
-
 						m_DataGridViewSp.Columns["name"].HeaderText = "Dependent Object";
 						m_DataGridViewSp.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 						m_DataGridViewSp.Columns["name"].ContextMenuStrip = m_ContextMenuStripShowDefinition;
+						// ReSharper restore PossibleNullReferenceException
 					}
 				}
 			}

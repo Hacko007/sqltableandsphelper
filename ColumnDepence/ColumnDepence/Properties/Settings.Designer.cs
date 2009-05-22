@@ -141,5 +141,17 @@ namespace ColumnDepence.Properties {
                 this["DatabaseHistory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int MaxRowsLoaded {
+            get {
+                return ((int)(this["MaxRowsLoaded"]));
+            }
+            set {
+                this["MaxRowsLoaded"] = value;
+            }
+        }
     }
 }

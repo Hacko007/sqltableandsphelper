@@ -2,9 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.ComponentModel;
 using ColumnDepence.DbInfo;
 
 namespace ColumnDepence
@@ -18,6 +16,7 @@ namespace ColumnDepence
 		public event TabPageDelegate CloseTabPage;
 		public event OpenTableDelegate OpenTableTab;
 		public event OpenSpDelegate OpenSpTab;
+		private delegate SqlRichTextBox GetSqlRichTextBoxDelegate();
 
 		#region Properties
 
@@ -31,8 +30,7 @@ namespace ColumnDepence
 			}
 		}
 
-		private delegate SqlRichTextBox GetRichTextBoxDelegate();
-		private SqlRichTextBox GetRichTextBox()
+		private SqlRichTextBox GetSqlRichTextBox()
 		{
 			return m_RichTextBoxDefinition;
 		}
@@ -44,12 +42,9 @@ namespace ColumnDepence
 			{
 				if (m_RichTextBoxDefinition.InvokeRequired)
 				{
-					return (SqlRichTextBox)m_RichTextBoxDefinition.Invoke(new GetRichTextBoxDelegate(GetRichTextBox));
+					return (SqlRichTextBox)m_RichTextBoxDefinition.Invoke(new GetSqlRichTextBoxDelegate(GetSqlRichTextBox));
 				}
-				else
-				{
-					return m_RichTextBoxDefinition;
-				}
+				return GetSqlRichTextBox();				
 			}			
 		}
 
@@ -129,7 +124,7 @@ namespace ColumnDepence
 			Application.DoEvents();
 			FillSpDefinition();
 			Cursor = Cursors.Default;
-			m_toolStripLabelConnection.Text = ConnectionFactory.ShortConnectionName;
+			m_toolStripLabelConnection.Text = ConnectionFactory.ShortConnectionName + " . " + SpName;
 		}
 
 
@@ -149,21 +144,6 @@ namespace ColumnDepence
 			return sp;
 		}
 
-		public void SyntaxHighLight()
-		{
-			if (m_RichTextBoxDefinition.InvokeRequired)
-			{
-				m_RichTextBoxDefinition.Invoke(new MethodInvoker(SyntaxHighLight));
-			}
-			else
-			{
-				FormMain.StatusInfo1 = "Syntax highligting";
-				Application.DoEvents();				
-				RichTextBoxDefinition.ApplySyntaxHighlighting();
-				FormMain.StatusInfo1 = "";
-
-			}
-		}
 	
 		#region Raise on event
 		protected virtual void RaiseCloseTabPage()
@@ -193,17 +173,15 @@ namespace ColumnDepence
 		/// <summary>
 		/// Refreshes textbox with SPs definition.
 		/// </summary>
-		void FillSpDefinition()
+		private void FillSpDefinition()
 		{			
 			if(SpName == "")return;
 			if(ConnectionFactory.OpenConnection()== false) return;
 
-			const string sqlStr = "	Declare @id int "
-			                       + @"
+			const string sqlStr = "	Declare @id int "+ @"
 SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @SPSEARCH AND OBJECTPROPERTY(id, 'IsProcedure') = 1 "
 			                       + @"
- SELECT [text]    FROM syscomments     "
-			                       + " WHERE id= @id ";
+ SELECT [text]    FROM syscomments     "+ " WHERE id= @id ";
 
 			SqlCommand com = new SqlCommand(sqlStr, ConnectionFactory.Instance);
 			com.Parameters.Add("@SPSEARCH", SqlDbType.NVarChar);
@@ -256,74 +234,41 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 		/// <summary>
 		/// Fill datagrid with inforamtion about SP's parameters
 		/// </summary>
-		void FillParameters() {
+		private void FillParameters() 
+		{
 			m_DataGridViewParams.DataSource = SpInfo.ParameterInfo;
 		}
 
 		/// <summary>
 		/// Fill datagrid with inforamtion about SP's dependencies
 		/// </summary>
-		void FillDependecies()
+		private void FillDependecies()
 		{
 			m_DataGridViewDepTables.DataSource = SpInfo.Dependencies;
+			InitCoulomnsInDvDepTables();
 		}
 
-		internal void InitCoulomnsInDvDepTables()
+		private void InitCoulomnsInDvDepTables()
 		{
-			m_DataGridViewDepTables.Columns["type"].Visible = false;
-			m_DataGridViewDepTables.Columns["updated"].Visible = false;
-			m_DataGridViewDepTables.Columns["selected"].Visible = false;
-			m_DataGridViewDepTables.Columns["MyUpd"].HeaderText = "Updated";
-			m_DataGridViewDepTables.Columns["MySel"].HeaderText = "Selected";
-			m_DataGridViewDepTables.Columns["MyType"].HeaderText = "Type";
-
-			m_DataGridViewDepTables.Columns["name"].HeaderText = "Dependent Object";
-			m_DataGridViewDepTables.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-			m_DataGridViewDepTables.Columns["name"].ContextMenuStrip = m_ContextMenuStripShowDefinition;
-
-			m_DataGridViewDepTables.Columns["column"].HeaderText = "Column";
-			m_DataGridViewDepTables.Columns["column"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-		}
-
-
-		/// <summary>
-		/// Execute sql string and return result in DataSet
-		/// </summary>
-		/// <param name="sqlCmdStr">SQL to execute</param>
-		/// <returns>Result of SQL executtion</returns>
-		DataSet FillDataSet(string sqlCmdStr)
-		{
+			
 			try
 			{
-				if (ConnectionFactory.Instance.State != ConnectionState.Open)
-				{
-					ConnectionFactory.Instance.Open();
-				}
-
-				SqlCommand com = new SqlCommand(sqlCmdStr, ConnectionFactory.Instance);
-				if (sqlCmdStr.IndexOf("@SPSEARCH") > -1)
-				{
-					com.Parameters.Add("@SPSEARCH", SqlDbType.NVarChar);
-					com.Parameters["@SPSEARCH"].Value = SpName;
-				}
-				using (SqlDataAdapter adapter = new SqlDataAdapter(com))
-				{
-					DataSet ds = new DataSet();
-					adapter.Fill(ds);
-					return ds;
-				}
-
-			}
-			catch
-			{
-				return null;
-			}
-			finally
-			{
-				ConnectionFactory.CloseConnection();
-			}
-		}
-		
+				// ReSharper disable PossibleNullReferenceException
+				m_DataGridViewDepTables.Columns["type"].Visible = false;
+				m_DataGridViewDepTables.Columns["updated"].Visible = false;
+				m_DataGridViewDepTables.Columns["selected"].Visible = false;
+				m_DataGridViewDepTables.Columns["MyUpd"].HeaderText = "Updated";
+				m_DataGridViewDepTables.Columns["MySel"].HeaderText = "Selected";
+				m_DataGridViewDepTables.Columns["MyType"].HeaderText = "Type";
+				m_DataGridViewDepTables.Columns["name"].HeaderText = "Dependent Object";
+				m_DataGridViewDepTables.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+				m_DataGridViewDepTables.Columns["name"].ContextMenuStrip = m_ContextMenuStripShowDefinition;
+				m_DataGridViewDepTables.Columns["column"].HeaderText = "Column";
+				m_DataGridViewDepTables.Columns["column"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+				// ReSharper restore PossibleNullReferenceException
+			}catch{}
+			
+		}				
 		#endregion Get data from DB
 
 
@@ -347,7 +292,6 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 				}
 			}
 			catch { }
-
 		}
 
 
@@ -397,7 +341,6 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 			m_SplitContainerMain.Panel1Collapsed = !m_toolStripButtonShowParamInfo.Checked;
 		}
 
-		#endregion ToolStripMenuItem events
 
 		private void ToolStripTextBoxFind_TextChanged(object sender, EventArgs e)
 		{
@@ -411,6 +354,48 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 			formRunSp.Show();
 		}
 
+		private void ToolStripButtonFindNext_Click(object sender, EventArgs e)
+		{
+			RichTextBoxDefinition.ScrollToNext();
+			EnableScrollToButtons();
+		}
+
+		private void ToolStripButtonFindPrevious_Click(object sender, EventArgs e)
+		{
+			RichTextBoxDefinition.ScrollToPrevious();
+			EnableScrollToButtons();
+		}
+
+		#endregion ToolStripMenuItem events
+
+		public void SyntaxHighLight()
+		{
+			if (m_RichTextBoxDefinition.InvokeRequired)
+			{
+				m_RichTextBoxDefinition.Invoke(new MethodInvoker(SyntaxHighLight));
+			}
+			else
+			{
+				m_toolStripButtonFindNext.Enabled = false;
+				m_ToolStripButtonFindPrevious.Enabled = false;
+				FormMain.StatusInfo1 = "Syntax highligting";
+				Application.DoEvents();
+				RichTextBoxDefinition.ApplySyntaxHighlighting();
+				FormMain.StatusInfo1 = "";
+			}
+		}
+
+		private void RichTextBoxDefinition_FindTextCompleted(object sender, EventArgs e)
+		{
+			EnableScrollToButtons();
+		}
+
+		private void EnableScrollToButtons()
+		{
+			m_toolStripButtonFindNext.Enabled = !RichTextBoxDefinition.PositionedAtLast && RichTextBoxDefinition.IsTextFounded;
+			m_ToolStripButtonFindPrevious.Enabled = !RichTextBoxDefinition.PositionedAtFirst &&
+			                                        RichTextBoxDefinition.IsTextFounded;
+		}
 	}
 
 
