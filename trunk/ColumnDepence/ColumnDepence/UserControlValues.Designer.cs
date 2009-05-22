@@ -102,18 +102,20 @@ namespace ColumnDepence
 			this.m_labelFilter.Name = "m_labelFilter";
 			this.m_labelFilter.Size = new System.Drawing.Size(0, 13);
 			this.m_labelFilter.TabIndex = 1;
-			this.m_labelFilter.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.m_labelFilter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// m_buttonRemoveFilter
 			// 
 			this.m_buttonRemoveFilter.BackColor = System.Drawing.Color.Transparent;
 			this.m_buttonRemoveFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.m_buttonRemoveFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.m_buttonRemoveFilter.ForeColor = System.Drawing.Color.Brown;
 			this.m_buttonRemoveFilter.Location = new System.Drawing.Point(9, 3);
 			this.m_buttonRemoveFilter.Name = "m_buttonRemoveFilter";
-			this.m_buttonRemoveFilter.Size = new System.Drawing.Size(18, 21);
+			this.m_buttonRemoveFilter.Size = new System.Drawing.Size(19, 17);
 			this.m_buttonRemoveFilter.TabIndex = 3;
 			this.m_buttonRemoveFilter.Text = "X";
+			this.m_buttonRemoveFilter.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			this.m_buttonRemoveFilter.UseVisualStyleBackColor = false;
 			this.m_buttonRemoveFilter.Visible = false;
 			this.m_buttonRemoveFilter.Click += new System.EventHandler(this.ButtonRemoveFilter_Click);
@@ -316,5 +318,10 @@ namespace ColumnDepence
 		private Dictionary<string, ColumnFilter> m_FilterDictionary = new Dictionary<string, ColumnFilter>();
 		private ToolStripLabel m_ToolStripLabelFilteredColumn;
 		private ToolStripSeparator m_ToolStripSeparator2 ;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemLike;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemEqual;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemNotEqual;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemGreaterThen;
+		private UserControlToolStripLabelTextBox m_ToolStripMenuItemLessThen;
 	}
 }

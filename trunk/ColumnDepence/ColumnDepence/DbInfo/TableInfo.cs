@@ -1,35 +1,39 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace ColumnDepence.DbInfo
 {
 	public class TableInfo
 	{
+		public string TableName { get; set; }
 		public DataTableColumnConstrains ColumnConstrains { get; set; }
 		public DataTableChildTables ChildTables { get; set; }
 		public DataTableParentTables ParentTables { get; set; }
 		public DataTable Values { get; set; }
+		public bool ValuesLoadedWithFilter { get; set; }
 
 		public TableInfo() {
 			ColumnConstrains = new DataTableColumnConstrains();
 			ChildTables = new DataTableChildTables();
 			ParentTables = new DataTableParentTables();
 			Values = new DataTable();
+			ValuesLoadedWithFilter = false;
 		}
 
-		public void LoadTableInfo(string tableName) { 
-			LoadColumnConstrains(tableName);
-			LoadParentTables(tableName);
-			LoadChildTables(tableName);
+		public void LoadTableInfo() { 
+			LoadColumnConstrains();
+			LoadParentTables();
+			LoadChildTables();
 		}
 
 
 
-		private void LoadColumnConstrains(string tableName) {
+		private void LoadColumnConstrains() {
 			if (ColumnConstrains != null && ColumnConstrains.IsDataLoaded) return;
 
 			ColumnConstrains =(DataTableColumnConstrains) FillDataTable(
-				tableName, 
+				TableName, 
 				Properties.Resources.SqlGetColumnConstrains,   
 				new DataTableColumnConstrains());
 			if(ColumnConstrains == null)
@@ -41,12 +45,12 @@ namespace ColumnDepence.DbInfo
 			ColumnConstrains.IsDataLoaded = true;
 		}
 
-		private void LoadChildTables(string tableName)
+		private void LoadChildTables()
 		{
 			if (ChildTables != null && ChildTables.IsDataLoaded) return;
 
 			ChildTables = (DataTableChildTables)FillDataTable(
-				tableName,
+				TableName,
 				Properties.Resources.SqlGetChildTables,
 				new DataTableChildTables());
 			if (ChildTables == null)
@@ -59,12 +63,12 @@ namespace ColumnDepence.DbInfo
 		}
 
 
-		private void LoadParentTables(string tableName)
+		private void LoadParentTables()
 		{
 			if (ParentTables != null && ParentTables.IsDataLoaded) return;
 
 			ParentTables = (DataTableParentTables)FillDataTable(
-				tableName,
+				TableName,
 				Properties.Resources.SqlGetParentTables,
 				new DataTableParentTables());
 			if (ParentTables == null)

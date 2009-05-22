@@ -32,16 +32,16 @@ namespace ColumnDepence
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlSpInfo));
 			this.m_SplitContainerMain = new System.Windows.Forms.SplitContainer();
 			this.m_SplitContainerTop = new System.Windows.Forms.SplitContainer();
 			this.m_DataGridViewParams = new System.Windows.Forms.DataGridView();
 			this.m_labelParam = new System.Windows.Forms.Label();
 			this.m_DataGridViewDepTables = new System.Windows.Forms.DataGridView();
 			this.m_labelDepTab = new System.Windows.Forms.Label();
-			this.m_RichTextBoxDefinition = new SqlRichTextBox();
 			this.m_ContextMenuStripShowDefinition = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.m_showDefinitionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.m_toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.m_ToolStrip = new System.Windows.Forms.ToolStrip();
 			this.m_toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripButtonShowAsToolBox = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripButtonShowParamInfo = new System.Windows.Forms.ToolStripButton();
@@ -49,8 +49,11 @@ namespace ColumnDepence
 			this.m_toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.m_toolStripLabelFind = new System.Windows.Forms.ToolStripLabel();
 			this.m_toolStripTextBoxFind = new System.Windows.Forms.ToolStripTextBox();
+			this.m_ToolStripButtonFindPrevious = new System.Windows.Forms.ToolStripButton();
+			this.m_toolStripButtonFindNext = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.m_toolStripLabelConnection = new System.Windows.Forms.ToolStripLabel();
+			this.m_RichTextBoxDefinition = new ColumnDepence.SqlRichTextBox();
 			this.m_SplitContainerMain.Panel1.SuspendLayout();
 			this.m_SplitContainerMain.Panel2.SuspendLayout();
 			this.m_SplitContainerMain.SuspendLayout();
@@ -60,7 +63,7 @@ namespace ColumnDepence
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewParams)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewDepTables)).BeginInit();
 			this.m_ContextMenuStripShowDefinition.SuspendLayout();
-			this.m_toolStrip1.SuspendLayout();
+			this.m_ToolStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// m_SplitContainerMain
@@ -112,17 +115,18 @@ namespace ColumnDepence
 			this.m_DataGridViewParams.Name = "m_DataGridViewParams";
 			this.m_DataGridViewParams.ReadOnly = true;
 			this.m_DataGridViewParams.Size = new System.Drawing.Size(398, 180);
-			this.m_DataGridViewParams.TabIndex = 0;
+			this.m_DataGridViewParams.TabIndex = 1;
 			// 
 			// m_labelParam
 			// 
 			this.m_labelParam.AutoSize = true;
+			this.m_labelParam.BackColor = System.Drawing.Color.Transparent;
 			this.m_labelParam.Dock = System.Windows.Forms.DockStyle.Top;
 			this.m_labelParam.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.m_labelParam.Location = new System.Drawing.Point(0, 0);
 			this.m_labelParam.Name = "m_labelParam";
 			this.m_labelParam.Size = new System.Drawing.Size(91, 20);
-			this.m_labelParam.TabIndex = 1;
+			this.m_labelParam.TabIndex = 0;
 			this.m_labelParam.Text = "Parameters";
 			// 
 			// m_DataGridViewDepTables
@@ -141,6 +145,7 @@ namespace ColumnDepence
 			// m_labelDepTab
 			// 
 			this.m_labelDepTab.AutoSize = true;
+			this.m_labelDepTab.BackColor = System.Drawing.Color.Transparent;
 			this.m_labelDepTab.Dock = System.Windows.Forms.DockStyle.Top;
 			this.m_labelDepTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.m_labelDepTab.Location = new System.Drawing.Point(0, 0);
@@ -148,17 +153,6 @@ namespace ColumnDepence
 			this.m_labelDepTab.Size = new System.Drawing.Size(136, 20);
 			this.m_labelDepTab.TabIndex = 0;
 			this.m_labelDepTab.Text = "Dependent tables";
-			// 
-			// m_RichTextBoxDefinition
-			// 
-			this.m_RichTextBoxDefinition.AcceptsTab = true;
-			this.m_RichTextBoxDefinition.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_RichTextBoxDefinition.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_RichTextBoxDefinition.Location = new System.Drawing.Point(0, 0);
-			this.m_RichTextBoxDefinition.Name = "m_RichTextBoxDefinition";
-			this.m_RichTextBoxDefinition.Size = new System.Drawing.Size(1021, 543);
-			this.m_RichTextBoxDefinition.TabIndex = 0;
-			this.m_RichTextBoxDefinition.Text = "";
 			// 
 			// m_ContextMenuStripShowDefinition
 			// 
@@ -175,9 +169,9 @@ namespace ColumnDepence
 			this.m_showDefinitionToolStripMenuItem.Text = "Show Definition";
 			this.m_showDefinitionToolStripMenuItem.Click += new System.EventHandler(this.ShowDefinitionToolStripMenuItem_Click);
 			// 
-			// m_toolStrip1
+			// m_ToolStrip
 			// 
-			this.m_toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.m_ToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_toolStripButtonClose,
             this.m_toolStripButtonShowAsToolBox,
             this.m_toolStripButtonShowParamInfo,
@@ -185,13 +179,15 @@ namespace ColumnDepence
             this.m_toolStripSeparator1,
             this.m_toolStripLabelFind,
             this.m_toolStripTextBoxFind,
+            this.m_ToolStripButtonFindPrevious,
+            this.m_toolStripButtonFindNext,
             this.m_toolStripSeparator2,
             this.m_toolStripLabelConnection});
-			this.m_toolStrip1.Location = new System.Drawing.Point(0, 0);
-			this.m_toolStrip1.Name = "m_toolStrip1";
-			this.m_toolStrip1.Size = new System.Drawing.Size(1021, 25);
-			this.m_toolStrip1.TabIndex = 1;
-			this.m_toolStrip1.Text = "m_toolStrip1";
+			this.m_ToolStrip.Location = new System.Drawing.Point(0, 0);
+			this.m_ToolStrip.Name = "m_ToolStrip";
+			this.m_ToolStrip.Size = new System.Drawing.Size(1021, 25);
+			this.m_ToolStrip.TabIndex = 0;
+			this.m_ToolStrip.Text = "Tool Strip";
 			// 
 			// m_toolStripButtonClose
 			// 
@@ -250,6 +246,28 @@ namespace ColumnDepence
 			this.m_toolStripTextBoxFind.Size = new System.Drawing.Size(150, 25);
 			this.m_toolStripTextBoxFind.TextChanged += new System.EventHandler(this.ToolStripTextBoxFind_TextChanged);
 			// 
+			// m_ToolStripButtonFindPrevious
+			// 
+			this.m_ToolStripButtonFindPrevious.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.m_ToolStripButtonFindPrevious.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripButtonFindPrevious.Image")));
+			this.m_ToolStripButtonFindPrevious.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.m_ToolStripButtonFindPrevious.Name = "m_ToolStripButtonFindPrevious";
+			this.m_ToolStripButtonFindPrevious.Size = new System.Drawing.Size(27, 22);
+			this.m_ToolStripButtonFindPrevious.Text = "<<";
+			this.m_ToolStripButtonFindPrevious.ToolTipText = "Scroll to previous";
+			this.m_ToolStripButtonFindPrevious.Click += new System.EventHandler(this.ToolStripButtonFindPrevious_Click);
+			// 
+			// m_toolStripButtonFindNext
+			// 
+			this.m_toolStripButtonFindNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.m_toolStripButtonFindNext.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButtonFindNext.Image")));
+			this.m_toolStripButtonFindNext.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.m_toolStripButtonFindNext.Name = "m_toolStripButtonFindNext";
+			this.m_toolStripButtonFindNext.Size = new System.Drawing.Size(27, 22);
+			this.m_toolStripButtonFindNext.Text = ">>";
+			this.m_toolStripButtonFindNext.ToolTipText = "Scroll to next";
+			this.m_toolStripButtonFindNext.Click += new System.EventHandler(this.ToolStripButtonFindNext_Click);
+			// 
 			// m_toolStripSeparator2
 			// 
 			this.m_toolStripSeparator2.Name = "m_toolStripSeparator2";
@@ -260,12 +278,24 @@ namespace ColumnDepence
 			this.m_toolStripLabelConnection.Name = "m_toolStripLabelConnection";
 			this.m_toolStripLabelConnection.Size = new System.Drawing.Size(0, 22);
 			// 
+			// m_RichTextBoxDefinition
+			// 
+			this.m_RichTextBoxDefinition.AcceptsTab = true;
+			this.m_RichTextBoxDefinition.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_RichTextBoxDefinition.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_RichTextBoxDefinition.Location = new System.Drawing.Point(0, 0);
+			this.m_RichTextBoxDefinition.Name = "m_RichTextBoxDefinition";
+			this.m_RichTextBoxDefinition.Size = new System.Drawing.Size(1021, 543);
+			this.m_RichTextBoxDefinition.TabIndex = 0;
+			this.m_RichTextBoxDefinition.Text = "";
+			this.m_RichTextBoxDefinition.FindTextCompleted += new System.EventHandler(RichTextBoxDefinition_FindTextCompleted);			
+			// 
 			// UserControlSpInfo
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.m_SplitContainerMain);
-			this.Controls.Add(this.m_toolStrip1);
+			this.Controls.Add(this.m_ToolStrip);
 			this.Name = "UserControlSpInfo";
 			this.Size = new System.Drawing.Size(1021, 772);
 			this.m_SplitContainerMain.Panel1.ResumeLayout(false);
@@ -279,8 +309,8 @@ namespace ColumnDepence
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewParams)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewDepTables)).EndInit();
 			this.m_ContextMenuStripShowDefinition.ResumeLayout(false);
-			this.m_toolStrip1.ResumeLayout(false);
-			this.m_toolStrip1.PerformLayout();
+			this.m_ToolStrip.ResumeLayout(false);
+			this.m_ToolStrip.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -297,7 +327,7 @@ namespace ColumnDepence
 		private System.Windows.Forms.DataGridView m_DataGridViewDepTables;
 		private System.Windows.Forms.ContextMenuStrip m_ContextMenuStripShowDefinition;
 		private System.Windows.Forms.ToolStripMenuItem m_showDefinitionToolStripMenuItem;
-		private System.Windows.Forms.ToolStrip m_toolStrip1;
+		private System.Windows.Forms.ToolStrip m_ToolStrip;
 		private System.Windows.Forms.ToolStripButton m_toolStripButtonShowAsToolBox;
 		private System.Windows.Forms.ToolStripButton m_toolStripButtonClose;
 		private System.Windows.Forms.ToolStripButton m_toolStripButtonShowParamInfo;
@@ -309,5 +339,7 @@ namespace ColumnDepence
 		private int m_tryToLoadCounter ;
 		private Form m_Toolbox ;
 		private ToolStripButton m_ToolStripButtonExecSp;
+		private ToolStripButton m_toolStripButtonFindNext;
+		private ToolStripButton m_ToolStripButtonFindPrevious;
 	}
 }

@@ -7,6 +7,11 @@ namespace ColumnDepence.DbInfo
 		Parent,
 		Child
 	}
+
+	/// <summary>
+	/// Contains inforamtion about all selected cells in DataGridView 
+	/// that user can use for filtering.
+	/// </summary>
 	public class TableFilterData
 	{		
 		public string TableName { get; set; }
@@ -22,6 +27,11 @@ namespace ColumnDepence.DbInfo
 			ColumnValues = new Dictionary<string, List<object>>();
 		}				
 
+		/// <summary>
+		/// Adds new filter for this column
+		/// </summary>
+		/// <param name="columnName">Column name</param>
+		/// <param name="value">filter value</param>
 		public void Add(string columnName, object value)
 		{
 			if (!ColumnValues.ContainsKey(columnName))
@@ -37,6 +47,15 @@ namespace ColumnDepence.DbInfo
 			}
 		}
 
+		/// <summary>
+		/// Gets dictionary of all filters. 
+		/// Key - column name, 
+		/// Value - one or more column filters.
+		/// </summary>
+		/// Returns dictionary of all filters with
+		/// column name as key and 
+		/// one or more column filters as value.
+		/// <returns></returns>
 		public Dictionary<string, ColumnFilter> GetColumnFilters()
 		{
 			Dictionary<string, ColumnFilter>  filterDict = new Dictionary<string, ColumnFilter>();
