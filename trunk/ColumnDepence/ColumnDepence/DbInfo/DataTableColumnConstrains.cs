@@ -23,6 +23,19 @@ namespace ColumnDepence.DbInfo
 			IsDataLoaded = false;
 		}
 
+		public ColumnRefType GetColumnRefType(string ColumnName) {
+			ColumnRefType refType = ColumnRefType.None;
+			if (IsPrimaryKey(ColumnName))
+				refType |= ColumnRefType.PrimaryKey;
+
+			if (IsForeignKey(ColumnName))
+				refType |= ColumnRefType.ForegnKey;
+
+			if (IsUnique(ColumnName))
+				refType |= ColumnRefType.Unique;
+
+			return refType;
+		}
 		
 		public bool IsPrimaryKey(string ColumnName)
 		{

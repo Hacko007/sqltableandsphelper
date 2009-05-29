@@ -165,4 +165,19 @@ FROM  sys.columns AS COL1 INNER JOIN
   <data name="m_ToolStripButtonExecSp_Image" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\m_ToolStripButtonExecSp.Image.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ForegnKeyIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PrimaryKeyIcon1.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GetColumnInfoForTable" xml:space="preserve">
+    <value>SELECT  COLUMN_NAME As Name , 
+DATA_TYPE As [Type], 
+CASE IS_NULLABLE  WHEN 'NO' THEN cast(0 as Bit)  ELSE cast (1 as BIT) END as Nullable,
+CHARACTER_MAXIMUM_LENGTH As [Max] , 
+COLUMN_DEFAULT AS [Default] 
+FROM   INFORMATION_SCHEMA.COLUMNS 
+WHERE  (TABLE_NAME = @TABSEARCH) ORDER BY ORDINAL_POSITION</value>
+  </data>
+  <data name="PrimaryKeyIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PrimaryKeyIcon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
