@@ -40,7 +40,6 @@ namespace ColumnDepence
 			set
 			{
 				TableInfo.TableName = value;
-				m_userControlValues.TableInfo.TableName = value;
 			}
 		}
 
@@ -104,17 +103,16 @@ namespace ColumnDepence
 			m_PanelDataView.Controls.Clear();
 			m_PanelDataView.Controls.Add(m_SplitContainerMain);
 			Application.DoEvents();
-			FillColumnDataGrid();
-			Application.DoEvents();
+			FillDataGridValues();
 			m_SplitContainerLeft.Panel2.Controls.Clear();
 			m_userControlValues.Dock = DockStyle.Fill;
 			m_SplitContainerLeft.Panel2.Controls.Add(m_userControlValues);
 			m_userControlValues.TableCount = GetTableCountStr();
 			Application.DoEvents();
-			FillDataGridValues();
-			Application.DoEvents();
-
 			TableInfo.LoadTableInfo();
+			FillColumnDataGrid();
+			Application.DoEvents();
+						
 			RefreshDataGrids();
 			Application.DoEvents();
 			FillSpDependecies();
@@ -245,28 +243,33 @@ namespace ColumnDepence
 			}
 		}
 
-
 		private void FillColumnDataGrid()
 		{
-			const string sqlCmd = @"SELECT  COLUMN_NAME As Name , DATA_TYPE As [Type],"
-			                      + "CASE IS_NULLABLE  WHEN 'NO' THEN cast(0 as Bit)  ELSE cast (1 as BIT) END as Nullable,"
-			                      + " CHARACTER_MAXIMUM_LENGTH As [Max] , COLUMN_DEFAULT AS [Default] "
-			                      +
-			                      "FROM   INFORMATION_SCHEMA.COLUMNS WHERE  (TABLE_NAME = @TABSEARCH) ORDER BY ORDINAL_POSITION";
-			DataSet ds = FillDataSet(sqlCmd);
 
-			if (ds != null && ds.Tables.Count > 0)
+			if (TableInfo.ColumnInfo == null || TableInfo.ColumnInfo.Rows.Count == 0)
 			{
-				m_DataGridViewColumns.DataSource = ds.Tables[0];
-				m_DataGridViewColumns.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-				m_DataGridViewColumns.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-				for (int i = 1; i < m_DataGridViewColumns.Columns.Count; i++)
-				{
-					m_DataGridViewColumns.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-				}
-				m_DataGridViewColumns.SelectAll();
+				m_DataGridViewColumns.DataSource = null;
 			}
-		}
+			else
+			{
+				m_DataGridViewColumns.DataSource = TableInfo.ColumnInfo;
+				for (int i = 0; i < m_DataGridViewColumns.Columns.Count; i++)
+				{
+					m_DataGridViewColumns.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+				}
+				m_DataGridViewColumns.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+				
+				m_DataGridViewColumns.SelectAll();
+				foreach (DataGridViewRow row in m_DataGridViewColumns.Rows)
+				{
+					ColumnRefType refType = TableInfo.ColumnConstrains.GetColumnRefType(row.Cells[TableInfo.ColumnInfo.ColumnColumnName.ColumnName].Value.ToString());
+					row.HeaderCell = new RowHeaderCellColumnInfo() { ColumnRefType = refType };
+				}				
+				m_DataGridViewColumns.AutoResizeRowHeadersWidth(  DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+
+			}
+			
+		}	
 
 		private string GetTableCountStr()
 		{
@@ -294,8 +297,7 @@ namespace ColumnDepence
 		
 		private void FillDataGridValues()
 		{
-			m_userControlValues.FillDataGridValues();
-			//TableInfo = m_userControlValues.TableInfo;
+			m_userControlValues.FillDataGridValues();			
 		}
 
 		private void FillDataGridColumnConstrains()
@@ -315,6 +317,14 @@ namespace ColumnDepence
 				m_DataGridViewColumnConstrains.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
 				m_DataGridViewColumnConstrains.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 				m_DataGridViewColumnConstrains.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+				foreach (DataGridViewRow row in m_DataGridViewColumnConstrains.Rows)
+				{
+					ColumnRefType refType = TableInfo.ColumnConstrains.GetColumnRefType(row.Cells[TableInfo.ColumnConstrains.ColumnColumnName.ColumnName].Value.ToString());
+					row.HeaderCell = new RowHeaderCellColumnInfo() { ColumnRefType = refType };
+				}
+				m_DataGridViewColumns.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+
 			}
 		}
 

@@ -67,6 +67,9 @@
     <Compile Include="DbInfo\DataTableChildTables.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DbInfo\DataTableColumnInfo.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DbInfo\DataTableParentTables.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -76,7 +79,9 @@
     <Compile Include="DbInfo\DataTableSpParameterInfo.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DbInfo\RowHeaderCellColumnInfo.cs" />
     <Compile Include="DbInfo\SpInfo.cs" />
+    <Compile Include="DbInfo\SqlDbTypeExtension.cs" />
     <Compile Include="DbInfo\TableFilterData.cs" />
     <Compile Include="DbInfo\TableFilterDataCollection.cs" />
     <Compile Include="DbInfo\DataTableColumnConstrains.cs">
@@ -255,6 +260,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\m_ToolStripButtonExecSp.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PrimaryKeyIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PrimaryKeyIcon1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

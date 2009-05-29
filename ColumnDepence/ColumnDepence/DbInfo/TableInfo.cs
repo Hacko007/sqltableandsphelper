@@ -7,6 +7,7 @@ namespace ColumnDepence.DbInfo
 	public class TableInfo
 	{
 		public string TableName { get; set; }
+		public DataTableColumnInfo ColumnInfo { get; set; }
 		public DataTableColumnConstrains ColumnConstrains { get; set; }
 		public DataTableChildTables ChildTables { get; set; }
 		public DataTableParentTables ParentTables { get; set; }
@@ -18,15 +19,32 @@ namespace ColumnDepence.DbInfo
 			ChildTables = new DataTableChildTables();
 			ParentTables = new DataTableParentTables();
 			Values = new DataTable();
+			ColumnInfo = new DataTableColumnInfo();
 			ValuesLoadedWithFilter = false;
 		}
 
-		public void LoadTableInfo() { 
+		public void LoadTableInfo() {
+			LoadColumnInfo();
 			LoadColumnConstrains();
 			LoadParentTables();
 			LoadChildTables();
 		}
 
+		private void LoadColumnInfo()
+		{
+			if (ColumnInfo != null && ColumnInfo.IsDataLoaded) return;
+
+			ColumnInfo = (DataTableColumnInfo)FillDataTable(
+				TableName,
+				Properties.Resources.GetColumnInfoForTable,
+				new DataTableColumnInfo());
+			if (ColumnInfo== null)
+			{
+				ColumnInfo = new DataTableColumnInfo();
+				return;
+			}
+			ColumnInfo.IsDataLoaded = true;
+		}
 
 
 		private void LoadColumnConstrains() {

@@ -74,6 +74,28 @@ namespace ColumnDepence.Properties {
             }
         }
         
+        public static System.Drawing.Icon ForegnKeyIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForegnKeyIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT  COLUMN_NAME As Name , 
+        ///DATA_TYPE As [Type], 
+        ///CASE IS_NULLABLE  WHEN &apos;NO&apos; THEN cast(0 as Bit)  ELSE cast (1 as BIT) END as Nullable,
+        ///CHARACTER_MAXIMUM_LENGTH As [Max] , 
+        ///COLUMN_DEFAULT AS [Default] 
+        ///FROM   INFORMATION_SCHEMA.COLUMNS 
+        ///WHERE  (TABLE_NAME = @TABSEARCH) ORDER BY ORDINAL_POSITION.
+        /// </summary>
+        public static string GetColumnInfoForTable {
+            get {
+                return ResourceManager.GetString("GetColumnInfoForTable", resourceCulture);
+            }
+        }
+        
         public static System.Drawing.Bitmap LoadAllValues {
             get {
                 object obj = ResourceManager.GetObject("LoadAllValues", resourceCulture);
@@ -92,6 +114,13 @@ namespace ColumnDepence.Properties {
             get {
                 object obj = ResourceManager.GetObject("m_ToolStripButtonExecSp_Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        public static System.Drawing.Icon PrimaryKeyIcon {
+            get {
+                object obj = ResourceManager.GetObject("PrimaryKeyIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
