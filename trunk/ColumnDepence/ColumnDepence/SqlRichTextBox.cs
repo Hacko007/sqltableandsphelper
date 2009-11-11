@@ -336,5 +336,56 @@ namespace ColumnDepence
 		}
 
 		#endregion Move to next selected
+
+
+		#region Colorize Xml
+
+		private void DoAppendTextGUI(string text)
+		{
+			//m_richTxtMessageReceived.Text =text;
+
+			if ( m_BackgroundWorkerColorizeXml.IsBusy == false)
+			{
+			//	m_BackgroundWorkerColorizeXml.RunWorkerAsync(richTxtMessageReceived.Rtf);
+			}
+		}
+
+		private BackgroundWorker m_BackgroundWorkerColorizeXml = new BackgroundWorker();
+
+		private void InitBackgroundWorker()
+		{
+			m_BackgroundWorkerColorizeXml.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
+			m_BackgroundWorkerColorizeXml.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
+		}
+		void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			BackgroundWorker worker = sender as BackgroundWorker;
+			e.Result = ColorizeXml(e.Argument.ToString(), worker, e);
+		}
+
+		void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			//richTxtMessageReceived.Rtf = e.Result.ToString();
+		}
+
+		private string ColorizeXml(string strRTF, BackgroundWorker worker, DoWorkEventArgs e)
+		{
+			Application.DoEvents();
+			int iCTableStart = strRTF.IndexOf("colortbl;");
+			int iRTFLoc = strRTF.IndexOf("\\rtf");
+			int iInsertLoc = strRTF.IndexOf('{', iRTFLoc);
+			if (iInsertLoc == -1) iInsertLoc = strRTF.IndexOf('}', iRTFLoc) - 1;
+			strRTF = strRTF.Insert(iInsertLoc,
+				"{\\colortbl ;\\red128\\green0\\blue0;\\red0\\green128\\blue0;\\red0\\green0\\blue255;}");
+			Application.DoEvents();
+			strRTF = strRTF.Replace("<", @"\cf3\b0<");
+			Application.DoEvents();
+			strRTF = strRTF.Replace(">", @">\cf1\b ");
+			Application.DoEvents();
+			strRTF = Regex.Replace(strRTF, "([\\w:]+)=\"([^\"]*)\"", "$1=\"" + @"\cf1\b " + "$2" + @"\cf3\b0 """);
+			Application.DoEvents();
+			return strRTF;
+		}
+		#endregion Colorize Xml
 	}
 }
