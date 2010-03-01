@@ -15,14 +15,15 @@ namespace ColumnDepence
 			if (Properties.Settings.Default.LastUsedServer == ""
 				|| Properties.Settings.Default.LastUsedDatabase == "") 
 				return;
-			                                 		
+
 			SqlConnectionStringBuilder con = new SqlConnectionStringBuilder
-			                                 	{
-			                                 		DataSource = Properties.Settings.Default.LastUsedServer,
-			                                 		InitialCatalog = Properties.Settings.Default.LastUsedDatabase,
-			                                 		UserID = Properties.Settings.Default.LastUsedUsername,
-			                                 		Password = Properties.Settings.Default.LastUsedPassword
-			                                 	};
+												{
+													DataSource = Properties.Settings.Default.LastUsedServer,
+													InitialCatalog = Properties.Settings.Default.LastUsedDatabase,
+													UserID = Properties.Settings.Default.LastUsedUsername,
+													Password = Properties.Settings.Default.LastUsedPassword,
+													IntegratedSecurity = Properties.Settings.Default.LastUsedIntegratedSecurity
+												};
 
 			ConnectionString = con.ConnectionString;
 		}

@@ -213,7 +213,8 @@ namespace ColumnDepence
 				m_comboBoxServerName.Text = b.DataSource;
 				m_comboBoxUserName.Text = b.UserID;
 				m_txtPasswordMsSql.Text = b.Password;
-				m_comboBoxDatabase.Text = ""; // b.InitialCatalog;
+				m_checkBoxWindowsAuth.Checked = b.IntegratedSecurity;
+				m_comboBoxDatabase.Text = b["Initial Catalog"].ToString();
 				ButtonConnect_Click(this, EventArgs.Empty);
 			}
 			catch
@@ -225,6 +226,8 @@ namespace ColumnDepence
 		{
 			m_comboBoxUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
 			m_txtPasswordMsSql.Enabled = !m_checkBoxWindowsAuth.Checked;
+			m_LabelUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
+			m_LabelPassword.Enabled = !m_checkBoxWindowsAuth.Checked;
 		}
 
 		private void Controls_Leave(object sender, EventArgs e)
