@@ -29,10 +29,10 @@
 		private void InitializeComponent()
 		{
 			this.m_Label2 = new System.Windows.Forms.Label();
-			this.m_Label5 = new System.Windows.Forms.Label();
+			this.m_LabelUserName = new System.Windows.Forms.Label();
 			this.m_ButtonConnect = new System.Windows.Forms.Button();
 			this.m_txtPasswordMsSql = new System.Windows.Forms.TextBox();
-			this.m_Label6 = new System.Windows.Forms.Label();
+			this.m_LabelPassword = new System.Windows.Forms.Label();
 			this.m_Label4 = new System.Windows.Forms.Label();
 			this.m_comboBoxServerName = new System.Windows.Forms.ComboBox();
 			this.m_comboBoxUserName = new System.Windows.Forms.ComboBox();
@@ -57,15 +57,15 @@
 			this.m_Label2.TabIndex = 8;
 			this.m_Label2.Text = "Database";
 			// 
-			// m_Label5
+			// m_LabelUserName
 			// 
-			this.m_Label5.AutoSize = true;
-			this.m_Label5.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.m_Label5.Location = new System.Drawing.Point(32, 119);
-			this.m_Label5.Name = "m_Label5";
-			this.m_Label5.Size = new System.Drawing.Size(55, 13);
-			this.m_Label5.TabIndex = 4;
-			this.m_Label5.Text = "Username";
+			this.m_LabelUserName.AutoSize = true;
+			this.m_LabelUserName.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.m_LabelUserName.Location = new System.Drawing.Point(32, 119);
+			this.m_LabelUserName.Name = "m_LabelUserName";
+			this.m_LabelUserName.Size = new System.Drawing.Size(55, 13);
+			this.m_LabelUserName.TabIndex = 4;
+			this.m_LabelUserName.Text = "Username";
 			// 
 			// m_ButtonConnect
 			// 
@@ -88,15 +88,15 @@
 			this.m_txtPasswordMsSql.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedPassword;
 			this.m_txtPasswordMsSql.Leave += new System.EventHandler(this.Controls_Leave);
 			// 
-			// m_Label6
+			// m_LabelPassword
 			// 
-			this.m_Label6.AutoSize = true;
-			this.m_Label6.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.m_Label6.Location = new System.Drawing.Point(32, 146);
-			this.m_Label6.Name = "m_Label6";
-			this.m_Label6.Size = new System.Drawing.Size(53, 13);
-			this.m_Label6.TabIndex = 6;
-			this.m_Label6.Text = "Password";
+			this.m_LabelPassword.AutoSize = true;
+			this.m_LabelPassword.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.m_LabelPassword.Location = new System.Drawing.Point(32, 146);
+			this.m_LabelPassword.Name = "m_LabelPassword";
+			this.m_LabelPassword.Size = new System.Drawing.Size(53, 13);
+			this.m_LabelPassword.TabIndex = 6;
+			this.m_LabelPassword.Text = "Password";
 			// 
 			// m_Label4
 			// 
@@ -143,6 +143,8 @@
 			// m_checkBoxWindowsAuth
 			// 
 			this.m_checkBoxWindowsAuth.AutoSize = true;
+			this.m_checkBoxWindowsAuth.Checked = global::ColumnDepence.Properties.Settings.Default.LastUsedIntegratedSecurity;
+			this.m_checkBoxWindowsAuth.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ColumnDepence.Properties.Settings.Default, "LastUsedIntegratedSecurity", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.m_checkBoxWindowsAuth.Location = new System.Drawing.Point(15, 93);
 			this.m_checkBoxWindowsAuth.Name = "m_checkBoxWindowsAuth";
 			this.m_checkBoxWindowsAuth.Size = new System.Drawing.Size(163, 17);
@@ -216,9 +218,9 @@
 			this.Controls.Add(this.m_comboBoxUserName);
 			this.Controls.Add(this.m_comboBoxServerName);
 			this.Controls.Add(this.m_Label2);
-			this.Controls.Add(this.m_Label5);
+			this.Controls.Add(this.m_LabelUserName);
 			this.Controls.Add(this.m_txtPasswordMsSql);
-			this.Controls.Add(this.m_Label6);
+			this.Controls.Add(this.m_LabelPassword);
 			this.Controls.Add(this.m_Label4);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -234,10 +236,10 @@
 		#endregion
 
 		private System.Windows.Forms.Label m_Label2;
-		private System.Windows.Forms.Label m_Label5;
+		private System.Windows.Forms.Label m_LabelUserName;
 		private System.Windows.Forms.Button m_ButtonConnect;
 		private System.Windows.Forms.TextBox m_txtPasswordMsSql;
-		private System.Windows.Forms.Label m_Label6;
+		private System.Windows.Forms.Label m_LabelPassword;
 		private System.Windows.Forms.Label m_Label4;
 		private System.Windows.Forms.ComboBox m_comboBoxServerName;
 		private System.Windows.Forms.ComboBox m_comboBoxUserName;
