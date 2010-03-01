@@ -484,14 +484,14 @@ namespace ColumnDepence
 					/// 
 					if (TableInfo.ChildTables != null && TableInfo.ChildTables.Rows.Count > 0)
 					{
-						DataRow[] parentColRefs = TableInfo.ChildTables.FindParents(colName);
+						DataRow[] parentColRefs = TableInfo.ChildTables.FindChilds(colName);
 						if (parentColRefs != null && parentColRefs.Length > 0)
 						{
 							foreach (DataRow row in parentColRefs)
 							{
 								cellValues.Add(
 									row[TableInfo.ChildTables.ColumnTableName].ToString(),
-									row[TableInfo.ChildTables.ColumnParentColumnName].ToString(),
+									row[TableInfo.ChildTables.ColumnChildColumnName].ToString(),
 									cell.Value,
 									TableRelation.Child);
 							}							
@@ -502,7 +502,7 @@ namespace ColumnDepence
 					/// 
 					if (TableInfo.ParentTables != null && TableInfo.ParentTables.Rows.Count > 0)
 					{
-						DataRow[] childColRefs = TableInfo.ParentTables.FindChilds(colName);
+						DataRow[] childColRefs = TableInfo.ParentTables.FindParents(colName);
 						if (childColRefs != null && childColRefs.Length > 0)
 						{
 							foreach (DataRow row in childColRefs)
