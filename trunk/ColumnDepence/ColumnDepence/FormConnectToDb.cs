@@ -23,6 +23,7 @@ namespace ColumnDepence
 
 			FillConnectionHistoryList();
 			FillComboBoxDatabase();
+			SetupWindowsAuthorization();
 		}
 
 
@@ -181,7 +182,36 @@ namespace ColumnDepence
 
 		}
 
+		private void SetupWindowsAuthorization()
+		{
+			m_comboBoxUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
+			m_txtPasswordMsSql.Enabled = !m_checkBoxWindowsAuth.Checked;
+			m_LabelUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
+			m_LabelPassword.Enabled = !m_checkBoxWindowsAuth.Checked;
+		}
 
+		private void ApplySelectedConnection()
+		{
+			try
+			{
+				if (m_comboBoxConnectionHistory.SelectedItem == null) return;
+
+				SqlConnectionStringBuilder b =
+					((ConnectionStringItem)m_comboBoxConnectionHistory.SelectedItem).SqlConnectionStringBuilder;
+
+				m_comboBoxServerName.Text = b.DataSource;
+				m_comboBoxUserName.Text = b.UserID;
+				m_txtPasswordMsSql.Text = b.Password;
+				m_checkBoxWindowsAuth.Checked = b.IntegratedSecurity;
+				m_comboBoxDatabase.Text = b["Initial Catalog"].ToString();
+				ButtonConnect_Click(this, EventArgs.Empty);
+			}
+			catch
+			{
+			}
+		}
+
+		#region Events
 
 		private void ButtonConnect_Click(object sender, EventArgs e)
 		{
@@ -203,36 +233,24 @@ namespace ColumnDepence
 
 		private void ComboBoxConnectionHistory_SelectedValueChanged(object sender, EventArgs e)
 		{
-			try
-			{
-				if (m_comboBoxConnectionHistory.SelectedItem == null) return;
-
-				SqlConnectionStringBuilder b =
-					((ConnectionStringItem) m_comboBoxConnectionHistory.SelectedItem).SqlConnectionStringBuilder;
-
-				m_comboBoxServerName.Text = b.DataSource;
-				m_comboBoxUserName.Text = b.UserID;
-				m_txtPasswordMsSql.Text = b.Password;
-				m_checkBoxWindowsAuth.Checked = b.IntegratedSecurity;
-				m_comboBoxDatabase.Text = b["Initial Catalog"].ToString();
-				ButtonConnect_Click(this, EventArgs.Empty);
-			}
-			catch
-			{
-			}
+			ApplySelectedConnection();
 		}
+
+	
 
 		private void CheckBoxWindowsAuth_CheckedChanged(object sender, EventArgs e)
 		{
-			m_comboBoxUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
-			m_txtPasswordMsSql.Enabled = !m_checkBoxWindowsAuth.Checked;
-			m_LabelUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
-			m_LabelPassword.Enabled = !m_checkBoxWindowsAuth.Checked;
+			SetupWindowsAuthorization();
 		}
+
+		
 
 		private void Controls_Leave(object sender, EventArgs e)
 		{
 
 		}
+		
+		#endregion
+
 	}
 }
