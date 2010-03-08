@@ -91,9 +91,16 @@ namespace ColumnDepence
 			return false;
 		}
 
+		private void CreeateNewConnection()
+		{
+			FormConnectToDb form = new FormConnectToDb();
+			if (form.ShowDialog(this) == DialogResult.OK)
+			{
+				UpdateConnectionHistory();
+			}
+		}
 
-		#region Events
-		private void ButtonConnect_Click(object sender, EventArgs e)
+		private void Connect()
 		{
 			if (m_comboBoxConnectionHistory.SelectedItem == null) return;
 			try
@@ -102,6 +109,7 @@ namespace ColumnDepence
 				if (ConnectionFactory.OpenConnection())
 				{
 					FormMain.SetTitle();
+					FormMain.FillAutoCompleteCustomSource();
 				}
 				else
 				{
@@ -116,18 +124,8 @@ namespace ColumnDepence
 			}
 			catch { }
 		}
-		private void ButtonNewConnection_Click(object sender, EventArgs e)
-		{
-			FormConnectToDb form = new FormConnectToDb();
-			if (form.ShowDialog(this) == DialogResult.OK) {
-				UpdateConnectionHistory();			
-			}
-		}
-		
-		/// <summary>
-		/// Remove selected connection history
-		/// </summary>		
-		private void ButtonRemove_Click(object sender, EventArgs e)
+
+		private void RemoveSelectedConnection()
 		{
 			if (m_connectionHistorySetting == null || m_comboBoxConnectionHistory.SelectedIndex < 0) return;
 
@@ -140,6 +138,30 @@ namespace ColumnDepence
 			{
 			}
 		}
+
+
+
+		#region Events
+		private void ButtonConnect_Click(object sender, EventArgs e)
+		{
+			Connect();
+		}
+
+		
+		private void ButtonNewConnection_Click(object sender, EventArgs e)
+		{
+			CreeateNewConnection();
+		}
+
+		
+		/// <summary>
+		/// Remove selected connection history
+		/// </summary>		
+		private void ButtonRemove_Click(object sender, EventArgs e)
+		{
+			RemoveSelectedConnection();
+		}
+
 
 		#endregion 
 
