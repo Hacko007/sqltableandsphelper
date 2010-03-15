@@ -174,14 +174,11 @@ namespace ColumnDepence
 		/// Refreshes textbox with SPs definition.
 		/// </summary>
 		private void FillSpDefinition()
-		{			
-			if(SpName == "")return;
-			if(ConnectionFactory.OpenConnection()== false) return;
+		{
+			if (SpName == "") return;
+			if (ConnectionFactory.OpenConnection() == false) return;
 
-			const string sqlStr = "	Declare @id int "+ @"
-SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @SPSEARCH AND OBJECTPROPERTY(id, 'IsProcedure') = 1 "
-			                       + @"
- SELECT [text]    FROM syscomments     "+ " WHERE id= @id ";
+			const string sqlStr = "SELECT ROUTINE_DEFINITION FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME LIKE @SPSEARCH ";
 
 			SqlCommand com = new SqlCommand(sqlStr, ConnectionFactory.Instance);
 			com.Parameters.Add("@SPSEARCH", SqlDbType.NVarChar);
@@ -194,42 +191,27 @@ SELECT top 1 " + "@id = id     FROM syscomments WHERE colid=1 AND  [text] LIKE @
 			Application.DoEvents();
 
 			try
-			{				
-				SqlDataReader reader = com.ExecuteReader();
-				if (reader == null)
-				{
-					return;
-				}
-				try
-				{
-					while (reader.Read())
-					{
-						RichTextBoxDefinition.Text += reader[0];
-						Application.DoEvents();
-					}
-				}
-				finally
-				{
-					// Always call Close when done reading.
-					reader.Close();
-					m_tryToLoadCounter = 1;
-				}
-			}catch
 			{
-				if(m_tryToLoadCounter <4)
+				object obj = com.ExecuteScalar();
+				if (obj != null)
+					RichTextBoxDefinition.Text = obj.ToString();
+			}
+			catch
+			{
+				if (m_tryToLoadCounter < 4)
 				{
 					Application.DoEvents();
 					m_tryToLoadCounter++;
-					FillSpDefinition();		
+					FillSpDefinition();
 					return;
 				}
-				
+
 			}
-			ConnectionFactory.CloseConnection();			
+			ConnectionFactory.CloseConnection();
 			FormMain.StatusInfo1 = "";
 			FormMain.StatusInfo2 = "";
 
-		}
+		}		
 
 		/// <summary>
 		/// Fill datagrid with inforamtion about SP's parameters
