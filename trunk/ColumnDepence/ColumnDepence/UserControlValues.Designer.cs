@@ -45,6 +45,7 @@ namespace ColumnDepence
 			this.m_ChooseColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.m_ShowRowInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.m_BindingSourceValues = new System.Windows.Forms.BindingSource(this.components);
 			this.m_contextMenuStripFilter = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.m_LikeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_equalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +61,7 @@ namespace ColumnDepence
 			this.m_FlowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewValues)).BeginInit();
 			this.m_contextMenuStripShownColumns.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.m_BindingSourceValues)).BeginInit();
 			this.m_panelDataGrid.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -133,7 +135,6 @@ namespace ColumnDepence
 			// 
 			// m_DataGridViewValues
 			// 
-			this.m_DataGridViewValues.AllowUserToAddRows = false;
 			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
 			this.m_DataGridViewValues.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
 			this.m_DataGridViewValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -149,6 +150,7 @@ namespace ColumnDepence
 			this.m_DataGridViewValues.TabIndex = 1;
 			this.m_DataGridViewValues.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.DataGridViewValues_UserDeletingRow);
 			this.m_DataGridViewValues.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DataGridViewValues_MouseUp);
+			this.m_DataGridViewValues.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewValues_CellEndEdit);
 			// 
 			// m_contextMenuStripShownColumns
 			// 
@@ -158,34 +160,38 @@ namespace ColumnDepence
             this.m_ToolStripSeparator1,
             this.m_ShowRowInfoToolStripMenuItem});
 			this.m_contextMenuStripShownColumns.Name = "m_contextMenuStripShownColumns";
-			this.m_contextMenuStripShownColumns.Size = new System.Drawing.Size(165, 76);
+			this.m_contextMenuStripShownColumns.Size = new System.Drawing.Size(166, 76);
 			this.m_contextMenuStripShownColumns.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripShownColumns_Opening);
 			// 
 			// m_showallClumnsToolStripMenuItem
 			// 
 			this.m_showallClumnsToolStripMenuItem.Name = "m_showallClumnsToolStripMenuItem";
-			this.m_showallClumnsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+			this.m_showallClumnsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
 			this.m_showallClumnsToolStripMenuItem.Text = "Show &all clumns";
 			this.m_showallClumnsToolStripMenuItem.Click += new System.EventHandler(this.ShowAllClumnsToolStripMenuItem_Click);
 			// 
 			// m_ChooseColumnsToolStripMenuItem
 			// 
 			this.m_ChooseColumnsToolStripMenuItem.Name = "m_ChooseColumnsToolStripMenuItem";
-			this.m_ChooseColumnsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+			this.m_ChooseColumnsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
 			this.m_ChooseColumnsToolStripMenuItem.Text = "&Choose Columns";
 			this.m_ChooseColumnsToolStripMenuItem.Click += new System.EventHandler(this.ChooseColumnsToolStripMenuItem_Click);
 			// 
 			// m_ToolStripSeparator1
 			// 
 			this.m_ToolStripSeparator1.Name = "m_ToolStripSeparator1";
-			this.m_ToolStripSeparator1.Size = new System.Drawing.Size(161, 6);
+			this.m_ToolStripSeparator1.Size = new System.Drawing.Size(162, 6);
 			// 
 			// m_ShowRowInfoToolStripMenuItem
 			// 
 			this.m_ShowRowInfoToolStripMenuItem.Name = "m_ShowRowInfoToolStripMenuItem";
-			this.m_ShowRowInfoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+			this.m_ShowRowInfoToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
 			this.m_ShowRowInfoToolStripMenuItem.Text = "Show row info";
 			this.m_ShowRowInfoToolStripMenuItem.Click += new System.EventHandler(this.ShowRowInfoToolStripMenuItem_Click);
+			// 
+			// m_BindingSourceValues
+			// 
+			this.m_BindingSourceValues.AddingNew += new System.ComponentModel.AddingNewEventHandler(this.BindingSourceValues_AddingNew);
 			// 
 			// m_contextMenuStripFilter
 			// 
@@ -277,6 +283,7 @@ namespace ColumnDepence
 			this.m_FlowLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewValues)).EndInit();
 			this.m_contextMenuStripShownColumns.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.m_BindingSourceValues)).EndInit();
 			this.m_panelDataGrid.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -323,5 +330,6 @@ namespace ColumnDepence
 		private UserControlToolStripLabelTextBox m_ToolStripMenuItemNotEqual;
 		private UserControlToolStripLabelTextBox m_ToolStripMenuItemGreaterThen;
 		private UserControlToolStripLabelTextBox m_ToolStripMenuItemLessThen;
+		private BindingSource m_BindingSourceValues;
 	}
 }
