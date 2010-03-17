@@ -180,4 +180,10 @@ WHERE  (TABLE_NAME = @TABSEARCH) ORDER BY ORDINAL_POSITION</value>
   <data name="PrimaryKeyIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PrimaryKeyIcon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SqlGetIdentityColumns" xml:space="preserve">
+    <value>SELECT   sys.columns.name as IdentityColumn
+FROM     sys.tables INNER JOIN
+         sys.columns ON sys.tables.object_id = sys.columns.object_id
+WHERE  (sys.columns.is_identity = 1) AND (sys.tables.name =@TABSEARCH )</value>
+  </data>
 </root>

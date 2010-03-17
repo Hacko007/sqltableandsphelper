@@ -135,7 +135,7 @@ namespace ColumnDepence
 
 				/// Left slit container
 				m_SplitContainerLeft.SplitterDistance -= FreeSpace(m_DataGridViewColumns) - emptySpace;
-				if (m_userControlValues.ValuesDataGrid.Rows.Count == 0)
+				if (m_userControlValues.ValuesDataGrid.Count == 0)
 					m_SplitContainerLeft.SplitterDistance = Math.Min(m_SplitContainerLeft.Height - 80,
 					                                                 m_SplitContainerLeft.SplitterDistance);
 				else

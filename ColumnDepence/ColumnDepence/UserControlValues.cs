@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Text;
 using ColumnDepence.DbInfo;
 using System.Drawing;
+using System.Data.SqlClient;
 
 namespace ColumnDepence
 {
@@ -50,12 +51,16 @@ namespace ColumnDepence
 
 			if (TableInfo.Values == null) return;
 
-			ValuesDataGrid.DataSource = TableInfo.Values;
+			SetBindingDataSource(TableInfo.Values);
+			//m_BindingSourceValues.DataMember = TableInfo.TableName;
+
+			m_DataGridViewValues .DataSource = m_BindingSourceValues ;
+
 			if (selectedColumns == "*") AllColumns = new List<string>();
-			for (int i = 0; i < ValuesDataGrid.Columns.Count; i++)
+			for (int i = 0; i < m_DataGridViewValues.Columns.Count; i++)
 			{
-				ValuesDataGrid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-				if (selectedColumns == "*") AllColumns.Add(ValuesDataGrid.Columns[i].Name);
+				m_DataGridViewValues.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+				if (selectedColumns == "*") AllColumns.Add(m_DataGridViewValues.Columns[i].Name);
 			}
 			if (selectedColumns == "*")
 			{
@@ -66,9 +71,20 @@ namespace ColumnDepence
 			UpdateShownColumnsContextMenu();
 		}
 
+		private void SetBindingDataSource(object dataSource)
+		{
+			m_BindingSourceValues.AddingNew -= BindingSourceValues_AddingNew;			
+			m_DataGridViewValues.CellEndEdit -= this.DataGridViewValues_CellEndEdit;
+			
+			m_BindingSourceValues.DataSource = dataSource ;
+
+			m_BindingSourceValues.AddingNew += BindingSourceValues_AddingNew;			
+			m_DataGridViewValues.CellEndEdit += this.DataGridViewValues_CellEndEdit;
+		}
 
 
-		public DataGridView ValuesDataGrid { get { return m_DataGridViewValues; } }
+
+		public BindingSource ValuesDataGrid { get { return m_BindingSourceValues ; } }
 
 		public TableInfo TableInfo { get; set; }
 
@@ -358,7 +374,9 @@ namespace ColumnDepence
 				if(TableInfo.Values.TableName == "") return;
 
 				DataView dv = new DataView {Table = TableInfo.Values, RowFilter = filter};
-				m_DataGridViewValues.DataSource = dv;
+				SetBindingDataSource (dv);
+
+				m_DataGridViewValues.DataSource = m_BindingSourceValues;
 				ShownRows = dv.Count;			
 			}
 			catch { }									
@@ -473,7 +491,7 @@ namespace ColumnDepence
 			/// 
 			/// Find all referensed tables for selected cells
 			/// 
-			foreach (DataGridViewCell cell in ValuesDataGrid.SelectedCells)
+			foreach (DataGridViewCell cell in m_DataGridViewValues.SelectedCells)
 			{
 				// cell.ColumnIndex
 				if (TableInfo.Values.Columns.Count > cell.ColumnIndex)
@@ -660,7 +678,196 @@ namespace ColumnDepence
 			}
 		}
 
-		
+		private void DataGridViewValues_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+		{
+			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			
+			//if( false == m_NewRowAddedButNotSaved )
+				Save();
+		}
+
+		private void Save()
+		{
+			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			DataRowView rowView = m_BindingSourceValues.Current as DataRowView ;
+			if (rowView == null) return;
+			SqlCommand sqlCmd ;
+				if( m_NewRowAddedButNotSaved ){
+					sqlCmd = CreateInsertSqlCommand(rowView);
+				}
+				else
+				{
+					sqlCmd = CreateUpdateRowSqlCommand(rowView);
+				}
+			if (sqlCmd == null) return;
+			try
+			{
+				if (ConnectionFactory.OpenConnection())
+				{
+					sqlCmd.Connection = ConnectionFactory.Instance;
+					sqlCmd.ExecuteNonQuery();
+					m_BindingSourceValues.EndEdit();
+					m_NewRowAddedButNotSaved = false;
+				}
+			}
+			catch(Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+			}
+			finally {
+				ConnectionFactory.CloseConnection();
+			}
+		}
+
+		private SqlCommand CreateInsertSqlCommand(DataRowView rowView)
+		{
+			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			SqlCommand sqlCmd = new SqlCommand();
+			StringBuilder sqlColumns = new StringBuilder();
+			StringBuilder sqlValues = new StringBuilder();
+
+			foreach (DataColumn col in rowView.Row.Table.Columns)
+			{
+				if (TableInfo.ColumnInfo.IsIdentityColumn(col.ColumnName)) continue ;
+
+				sqlColumns.Append(string.Format("[{0}] ,", col.ColumnName));
+				sqlValues .Append(string.Format("@{0} ,", col.ColumnName));
+				if (rowView.Row.HasVersion(DataRowVersion.Proposed ))
+				{
+					sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
+				}
+				else
+				{
+					sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, DBNull.Value  ));
+				}
+			}
+			if (sqlColumns .Length > 0)
+			{
+				sqlColumns.Remove(sqlColumns.Length - 1, 1);
+			}
+			else
+			{
+				return null;
+			}
+
+			if (sqlValues.Length > 0)
+			{
+				sqlValues.Remove(sqlValues.Length - 1, 1);
+			}
+			else
+			{
+				return null;
+			}
+
+			sqlCmd.CommandText = "INSERT INTO " + TableInfo.TableName + " (" + sqlColumns .ToString() + ") Values( " + sqlValues.ToString() +")";
+			Console.WriteLine(sqlCmd.CommandText);
+			return sqlCmd;
+		}
 	
+		private SqlCommand CreateUpdateRowSqlCommand(DataRowView rowView)
+		{
+			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			SqlCommand sqlCmd = new SqlCommand();
+
+			StringBuilder sql = new StringBuilder();
+			StringBuilder sqlWhere = new StringBuilder();
+
+			SqlParameter[] sqlParams = new SqlParameter[rowView.Row.Table.Columns.Count * 2];
+
+			foreach (DataColumn col in rowView.Row.Table.Columns)
+			{
+				if (rowView.Row.HasVersion(DataRowVersion.Original) &&
+					rowView.Row.HasVersion(DataRowVersion.Proposed) &&
+					!rowView.Row[col, DataRowVersion.Proposed].Equals(rowView.Row[col, DataRowVersion.Original]))
+				{
+					sql.Append(string.Format("[{0}] = @{0} ,", col.ColumnName));
+					sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
+				}
+
+				if (rowView.Row[col, DataRowVersion.Original] is DBNull)
+				{
+					sqlWhere.Append(string.Format(" ([{0}] IS NULL) AND", col.ColumnName));					
+				}
+				else
+				{
+					sqlWhere.Append(string.Format(" ([{0}] = @Original_{0}) AND", col.ColumnName));
+					sqlCmd.Parameters.Add(new SqlParameter("@Original_" + col.ColumnName, rowView.Row[col, DataRowVersion.Original]));
+				}
+			}
+			if (sql.Length > 0)
+			{
+				sql.Remove(sql.Length - 1, 1);
+			}
+			else
+			{
+				return null;
+			}
+
+			if (sqlWhere.Length > 0)
+			{
+				sqlWhere.Remove(sqlWhere.Length - 3, 3);
+			}
+			else
+			{
+				return null;
+			}
+
+			sqlCmd.CommandText = "UPDATE " + TableInfo.TableName + " SET " + sql.ToString() + " WHERE " + sqlWhere.ToString();
+			Console.WriteLine(sqlCmd.CommandText);
+			return sqlCmd;
+		}
+
+		bool m_NewRowAddedButNotSaved = false;
+		private void BindingSourceValues_AddingNew(object sender, System.ComponentModel.AddingNewEventArgs e)
+		{
+			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			Console.WriteLine(e.ToString());
+			m_NewRowAddedButNotSaved = true;
+			m_DataGridViewValues.RowLeave += DataGridViewValues_RowLeave;
+			m_DataGridViewValues.CellEndEdit  -= DataGridViewValues_CellEndEdit ;
+
+		}
+
+		private void DataGridViewValues_RowLeave(object sender, DataGridViewCellEventArgs e)
+		{
+			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			if (IsRowEmpty(CurrentRow)) {
+				m_NewRowAddedButNotSaved = false;
+				m_BindingSourceValues.CancelEdit();
+			}
+			if (m_NewRowAddedButNotSaved)
+			{
+				//Save();								
+				m_DataGridViewValues.CellEndEdit += DataGridViewValues_CellEndEdit;
+			}
+			m_DataGridViewValues.RowLeave -= DataGridViewValues_RowLeave;
+		}
+
+		private bool IsRowEmpty(DataRow row) {
+			
+			if (row == null) return true;
+
+			foreach (var item in row.ItemArray )
+			{
+				if (item.ToString() != String.Empty)
+					return false;
+			}
+			return true;
+		}
+
+		private DataRow CurrentRow
+		{
+			get
+			{
+				DataRowView rowView = m_BindingSourceValues.Current as DataRowView;
+				if (rowView == null) return null;
+				return rowView.Row;
+			}
+		}
+
 	}
 }

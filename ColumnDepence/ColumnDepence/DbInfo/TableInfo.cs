@@ -43,9 +43,17 @@ namespace ColumnDepence.DbInfo
 				ColumnInfo = new DataTableColumnInfo();
 				return;
 			}
+			ColumnInfo.SetIdentityColumns(GetIdentityColumns());
 			ColumnInfo.IsDataLoaded = true;
 		}
 
+		private DataTable GetIdentityColumns()
+		{
+			return (DataTable)FillDataTable(
+					TableName,
+					Properties.Resources.SqlGetIdentityColumns,
+					new DataTable());
+		}
 
 		private void LoadColumnConstrains() {
 			if (ColumnConstrains != null && ColumnConstrains.IsDataLoaded) return;
