@@ -266,9 +266,6 @@
     <None Include="Resources\PrimaryKeyIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\DataSources\ColumnValueRow.datasource" />
-    <None Include="Properties\DataSources\ColumnValueRow1.datasource" />
-    <None Include="Properties\DataSources\FormShowOneRow.datasource" />
     <None Include="Resources\PrimaryKeyIcon1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
