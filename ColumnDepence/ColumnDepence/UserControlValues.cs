@@ -52,7 +52,6 @@ namespace ColumnDepence
 			if (TableInfo.Values == null) return;
 
 			SetBindingDataSource(TableInfo.Values);
-			//m_BindingSourceValues.DataMember = TableInfo.TableName;
 
 			m_DataGridViewValues .DataSource = m_BindingSourceValues ;
 
@@ -360,12 +359,14 @@ namespace ColumnDepence
 
 			if (filter == "")
 			{
-				m_labelFilter.Text = "";
+				m_TextBoxFilter.Text = "";
+				m_TextBoxFilter.Visible = false ;
 				m_buttonRemoveFilter.Visible = false;
 			}
 			else
 			{
-				m_labelFilter.Text = "Filter: " + filter;
+				m_TextBoxFilter.Text = "Filter: " + filter;
+				m_TextBoxFilter.Visible = true;
 				m_buttonRemoveFilter.Visible = true;
 			}
 
@@ -475,12 +476,15 @@ namespace ColumnDepence
 				m_showallClumnsToolStripMenuItem,
 				m_ChooseColumnsToolStripMenuItem,
 				new ToolStripSeparator(),
-				m_ShowRowInfoToolStripMenuItem
+				m_ShowRowInfoToolStripMenuItem,
+				m_ToolStripMenuItemFilterOnSelectedCells
 				});
 
 			if (TableInfo.Values == null )
 				return;
 
+			m_ToolStripMenuItemFilterOnSelectedCells.Enabled = (m_DataGridViewValues.SelectedCells.Count > 0);
+			
 			/// if foregn key column(s) are selected 
 			/// add contxt menu that should open parent table 
 			/// with this rows filtered.
@@ -657,10 +661,14 @@ namespace ColumnDepence
 		{
 			if (m_DataGridViewValues.Rows.Count == 0) return;
 
-			FormShowOneRow showOneRow = new FormShowOneRow {DataGridValues = m_DataGridViewValues};
+			FormShowOneRow showOneRow = new FormShowOneRow {ParentBidingSource = m_BindingSourceValues };
 			showOneRow.LoadRowItnoView();
 			showOneRow.ResizeWindow();
-			showOneRow.Show();			
+			showOneRow.Show();
+			showOneRow.RowChanged += delegate(System.Object o, System.EventArgs ea)
+			{
+				FillDataGridValues();
+			};
 		}
 
 		private void ButtonRemoveFilter_Click(object sender, EventArgs e)
@@ -694,11 +702,11 @@ namespace ColumnDepence
 			if (rowView == null) return;
 			SqlCommand sqlCmd ;
 				if( m_NewRowAddedButNotSaved ){
-					sqlCmd = CreateInsertSqlCommand(rowView);
+					sqlCmd = DataRowEditHelper.CreateInsertSqlCommand(rowView, TableInfo.ColumnInfo);
 				}
 				else
 				{
-					sqlCmd = CreateUpdateRowSqlCommand(rowView);
+					sqlCmd = DataRowEditHelper.CreateUpdateRowSqlCommand(rowView);
 				}
 			if (sqlCmd == null) return;
 			try
@@ -720,105 +728,105 @@ namespace ColumnDepence
 			}
 		}
 
-		private SqlCommand CreateInsertSqlCommand(DataRowView rowView)
-		{
-			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+		//private SqlCommand CreateInsertSqlCommand(DataRowView rowView)
+		//{
+		//    Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			SqlCommand sqlCmd = new SqlCommand();
-			StringBuilder sqlColumns = new StringBuilder();
-			StringBuilder sqlValues = new StringBuilder();
+		//    SqlCommand sqlCmd = new SqlCommand();
+		//    StringBuilder sqlColumns = new StringBuilder();
+		//    StringBuilder sqlValues = new StringBuilder();
 
-			foreach (DataColumn col in rowView.Row.Table.Columns)
-			{
-				if (TableInfo.ColumnInfo.IsIdentityColumn(col.ColumnName)) continue ;
+		//    foreach (DataColumn col in rowView.Row.Table.Columns)
+		//    {
+		//        if (TableInfo.ColumnInfo.IsIdentityColumn(col.ColumnName)) continue ;
 
-				sqlColumns.Append(string.Format("[{0}] ,", col.ColumnName));
-				sqlValues .Append(string.Format("@{0} ,", col.ColumnName));
-				if (rowView.Row.HasVersion(DataRowVersion.Proposed ))
-				{
-					sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
-				}
-				else
-				{
-					sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, DBNull.Value  ));
-				}
-			}
-			if (sqlColumns .Length > 0)
-			{
-				sqlColumns.Remove(sqlColumns.Length - 1, 1);
-			}
-			else
-			{
-				return null;
-			}
+		//        sqlColumns.Append(string.Format("[{0}] ,", col.ColumnName));
+		//        sqlValues .Append(string.Format("@{0} ,", col.ColumnName));
+		//        if (rowView.Row.HasVersion(DataRowVersion.Proposed ))
+		//        {
+		//            sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
+		//        }
+		//        else
+		//        {
+		//            sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, DBNull.Value  ));
+		//        }
+		//    }
+		//    if (sqlColumns .Length > 0)
+		//    {
+		//        sqlColumns.Remove(sqlColumns.Length - 1, 1);
+		//    }
+		//    else
+		//    {
+		//        return null;
+		//    }
 
-			if (sqlValues.Length > 0)
-			{
-				sqlValues.Remove(sqlValues.Length - 1, 1);
-			}
-			else
-			{
-				return null;
-			}
+		//    if (sqlValues.Length > 0)
+		//    {
+		//        sqlValues.Remove(sqlValues.Length - 1, 1);
+		//    }
+		//    else
+		//    {
+		//        return null;
+		//    }
 
-			sqlCmd.CommandText = "INSERT INTO " + TableInfo.TableName + " (" + sqlColumns .ToString() + ") Values( " + sqlValues.ToString() +")";
-			Console.WriteLine(sqlCmd.CommandText);
-			return sqlCmd;
-		}
+		//    sqlCmd.CommandText = "INSERT INTO " + TableInfo.TableName + " (" + sqlColumns .ToString() + ") Values( " + sqlValues.ToString() +")";
+		//    Console.WriteLine(sqlCmd.CommandText);
+		//    return sqlCmd;
+		//}
 	
-		private SqlCommand CreateUpdateRowSqlCommand(DataRowView rowView)
-		{
-			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+		//private SqlCommand CreateUpdateRowSqlCommand(DataRowView rowView)
+		//{
+		//    Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			SqlCommand sqlCmd = new SqlCommand();
+		//    SqlCommand sqlCmd = new SqlCommand();
 
-			StringBuilder sql = new StringBuilder();
-			StringBuilder sqlWhere = new StringBuilder();
+		//    StringBuilder sql = new StringBuilder();
+		//    StringBuilder sqlWhere = new StringBuilder();
 
-			SqlParameter[] sqlParams = new SqlParameter[rowView.Row.Table.Columns.Count * 2];
+		//    SqlParameter[] sqlParams = new SqlParameter[rowView.Row.Table.Columns.Count * 2];
 
-			foreach (DataColumn col in rowView.Row.Table.Columns)
-			{
-				if (rowView.Row.HasVersion(DataRowVersion.Original) &&
-					rowView.Row.HasVersion(DataRowVersion.Proposed) &&
-					!rowView.Row[col, DataRowVersion.Proposed].Equals(rowView.Row[col, DataRowVersion.Original]))
-				{
-					sql.Append(string.Format("[{0}] = @{0} ,", col.ColumnName));
-					sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
-				}
+		//    foreach (DataColumn col in rowView.Row.Table.Columns)
+		//    {
+		//        if (rowView.Row.HasVersion(DataRowVersion.Original) &&
+		//            rowView.Row.HasVersion(DataRowVersion.Proposed) &&
+		//            !rowView.Row[col, DataRowVersion.Proposed].Equals(rowView.Row[col, DataRowVersion.Original]))
+		//        {
+		//            sql.Append(string.Format("[{0}] = @{0} ,", col.ColumnName));
+		//            sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
+		//        }
 
-				if (rowView.Row[col, DataRowVersion.Original] is DBNull)
-				{
-					sqlWhere.Append(string.Format(" ([{0}] IS NULL) AND", col.ColumnName));					
-				}
-				else
-				{
-					sqlWhere.Append(string.Format(" ([{0}] = @Original_{0}) AND", col.ColumnName));
-					sqlCmd.Parameters.Add(new SqlParameter("@Original_" + col.ColumnName, rowView.Row[col, DataRowVersion.Original]));
-				}
-			}
-			if (sql.Length > 0)
-			{
-				sql.Remove(sql.Length - 1, 1);
-			}
-			else
-			{
-				return null;
-			}
+		//        if (rowView.Row[col, DataRowVersion.Original] is DBNull)
+		//        {
+		//            sqlWhere.Append(string.Format(" ([{0}] IS NULL) AND", col.ColumnName));					
+		//        }
+		//        else
+		//        {
+		//            sqlWhere.Append(string.Format(" ([{0}] = @Original_{0}) AND", col.ColumnName));
+		//            sqlCmd.Parameters.Add(new SqlParameter("@Original_" + col.ColumnName, rowView.Row[col, DataRowVersion.Original]));
+		//        }
+		//    }
+		//    if (sql.Length > 0)
+		//    {
+		//        sql.Remove(sql.Length - 1, 1);
+		//    }
+		//    else
+		//    {
+		//        return null;
+		//    }
 
-			if (sqlWhere.Length > 0)
-			{
-				sqlWhere.Remove(sqlWhere.Length - 3, 3);
-			}
-			else
-			{
-				return null;
-			}
+		//    if (sqlWhere.Length > 0)
+		//    {
+		//        sqlWhere.Remove(sqlWhere.Length - 3, 3);
+		//    }
+		//    else
+		//    {
+		//        return null;
+		//    }
 
-			sqlCmd.CommandText = "UPDATE " + TableInfo.TableName + " SET " + sql.ToString() + " WHERE " + sqlWhere.ToString();
-			Console.WriteLine(sqlCmd.CommandText);
-			return sqlCmd;
-		}
+		//    sqlCmd.CommandText = "UPDATE " + TableInfo.TableName + " SET " + sql.ToString() + " WHERE " + sqlWhere.ToString();
+		//    Console.WriteLine(sqlCmd.CommandText);
+		//    return sqlCmd;
+		//}
 
 		bool m_NewRowAddedButNotSaved = false;
 		private void BindingSourceValues_AddingNew(object sender, System.ComponentModel.AddingNewEventArgs e)
@@ -867,6 +875,23 @@ namespace ColumnDepence
 				if (rowView == null) return null;
 				return rowView.Row;
 			}
+		}
+
+		private void ToolStripMenuItemFilterOnSelectedCells_Click(object sender, EventArgs e)
+		{
+			TableFilterData filterData = new TableFilterData()
+				{
+					TableRelation = TableRelation.None,
+					TableName = TableInfo.TableName,
+					ColumnValues = new Dictionary<string, List<object>>()
+				};
+			foreach (DataGridViewCell cell in m_DataGridViewValues.SelectedCells)
+			{
+				filterData.Add(cell.OwningColumn.DataPropertyName, cell.Value);
+
+				//RaiseOpenTableTab(ci.TableName, false, ci);
+			}
+			RaiseOpenTableTab(TableInfo.TableName, false, filterData);
 		}
 
 	}
