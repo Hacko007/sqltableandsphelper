@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C85B72A6-5185-41C4-A313-EBD156822CE4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -64,6 +64,7 @@
     <Compile Include="CustomControlLabelTextBox.Designer.cs">
       <DependentUpon>CustomControlLabelTextBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataRowEditHelper.cs" />
     <Compile Include="DbInfo\DataTableChildTables.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -265,6 +266,9 @@
     <None Include="Resources\PrimaryKeyIcon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\DataSources\ColumnValueRow.datasource" />
+    <None Include="Properties\DataSources\ColumnValueRow1.datasource" />
+    <None Include="Properties\DataSources\FormShowOneRow.datasource" />
     <None Include="Resources\PrimaryKeyIcon1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
