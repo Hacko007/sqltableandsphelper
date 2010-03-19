@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Windows.Forms;
-using System.Text;
-using ColumnDepence.DbInfo;
-using System.Drawing;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using ColumnDepence.DbInfo;
 
 namespace ColumnDepence
 {
@@ -329,7 +329,7 @@ namespace ColumnDepence
 			m_removeFiltersToolStripMenuItem.Enabled = hasFilter;
 			m_ToolStripSeparator2.Visible = hasFilter;
 
-			m_ActiveColumn.HeaderText = (hasFilter) ? "["+ m_ActiveColumn.Name + "]" : m_ActiveColumn.Name;
+			//m_ActiveColumn.HeaderText = (hasFilter) ? "["+ m_ActiveColumn.Name + "]" : m_ActiveColumn.Name;
 			
 			ApplyFilter();
 		}
@@ -357,6 +357,8 @@ namespace ColumnDepence
 		{			
 			string filter = GetFilter();
 
+			MarkFilteredColumns();
+
 			if (filter == "")
 			{
 				m_TextBoxFilter.Text = "";
@@ -368,6 +370,7 @@ namespace ColumnDepence
 				m_TextBoxFilter.Text = "Filter: " + filter;
 				m_TextBoxFilter.Visible = true;
 				m_buttonRemoveFilter.Visible = true;
+				
 			}
 
 			try
@@ -381,6 +384,33 @@ namespace ColumnDepence
 				ShownRows = dv.Count;			
 			}
 			catch { }									
+		}
+
+		private void MarkFilteredColumns()
+		{
+			foreach (DataGridViewColumn column in m_DataGridViewValues.Columns)
+			{
+				column.HeaderText = column.Name ;				
+			}
+			
+			if (m_FilterDictionary == null || m_FilterDictionary.Count == 0) return;
+
+			var filteredColumns = from colFilter in m_FilterDictionary.Values
+								  where colFilter.Rules.Count > 0 
+								  group colFilter by colFilter.ColumnName into cols
+								  select cols;
+
+			foreach (var colRules in filteredColumns)
+			{
+				foreach (DataGridViewColumn column in m_DataGridViewValues.Columns)
+				{
+					if (colRules.Key == column.Name && !column .HeaderText.Contains("["))
+					{
+						column.HeaderText = "[" + column.Name + "]";
+						break;
+					}
+				}
+			}
 		}
 
 		#region Filter Menu Events
@@ -453,6 +483,7 @@ namespace ColumnDepence
 			m_ToolStripMenuItemLessThen.Text = "";
 
 			m_removeFiltersToolStripMenuItem.Enabled = false;
+			MarkFilteredColumns();
 		}
 
 		#endregion
@@ -465,7 +496,8 @@ namespace ColumnDepence
 		{
 			Point cliecked = PointToClient(Cursor.Position);
 			DataGridView.HitTestInfo hti = m_DataGridViewValues.HitTest(cliecked.X-2, cliecked.Y-15);
-			if (hti.Type != DataGridViewHitTestType.Cell)
+			if (hti.Type != DataGridViewHitTestType.Cell && 
+				hti.Type != DataGridViewHitTestType .RowHeader )
 			{
 			    e.Cancel = true;
 			    return;
@@ -662,6 +694,7 @@ namespace ColumnDepence
 			if (m_DataGridViewValues.Rows.Count == 0) return;
 
 			FormShowOneRow showOneRow = new FormShowOneRow {ParentBidingSource = m_BindingSourceValues };
+			showOneRow.RowIndex = m_BindingSourceValues.Position;
 			showOneRow.LoadRowItnoView();
 			showOneRow.ResizeWindow();
 			showOneRow.Show();
@@ -728,128 +761,22 @@ namespace ColumnDepence
 			}
 		}
 
-		//private SqlCommand CreateInsertSqlCommand(DataRowView rowView)
-		//{
-		//    Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
-
-		//    SqlCommand sqlCmd = new SqlCommand();
-		//    StringBuilder sqlColumns = new StringBuilder();
-		//    StringBuilder sqlValues = new StringBuilder();
-
-		//    foreach (DataColumn col in rowView.Row.Table.Columns)
-		//    {
-		//        if (TableInfo.ColumnInfo.IsIdentityColumn(col.ColumnName)) continue ;
-
-		//        sqlColumns.Append(string.Format("[{0}] ,", col.ColumnName));
-		//        sqlValues .Append(string.Format("@{0} ,", col.ColumnName));
-		//        if (rowView.Row.HasVersion(DataRowVersion.Proposed ))
-		//        {
-		//            sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
-		//        }
-		//        else
-		//        {
-		//            sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, DBNull.Value  ));
-		//        }
-		//    }
-		//    if (sqlColumns .Length > 0)
-		//    {
-		//        sqlColumns.Remove(sqlColumns.Length - 1, 1);
-		//    }
-		//    else
-		//    {
-		//        return null;
-		//    }
-
-		//    if (sqlValues.Length > 0)
-		//    {
-		//        sqlValues.Remove(sqlValues.Length - 1, 1);
-		//    }
-		//    else
-		//    {
-		//        return null;
-		//    }
-
-		//    sqlCmd.CommandText = "INSERT INTO " + TableInfo.TableName + " (" + sqlColumns .ToString() + ") Values( " + sqlValues.ToString() +")";
-		//    Console.WriteLine(sqlCmd.CommandText);
-		//    return sqlCmd;
-		//}
-	
-		//private SqlCommand CreateUpdateRowSqlCommand(DataRowView rowView)
-		//{
-		//    Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
-
-		//    SqlCommand sqlCmd = new SqlCommand();
-
-		//    StringBuilder sql = new StringBuilder();
-		//    StringBuilder sqlWhere = new StringBuilder();
-
-		//    SqlParameter[] sqlParams = new SqlParameter[rowView.Row.Table.Columns.Count * 2];
-
-		//    foreach (DataColumn col in rowView.Row.Table.Columns)
-		//    {
-		//        if (rowView.Row.HasVersion(DataRowVersion.Original) &&
-		//            rowView.Row.HasVersion(DataRowVersion.Proposed) &&
-		//            !rowView.Row[col, DataRowVersion.Proposed].Equals(rowView.Row[col, DataRowVersion.Original]))
-		//        {
-		//            sql.Append(string.Format("[{0}] = @{0} ,", col.ColumnName));
-		//            sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
-		//        }
-
-		//        if (rowView.Row[col, DataRowVersion.Original] is DBNull)
-		//        {
-		//            sqlWhere.Append(string.Format(" ([{0}] IS NULL) AND", col.ColumnName));					
-		//        }
-		//        else
-		//        {
-		//            sqlWhere.Append(string.Format(" ([{0}] = @Original_{0}) AND", col.ColumnName));
-		//            sqlCmd.Parameters.Add(new SqlParameter("@Original_" + col.ColumnName, rowView.Row[col, DataRowVersion.Original]));
-		//        }
-		//    }
-		//    if (sql.Length > 0)
-		//    {
-		//        sql.Remove(sql.Length - 1, 1);
-		//    }
-		//    else
-		//    {
-		//        return null;
-		//    }
-
-		//    if (sqlWhere.Length > 0)
-		//    {
-		//        sqlWhere.Remove(sqlWhere.Length - 3, 3);
-		//    }
-		//    else
-		//    {
-		//        return null;
-		//    }
-
-		//    sqlCmd.CommandText = "UPDATE " + TableInfo.TableName + " SET " + sql.ToString() + " WHERE " + sqlWhere.ToString();
-		//    Console.WriteLine(sqlCmd.CommandText);
-		//    return sqlCmd;
-		//}
-
 		bool m_NewRowAddedButNotSaved = false;
 		private void BindingSourceValues_AddingNew(object sender, System.ComponentModel.AddingNewEventArgs e)
 		{
-			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
-
-			Console.WriteLine(e.ToString());
 			m_NewRowAddedButNotSaved = true;
 			m_DataGridViewValues.RowLeave += DataGridViewValues_RowLeave;
 			m_DataGridViewValues.CellEndEdit  -= DataGridViewValues_CellEndEdit ;
-
 		}
 
 		private void DataGridViewValues_RowLeave(object sender, DataGridViewCellEventArgs e)
 		{
-			Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			if (IsRowEmpty(CurrentRow)) {
 				m_NewRowAddedButNotSaved = false;
 				m_BindingSourceValues.CancelEdit();
 			}
 			if (m_NewRowAddedButNotSaved)
 			{
-				//Save();								
 				m_DataGridViewValues.CellEndEdit += DataGridViewValues_CellEndEdit;
 			}
 			m_DataGridViewValues.RowLeave -= DataGridViewValues_RowLeave;
@@ -879,17 +806,20 @@ namespace ColumnDepence
 
 		private void ToolStripMenuItemFilterOnSelectedCells_Click(object sender, EventArgs e)
 		{
+			FilterOnSelectedCells();
+		}
+
+		private void FilterOnSelectedCells()
+		{
 			TableFilterData filterData = new TableFilterData()
-				{
-					TableRelation = TableRelation.None,
-					TableName = TableInfo.TableName,
-					ColumnValues = new Dictionary<string, List<object>>()
-				};
+			{
+				TableRelation = TableRelation.None,
+				TableName = TableInfo.TableName,
+				ColumnValues = new Dictionary<string, List<object>>()
+			};
 			foreach (DataGridViewCell cell in m_DataGridViewValues.SelectedCells)
 			{
 				filterData.Add(cell.OwningColumn.DataPropertyName, cell.Value);
-
-				//RaiseOpenTableTab(ci.TableName, false, ci);
 			}
 			RaiseOpenTableTab(TableInfo.TableName, false, filterData);
 		}

@@ -39,7 +39,7 @@
 			this.m_ButtonOpen.Name = "m_ButtonOpen";
 			this.m_ButtonOpen.Size = new System.Drawing.Size(32, 29);
 			this.m_ButtonOpen.TabIndex = 0;
-			this.m_ButtonOpen.Text = "¬";
+			this.m_ButtonOpen.Text = "L";
 			this.m_ButtonOpen.UseVisualStyleBackColor = true;
 			this.m_ButtonOpen.Click += new System.EventHandler(this.ButtonOpen_Click);
 			// 
