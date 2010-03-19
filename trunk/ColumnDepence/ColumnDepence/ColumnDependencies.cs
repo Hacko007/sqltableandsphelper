@@ -23,13 +23,24 @@ namespace ColumnDepence
 			m_userControlHistoryList_Tables.SettingName = "LastUsedTables";
 			m_userControlHistoryList_Sp.SettingName = "LastUsedSPs";
 			Application.DoEvents();
-			FillAutoCompleteCustomSource();
-			SetTitle();
+			AfterConnect();
 			FormMain = this;
+
+			m_UserControlFullNameListSPNames.NameSelected += delegate(object obj, EventArgs er)
+			{
+				m_textBox_SpSearch.Text = m_UserControlFullNameListSPNames.SelectedName;
+				CreateSpTabPage(m_textBox_SpSearch.Text.Trim());
+			};
+
+			m_UserControlFullNameListTableNames .NameSelected += delegate(object obj, EventArgs er)
+			{
+				m_TextBoxTableName.Text = m_UserControlFullNameListTableNames.SelectedName;
+				GetAllTableRows();
+			};
 		}
 
 
-		public string TableName { get { return txtTableName.Text.Trim(); } }
+		public string TableName { get { return m_TextBoxTableName.Text.Trim(); } }
 
 
 		public static bool TableExists(string tableName) {
@@ -93,6 +104,13 @@ namespace ColumnDepence
 			}
 
 		}
+		public void AfterConnect() 
+		{
+			FillAutoCompleteCustomSource();
+			m_UserControlFullNameListSPNames.StringList = null;
+			m_UserControlFullNameListTableNames.StringList = null;
+			SetTitle();
+		}
 
 		public void FillAutoCompleteCustomSource()
 		{
@@ -115,7 +133,7 @@ namespace ColumnDepence
 					}
 					catch { }
 				}
-				txtTableName.AutoCompleteCustomSource = tabStrs;
+				m_TextBoxTableName.AutoCompleteCustomSource = tabStrs;
 			}
 
 			/// 
@@ -167,27 +185,26 @@ namespace ColumnDepence
 			}
 			return null;
 		}
-		
 
-		private void ButtonGetAllRows_Click(object sender, EventArgs e)
-		{
-			if(TableName == "") return;
-
-			m_tabPage_TabSearch.Enabled = false;
-			CreateTabPageWithValues(TableName,null);
-			m_tabPage_TabSearch.Enabled = true;
-
-		}
-
-		private void ButtonTableDefinition_Click(object sender, EventArgs e)
+		private void GetTableDefinition()
 		{
 			if (TableName == "") return;
 
 			m_tabPage_TabSearch.Enabled = false;
-			CreateTabPageWithDefinition(TableName,null);
+			CreateTabPageWithDefinition(TableName, null);
 			m_tabPage_TabSearch.Enabled = true;
-
 		}
+
+		private void GetAllTableRows()
+		{
+			if (TableName == "") return;
+
+			m_tabPage_TabSearch.Enabled = false;
+			CreateTabPageWithValues(TableName, null);
+			m_tabPage_TabSearch.Enabled = true;
+		}
+
+
 
 		public UserControlAllTableInfo GetSelectedAllTableInfo()
 		{
@@ -395,7 +412,7 @@ namespace ColumnDepence
 
 		private void m_userControlHistoryList_Tables_SelectedIndexChanged(object sender, string value)
 		{
-			txtTableName.Text = value.Trim();
+			m_TextBoxTableName.Text = value.Trim();
 		}
 
 		private void m_userControlHistoryList_Sp_SelectedIndexChanged(object sender, string value)
@@ -430,7 +447,7 @@ namespace ColumnDepence
 			{
 				case Keys.F5:
 					m_tabControl_Search.SelectedTab = m_tabPage_TabSearch;
-					ButtonTableDefinition_Click(button_TabDef, EventArgs.Empty);
+					ButtonTableDefinition_Click(m_ButtonTabDef, EventArgs.Empty);
 					break;
 				case Keys.F6:
 					m_tabControl_Search.SelectedTab = m_tabPage_SpSearch;
@@ -465,7 +482,7 @@ namespace ColumnDepence
 					}
 				}
 				m_tabPage_TabSearch.Enabled = true;				
-				txtTableName.Focus();
+				m_TextBoxTableName.Focus();
 			}
 		}
 
@@ -493,5 +510,16 @@ namespace ColumnDepence
 				Text = " DB Info  -   " + ConnectionFactory.ShortConnectionName;
 			}
 		}
+
+		private void ButtonGetAllRows_Click(object sender, EventArgs e)
+		{
+			GetAllTableRows();
+		}
+
+		private void ButtonTableDefinition_Click(object sender, EventArgs e)
+		{
+			GetTableDefinition();
+		}
+
 	}
 }
