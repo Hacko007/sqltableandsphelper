@@ -41,7 +41,7 @@
 			this.m_ComboBoxLatestUsed.ItemHeight = 16;
 			this.m_ComboBoxLatestUsed.Location = new System.Drawing.Point(0, 0);
 			this.m_ComboBoxLatestUsed.Name = "m_ComboBoxLatestUsed";
-			this.m_ComboBoxLatestUsed.Size = new System.Drawing.Size(22, 24);
+			this.m_ComboBoxLatestUsed.Size = new System.Drawing.Size(20, 24);
 			this.m_ComboBoxLatestUsed.TabIndex = 5;
 			this.m_ComboBoxLatestUsed.SelectedIndexChanged += new System.EventHandler(this.m_comboBox_LatestUsed_SelectedIndexChanged);
 			// 
@@ -51,7 +51,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.m_ComboBoxLatestUsed);
 			this.Name = "UserControlHistoryList";
-			this.Size = new System.Drawing.Size(22, 27);
+			this.Size = new System.Drawing.Size(20, 25);
 			this.ResumeLayout(false);
 
 		}

@@ -121,8 +121,7 @@ namespace ColumnDepence
 
 				ConnectionFactory.ConnectionString = GetConnectionString(10000);				
 				UpdateConnectionHistory();
-				FormMain.FillAutoCompleteCustomSource();
-				FormMain.SetTitle();
+				FormMain.AfterConnect();				
 				return true;
 			}
 			catch

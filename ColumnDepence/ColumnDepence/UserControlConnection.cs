@@ -109,7 +109,7 @@ namespace ColumnDepence
 				if (ConnectionFactory.OpenConnection())
 				{
 					FormMain.SetTitle();
-					FormMain.FillAutoCompleteCustomSource();
+					FormMain.AfterConnect();
 				}
 				else
 				{
