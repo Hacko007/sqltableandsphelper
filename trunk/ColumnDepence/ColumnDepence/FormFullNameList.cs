@@ -51,12 +51,12 @@ namespace ColumnDepence
 
 		private void ApplyFilter()
 		{
-			m_ListBox.SelectedIndexChanged -= ListBox_SelectedIndexChanged;
+			//m_ListBox.SelectedIndexChanged -= ListBox_SelectedIndexChanged;
 			string searchStr = m_TextBoxFilter.Text.Trim().ToLowerInvariant();
 			if (searchStr == String.Empty)
 			{
 				m_ListBox.DataSource = m_StringList;
-				m_ListBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+			//	m_ListBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
 
 				return;
 			}
@@ -66,7 +66,7 @@ namespace ColumnDepence
 								 select name).ToList();
 			m_ListBox.DataSource = list;
 
-			m_ListBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+			//m_ListBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
 
 		}
 
@@ -75,11 +75,46 @@ namespace ColumnDepence
 			ApplyFilter();
 		}
 
-		private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
+		private void SelectName()
 		{
-			SelectedName = m_ListBox.SelectedItem.ToString ();
-			DialogResult = DialogResult.OK;
-			RaiseNameSelected();
+			if (m_ListBox.SelectedItem != null)
+			{
+				DialogResult = DialogResult.OK;
+				SelectedName = m_ListBox.SelectedItem.ToString();				
+				RaiseNameSelected();
+				
+			}
+		}
+
+		
+		/// <summary>
+		///  Select selected item when user doubleclicks on it.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			SelectName();
+		}
+
+
+		/// <summary>
+		/// Select selected item when user press Enter or Return.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ListBox_KeyDown(object sender, KeyEventArgs e)
+		{
+			switch (e.KeyData)
+			{				
+				case Keys.Return:
+					SelectName();
+					e.Handled = true;
+					break;
+				default:
+					e.Handled = false;
+					break;
+			}
 		}
 
 		

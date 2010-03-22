@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFullNameList));
 			this.m_Panel = new System.Windows.Forms.Panel();
 			this.m_ListBox = new System.Windows.Forms.ListBox();
 			this.m_GroupBoxSearch = new System.Windows.Forms.GroupBox();
@@ -57,7 +58,8 @@
 			this.m_ListBox.Name = "m_ListBox";
 			this.m_ListBox.Size = new System.Drawing.Size(522, 744);
 			this.m_ListBox.TabIndex = 1;
-			this.m_ListBox.SelectedIndexChanged += new System.EventHandler(this.ListBox_SelectedIndexChanged);
+			this.m_ListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_MouseDoubleClick);
+			this.m_ListBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox_KeyDown);
 			// 
 			// m_GroupBoxSearch
 			// 
@@ -97,6 +99,7 @@
 			this.ClientSize = new System.Drawing.Size(522, 803);
 			this.Controls.Add(this.m_Panel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimizeBox = false;
 			this.Name = "FormFullNameList";
 			this.Text = "FormFullNameList";

@@ -67,9 +67,9 @@ namespace ColumnDepence.Properties {
             }
         }
         
-        public static System.Drawing.Bitmap FilterByColumn {
+        public static System.Drawing.Bitmap FilterByWholeRow {
             get {
-                object obj = ResourceManager.GetObject("FilterByColumn", resourceCulture);
+                object obj = ResourceManager.GetObject("FilterByWholeRow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -128,6 +128,13 @@ namespace ColumnDepence.Properties {
             get {
                 object obj = ResourceManager.GetObject("programIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        public static System.Drawing.Bitmap Reload {
+            get {
+                object obj = ResourceManager.GetObject("Reload", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

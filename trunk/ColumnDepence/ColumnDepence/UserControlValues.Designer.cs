@@ -32,10 +32,12 @@ namespace ColumnDepence
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.m_PanelMenu = new System.Windows.Forms.Panel();
-			this.m_labelTableCount = new System.Windows.Forms.Label();
+			this.m_PanelFilter = new System.Windows.Forms.Panel();
+			this.m_TextBoxFilter = new System.Windows.Forms.TextBox();
 			this.m_buttonRemoveFilter = new System.Windows.Forms.Button();
+			this.m_labelTableCount = new System.Windows.Forms.Label();
 			this.m_labelInfo = new System.Windows.Forms.Label();
 			this.m_DataGridViewValues = new System.Windows.Forms.DataGridView();
 			this.m_contextMenuStripShownColumns = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -56,14 +58,12 @@ namespace ColumnDepence
 			this.m_ToolStripMenuItemIsFalse = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_removeFiltersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_panelDataGrid = new System.Windows.Forms.Panel();
-			this.m_PanelFilter = new System.Windows.Forms.Panel();
-			this.m_TextBoxFilter = new System.Windows.Forms.TextBox();
 			this.m_PanelMenu.SuspendLayout();
+			this.m_PanelFilter.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewValues)).BeginInit();
 			this.m_contextMenuStripShownColumns.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.m_BindingSourceValues)).BeginInit();
 			this.m_panelDataGrid.SuspendLayout();
-			this.m_PanelFilter.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// m_PanelMenu
@@ -77,14 +77,26 @@ namespace ColumnDepence
 			this.m_PanelMenu.Size = new System.Drawing.Size(399, 31);
 			this.m_PanelMenu.TabIndex = 0;
 			// 
-			// m_labelTableCount
+			// m_PanelFilter
 			// 
-			this.m_labelTableCount.AutoSize = true;
-			this.m_labelTableCount.Dock = System.Windows.Forms.DockStyle.Right;
-			this.m_labelTableCount.Location = new System.Drawing.Point(399, 0);
-			this.m_labelTableCount.Name = "m_labelTableCount";
-			this.m_labelTableCount.Size = new System.Drawing.Size(0, 13);
-			this.m_labelTableCount.TabIndex = 2;
+			this.m_PanelFilter.Controls.Add(this.m_TextBoxFilter);
+			this.m_PanelFilter.Controls.Add(this.m_buttonRemoveFilter);
+			this.m_PanelFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_PanelFilter.Location = new System.Drawing.Point(58, 0);
+			this.m_PanelFilter.Name = "m_PanelFilter";
+			this.m_PanelFilter.Size = new System.Drawing.Size(341, 31);
+			this.m_PanelFilter.TabIndex = 4;
+			// 
+			// m_TextBoxFilter
+			// 
+			this.m_TextBoxFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_TextBoxFilter.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_TextBoxFilter.Location = new System.Drawing.Point(25, 0);
+			this.m_TextBoxFilter.Multiline = true;
+			this.m_TextBoxFilter.Name = "m_TextBoxFilter";
+			this.m_TextBoxFilter.ReadOnly = true;
+			this.m_TextBoxFilter.Size = new System.Drawing.Size(316, 31);
+			this.m_TextBoxFilter.TabIndex = 4;
 			// 
 			// m_buttonRemoveFilter
 			// 
@@ -104,6 +116,15 @@ namespace ColumnDepence
 			this.m_buttonRemoveFilter.Visible = false;
 			this.m_buttonRemoveFilter.Click += new System.EventHandler(this.ButtonRemoveFilter_Click);
 			// 
+			// m_labelTableCount
+			// 
+			this.m_labelTableCount.AutoSize = true;
+			this.m_labelTableCount.Dock = System.Windows.Forms.DockStyle.Right;
+			this.m_labelTableCount.Location = new System.Drawing.Point(399, 0);
+			this.m_labelTableCount.Name = "m_labelTableCount";
+			this.m_labelTableCount.Size = new System.Drawing.Size(0, 13);
+			this.m_labelTableCount.TabIndex = 2;
+			// 
 			// m_labelInfo
 			// 
 			this.m_labelInfo.AutoSize = true;
@@ -117,8 +138,8 @@ namespace ColumnDepence
 			// 
 			// m_DataGridViewValues
 			// 
-			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
-			this.m_DataGridViewValues.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
+			this.m_DataGridViewValues.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
 			this.m_DataGridViewValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -143,7 +164,7 @@ namespace ColumnDepence
             this.m_ShowRowInfoToolStripMenuItem,
             this.m_ToolStripMenuItemFilterOnSelectedCells});
 			this.m_contextMenuStripShownColumns.Name = "m_contextMenuStripShownColumns";
-			this.m_contextMenuStripShownColumns.Size = new System.Drawing.Size(190, 98);
+			this.m_contextMenuStripShownColumns.Size = new System.Drawing.Size(190, 120);
 			this.m_contextMenuStripShownColumns.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripShownColumns_Opening);
 			// 
 			// m_showallClumnsToolStripMenuItem
@@ -174,6 +195,8 @@ namespace ColumnDepence
 			// 
 			// m_ToolStripMenuItemFilterOnSelectedCells
 			// 
+			this.m_ToolStripMenuItemFilterOnSelectedCells.Image = global::ColumnDepence.Properties.Resources.FilterByWholeRow;
+			this.m_ToolStripMenuItemFilterOnSelectedCells.ImageTransparentColor = System.Drawing.Color.Black;
 			this.m_ToolStripMenuItemFilterOnSelectedCells.Name = "m_ToolStripMenuItemFilterOnSelectedCells";
 			this.m_ToolStripMenuItemFilterOnSelectedCells.Size = new System.Drawing.Size(189, 22);
 			this.m_ToolStripMenuItemFilterOnSelectedCells.Text = "Filter on selected cells";
@@ -258,27 +281,6 @@ namespace ColumnDepence
 			this.m_panelDataGrid.Size = new System.Drawing.Size(399, 219);
 			this.m_panelDataGrid.TabIndex = 2;
 			// 
-			// m_PanelFilter
-			// 
-			this.m_PanelFilter.Controls.Add(this.m_TextBoxFilter);
-			this.m_PanelFilter.Controls.Add(this.m_buttonRemoveFilter);
-			this.m_PanelFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_PanelFilter.Location = new System.Drawing.Point(58, 0);
-			this.m_PanelFilter.Name = "m_PanelFilter";
-			this.m_PanelFilter.Size = new System.Drawing.Size(341, 31);
-			this.m_PanelFilter.TabIndex = 4;
-			// 
-			// m_TextBoxFilter
-			// 
-			this.m_TextBoxFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_TextBoxFilter.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_TextBoxFilter.Location = new System.Drawing.Point(25, 0);
-			this.m_TextBoxFilter.Multiline = true;
-			this.m_TextBoxFilter.Name = "m_TextBoxFilter";
-			this.m_TextBoxFilter.ReadOnly = true;
-			this.m_TextBoxFilter.Size = new System.Drawing.Size(316, 31);
-			this.m_TextBoxFilter.TabIndex = 4;
-			// 
 			// UserControlValues
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -290,12 +292,12 @@ namespace ColumnDepence
 			this.Size = new System.Drawing.Size(399, 250);
 			this.m_PanelMenu.ResumeLayout(false);
 			this.m_PanelMenu.PerformLayout();
+			this.m_PanelFilter.ResumeLayout(false);
+			this.m_PanelFilter.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewValues)).EndInit();
 			this.m_contextMenuStripShownColumns.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.m_BindingSourceValues)).EndInit();
 			this.m_panelDataGrid.ResumeLayout(false);
-			this.m_PanelFilter.ResumeLayout(false);
-			this.m_PanelFilter.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
