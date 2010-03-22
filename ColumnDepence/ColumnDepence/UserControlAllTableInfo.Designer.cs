@@ -35,6 +35,8 @@ namespace ColumnDepence
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			ColumnDepence.DbInfo.TableInfo tableInfo1 = new ColumnDepence.DbInfo.TableInfo();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlAllTableInfo));
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -51,11 +53,10 @@ namespace ColumnDepence
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-			ColumnDepence.DbInfo.TableInfo tableInfo1 = new ColumnDepence.DbInfo.TableInfo();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlAllTableInfo));
 			this.m_DataGridViewColumns = new System.Windows.Forms.DataGridView();
 			this.m_Label7 = new System.Windows.Forms.Label();
 			this.m_SplitContainerLeft = new System.Windows.Forms.SplitContainer();
+			this.m_userControlValues = new ColumnDepence.UserControlValues();
 			this.m_DataGridViewColumnConstrains = new System.Windows.Forms.DataGridView();
 			this.m_Label9 = new System.Windows.Forms.Label();
 			this.m_Label10 = new System.Windows.Forms.Label();
@@ -84,7 +85,6 @@ namespace ColumnDepence
 			this.m_showTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.m_ContextMenuStripShowDefinition = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.m_ToolStripMenuItemShowDefinition = new System.Windows.Forms.ToolStripMenuItem();
-			this.m_userControlValues = new ColumnDepence.UserControlValues();
 			((System.ComponentModel.ISupportInitialize)(this.m_DataGridViewColumns)).BeginInit();
 			this.m_SplitContainerLeft.Panel1.SuspendLayout();
 			this.m_SplitContainerLeft.Panel2.SuspendLayout();
@@ -187,6 +187,21 @@ namespace ColumnDepence
 			this.m_SplitContainerLeft.SplitterWidth = 8;
 			this.m_SplitContainerLeft.TabIndex = 0;
 			// 
+			// m_userControlValues
+			// 
+			this.m_userControlValues.AllColumns = null;
+			this.m_userControlValues.AutoScroll = true;
+			this.m_userControlValues.Location = new System.Drawing.Point(-1, -3);
+			this.m_userControlValues.Name = "m_userControlValues";
+			this.m_userControlValues.ShownColumns = null;
+			this.m_userControlValues.ShownRows = 0;
+			this.m_userControlValues.Size = new System.Drawing.Size(698, 472);
+			this.m_userControlValues.TabIndex = 2;
+			this.m_userControlValues.TableCount = "";
+			tableInfo1.TableName = null;
+			tableInfo1.ValuesLoadedWithFilter = false;
+			this.m_userControlValues.TableInfo = tableInfo1;
+			// 
 			// m_DataGridViewColumnConstrains
 			// 
 			this.m_DataGridViewColumnConstrains.AllowUserToAddRows = false;
@@ -284,7 +299,7 @@ namespace ColumnDepence
 			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.m_DataGridViewParent.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
-			this.m_DataGridViewParent.Size = new System.Drawing.Size(488, 165);
+			this.m_DataGridViewParent.Size = new System.Drawing.Size(488, 161);
 			this.m_DataGridViewParent.TabIndex = 1;
 			// 
 			// m_DataGridViewChild
@@ -324,7 +339,7 @@ namespace ColumnDepence
 			dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.m_DataGridViewChild.RowHeadersDefaultCellStyle = dataGridViewCellStyle16;
-			this.m_DataGridViewChild.Size = new System.Drawing.Size(485, 219);
+			this.m_DataGridViewChild.Size = new System.Drawing.Size(485, 221);
 			this.m_DataGridViewChild.TabIndex = 0;
 			// 
 			// m_Label11
@@ -357,7 +372,7 @@ namespace ColumnDepence
 			this.m_SplitContainerRightBottom.Panel2.BackColor = System.Drawing.SystemColors.Control;
 			this.m_SplitContainerRightBottom.Panel2.Controls.Add(this.m_SplitContainerLeftSpButtom);
 			this.m_SplitContainerRightBottom.Size = new System.Drawing.Size(494, 668);
-			this.m_SplitContainerRightBottom.SplitterDistance = 184;
+			this.m_SplitContainerRightBottom.SplitterDistance = 180;
 			this.m_SplitContainerRightBottom.SplitterWidth = 8;
 			this.m_SplitContainerRightBottom.TabIndex = 0;
 			// 
@@ -380,8 +395,8 @@ namespace ColumnDepence
 			this.m_SplitContainerLeftSpButtom.Panel2.BackColor = System.Drawing.SystemColors.Control;
 			this.m_SplitContainerLeftSpButtom.Panel2.Controls.Add(this.m_DataGridViewSp);
 			this.m_SplitContainerLeftSpButtom.Panel2.Controls.Add(this.m_LabelSp);
-			this.m_SplitContainerLeftSpButtom.Size = new System.Drawing.Size(494, 476);
-			this.m_SplitContainerLeftSpButtom.SplitterDistance = 238;
+			this.m_SplitContainerLeftSpButtom.Size = new System.Drawing.Size(494, 480);
+			this.m_SplitContainerLeftSpButtom.SplitterDistance = 240;
 			this.m_SplitContainerLeftSpButtom.SplitterWidth = 8;
 			this.m_SplitContainerLeftSpButtom.TabIndex = 6;
 			// 
@@ -422,7 +437,7 @@ namespace ColumnDepence
 			dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.m_DataGridViewSp.RowHeadersDefaultCellStyle = dataGridViewCellStyle20;
-			this.m_DataGridViewSp.Size = new System.Drawing.Size(485, 207);
+			this.m_DataGridViewSp.Size = new System.Drawing.Size(485, 209);
 			this.m_DataGridViewSp.TabIndex = 1;
 			// 
 			// m_LabelSp
@@ -500,7 +515,7 @@ namespace ColumnDepence
 			this.m_ToolStripButtonLoadDef.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
 			this.m_ToolStripButtonLoadDef.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonLoadDef.Name = "m_ToolStripButtonLoadDef";
-			this.m_ToolStripButtonLoadDef.Size = new System.Drawing.Size(98, 22);
+			this.m_ToolStripButtonLoadDef.Size = new System.Drawing.Size(108, 22);
 			this.m_ToolStripButtonLoadDef.Text = "Load Definition";
 			this.m_ToolStripButtonLoadDef.ToolTipText = "Load this tables definition";
 			this.m_ToolStripButtonLoadDef.Click += new System.EventHandler(this.button_RefreshDef_Click);
@@ -510,25 +525,26 @@ namespace ColumnDepence
 			this.m_ToolStripSplitButtonLoadMain.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_LoadAllValuesToolStripMenuItem,
             this.m_LoadTop300ToolStripMenuItem});
-			this.m_ToolStripSplitButtonLoadMain.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
-			this.m_ToolStripSplitButtonLoadMain.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.m_ToolStripSplitButtonLoadMain.Image = global::ColumnDepence.Properties.Resources.Reload;
+			this.m_ToolStripSplitButtonLoadMain.ImageTransparentColor = System.Drawing.Color.White;
 			this.m_ToolStripSplitButtonLoadMain.Name = "m_ToolStripSplitButtonLoadMain";
-			this.m_ToolStripSplitButtonLoadMain.Size = new System.Drawing.Size(110, 22);
+			this.m_ToolStripSplitButtonLoadMain.Size = new System.Drawing.Size(119, 22);
 			this.m_ToolStripSplitButtonLoadMain.Text = "Load All Values";
 			this.m_ToolStripSplitButtonLoadMain.Click += new System.EventHandler(this.toolStripSplitButton_LoadMain_Click);
 			// 
 			// m_LoadAllValuesToolStripMenuItem
 			// 
-			this.m_LoadAllValuesToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
+			this.m_LoadAllValuesToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.Reload;
+			this.m_LoadAllValuesToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.White;
 			this.m_LoadAllValuesToolStripMenuItem.Name = "m_LoadAllValuesToolStripMenuItem";
-			this.m_LoadAllValuesToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.m_LoadAllValuesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
 			this.m_LoadAllValuesToolStripMenuItem.Text = "Load All Values";
 			this.m_LoadAllValuesToolStripMenuItem.Click += new System.EventHandler(this.loadAllValuesToolStripMenuItem_Click);
 			// 
 			// m_LoadTop300ToolStripMenuItem
 			// 
 			this.m_LoadTop300ToolStripMenuItem.Name = "m_LoadTop300ToolStripMenuItem";
-			this.m_LoadTop300ToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.m_LoadTop300ToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
 			this.m_LoadTop300ToolStripMenuItem.Text = "Load Top 300";
 			this.m_LoadTop300ToolStripMenuItem.Click += new System.EventHandler(this.loadTop300ToolStripMenuItem_Click);
 			// 
@@ -557,7 +573,7 @@ namespace ColumnDepence
 			this.m_ToolStripButtonCloseTab.Image = global::ColumnDepence.Properties.Resources.CloseImage;
 			this.m_ToolStripButtonCloseTab.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonCloseTab.Name = "m_ToolStripButtonCloseTab";
-			this.m_ToolStripButtonCloseTab.Size = new System.Drawing.Size(74, 22);
+			this.m_ToolStripButtonCloseTab.Size = new System.Drawing.Size(79, 22);
 			this.m_ToolStripButtonCloseTab.Text = "Close Tab";
 			this.m_ToolStripButtonCloseTab.Click += new System.EventHandler(this.button_CloseTab_Click);
 			// 
@@ -567,7 +583,7 @@ namespace ColumnDepence
 			this.m_ToolStripButtonToolBox.Image = global::ColumnDepence.Properties.Resources.ToolBoxImage;
 			this.m_ToolStripButtonToolBox.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonToolBox.Name = "m_ToolStripButtonToolBox";
-			this.m_ToolStripButtonToolBox.Size = new System.Drawing.Size(109, 22);
+			this.m_ToolStripButtonToolBox.Size = new System.Drawing.Size(116, 22);
 			this.m_ToolStripButtonToolBox.Text = "Show as tool box";
 			this.m_ToolStripButtonToolBox.Click += new System.EventHandler(this.ToolStripButtonToolBox_Click);
 			// 
@@ -586,13 +602,13 @@ namespace ColumnDepence
             this.m_showDefinitionToolStripMenuItem,
             this.m_showTableToolStripMenuItem});
 			this.m_ContextMenuStripShowTable.Name = "m_ContextMenuStripShowTable";
-			this.m_ContextMenuStripShowTable.Size = new System.Drawing.Size(175, 48);
+			this.m_ContextMenuStripShowTable.Size = new System.Drawing.Size(173, 48);
 			// 
 			// m_showDefinitionToolStripMenuItem
 			// 
 			this.m_showDefinitionToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
 			this.m_showDefinitionToolStripMenuItem.Name = "m_showDefinitionToolStripMenuItem";
-			this.m_showDefinitionToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+			this.m_showDefinitionToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.m_showDefinitionToolStripMenuItem.Text = "Show Definition";
 			this.m_showDefinitionToolStripMenuItem.Click += new System.EventHandler(this.ShowTableDefinition_Click);
 			// 
@@ -600,7 +616,7 @@ namespace ColumnDepence
 			// 
 			this.m_showTableToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
 			this.m_showTableToolStripMenuItem.Name = "m_showTableToolStripMenuItem";
-			this.m_showTableToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+			this.m_showTableToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.m_showTableToolStripMenuItem.Text = "Show Table Values";
 			this.m_showTableToolStripMenuItem.Click += new System.EventHandler(this.ShowTableValues_Click);
 			// 
@@ -609,28 +625,15 @@ namespace ColumnDepence
 			this.m_ContextMenuStripShowDefinition.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_ToolStripMenuItemShowDefinition});
 			this.m_ContextMenuStripShowDefinition.Name = "m_ContextMenuStripShowDefinition";
-			this.m_ContextMenuStripShowDefinition.Size = new System.Drawing.Size(160, 26);
+			this.m_ContextMenuStripShowDefinition.Size = new System.Drawing.Size(159, 26);
 			// 
 			// m_ToolStripMenuItemShowDefinition
 			// 
 			this.m_ToolStripMenuItemShowDefinition.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
 			this.m_ToolStripMenuItemShowDefinition.Name = "m_ToolStripMenuItemShowDefinition";
-			this.m_ToolStripMenuItemShowDefinition.Size = new System.Drawing.Size(159, 22);
+			this.m_ToolStripMenuItemShowDefinition.Size = new System.Drawing.Size(158, 22);
 			this.m_ToolStripMenuItemShowDefinition.Text = "Show Definition";
 			this.m_ToolStripMenuItemShowDefinition.Click += new System.EventHandler(this.ToolStripMenuItem_ShowDefinition_Click);
-			// 
-			// m_userControlValues
-			// 
-			this.m_userControlValues.AllColumns = null;
-			this.m_userControlValues.AutoScroll = true;
-			this.m_userControlValues.Location = new System.Drawing.Point(-1, -3);
-			this.m_userControlValues.Name = "m_userControlValues";
-			this.m_userControlValues.ShownColumns = null;
-			this.m_userControlValues.ShownRows = 0;
-			this.m_userControlValues.Size = new System.Drawing.Size(698, 472);
-			this.m_userControlValues.TabIndex = 2;
-			this.m_userControlValues.TableCount = "";
-			this.m_userControlValues.TableInfo = tableInfo1;
 			// 
 			// UserControlAllTableInfo
 			// 
