@@ -186,8 +186,11 @@ namespace ColumnDepence
 		private void UpdateValuesOnly(bool getAllRows)
 		{
 			Cursor.Current = Cursors.WaitCursor;
-
-			m_PanelDataView.Controls.Clear();
+			try
+			{
+				m_PanelDataView.Controls.Clear();
+			}
+			catch { }
 
 			m_userControlValues.Dock = DockStyle.Fill;
 			m_PanelDataView.Controls.Add(m_userControlValues);

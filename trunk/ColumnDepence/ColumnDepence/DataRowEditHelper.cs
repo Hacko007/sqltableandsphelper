@@ -78,8 +78,15 @@ namespace ColumnDepence
 				}
 				else
 				{
-					sqlWhere.Append(string.Format(" ([{0}] = @Original_{0}) AND", col.ColumnName));
-					sqlCmd.Parameters.Add(new SqlParameter("@Original_" + col.ColumnName, rowView.Row[col, DataRowVersion.Original]));
+					SqlParameter parameter = new SqlParameter("@Original_" + col.ColumnName, rowView.Row[col, DataRowVersion.Original]);
+					if (parameter.SqlDbType != SqlDbType.NText &&
+						parameter.SqlDbType != SqlDbType.NVarChar &&
+						parameter.SqlDbType != SqlDbType.VarBinary &&
+						parameter.SqlDbType != SqlDbType.Image)
+					{
+						sqlWhere.Append(string.Format(" ([{0}] = @Original_{0}) AND", col.ColumnName));
+						sqlCmd.Parameters.Add(parameter);
+					}
 				}
 			}
 			if (sql.Length > 0)
