@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using ColumnDepence.Properties;
 
 namespace ColumnDepence
 {
@@ -26,6 +27,26 @@ namespace ColumnDepence
 												};
 
 			ConnectionString = con.ConnectionString;
+		}
+
+
+		/// <summary>
+		/// Save current connection as latest connection in history
+		/// </summary>
+		private static void SaveConnectionStringToHistory()
+		{
+			if( Instance == null ) return ;
+			try
+			{
+				SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder(Instance.ConnectionString);
+				Settings.Default.LastUsedServer = sqlBuilder.DataSource;
+				Settings.Default.LastUsedDatabase = sqlBuilder["Initial Catalog"].ToString();
+				Settings.Default.LastUsedUsername = sqlBuilder.UserID;
+				Settings.Default.LastUsedPassword = sqlBuilder.Password;
+				Settings.Default.LastUsedIntegratedSecurity = sqlBuilder.IntegratedSecurity;
+				Settings.Default.Save();
+			}
+			catch { }
 		}
 
 		private static string m_ConnectionString ;
@@ -82,6 +103,7 @@ namespace ColumnDepence
 				if (Instance != null && Instance.State != ConnectionState.Open)
 				{
 					Instance.Open();
+					SaveConnectionStringToHistory();
 				}
 
 				if (Instance != null) 
