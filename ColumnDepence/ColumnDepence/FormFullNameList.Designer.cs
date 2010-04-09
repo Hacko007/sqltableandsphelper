@@ -32,6 +32,7 @@
 			this.m_Panel = new System.Windows.Forms.Panel();
 			this.m_ListBox = new System.Windows.Forms.ListBox();
 			this.m_GroupBoxSearch = new System.Windows.Forms.GroupBox();
+			this.buttonClear = new System.Windows.Forms.Button();
 			this.m_TextBoxFilter = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.m_Panel.SuspendLayout();
@@ -51,35 +52,49 @@
 			// m_ListBox
 			// 
 			this.m_ListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_ListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_ListBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.m_ListBox.FormattingEnabled = true;
-			this.m_ListBox.ItemHeight = 20;
-			this.m_ListBox.Location = new System.Drawing.Point(0, 47);
+			this.m_ListBox.ItemHeight = 18;
+			this.m_ListBox.Location = new System.Drawing.Point(0, 55);
 			this.m_ListBox.Name = "m_ListBox";
-			this.m_ListBox.Size = new System.Drawing.Size(522, 744);
+			this.m_ListBox.Size = new System.Drawing.Size(522, 742);
 			this.m_ListBox.TabIndex = 1;
 			this.m_ListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_MouseDoubleClick);
 			this.m_ListBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox_KeyDown);
 			// 
 			// m_GroupBoxSearch
 			// 
+			this.m_GroupBoxSearch.Controls.Add(this.buttonClear);
 			this.m_GroupBoxSearch.Controls.Add(this.m_TextBoxFilter);
 			this.m_GroupBoxSearch.Controls.Add(this.label1);
 			this.m_GroupBoxSearch.Dock = System.Windows.Forms.DockStyle.Top;
 			this.m_GroupBoxSearch.Location = new System.Drawing.Point(0, 0);
 			this.m_GroupBoxSearch.Name = "m_GroupBoxSearch";
-			this.m_GroupBoxSearch.Size = new System.Drawing.Size(522, 47);
+			this.m_GroupBoxSearch.Size = new System.Drawing.Size(522, 55);
 			this.m_GroupBoxSearch.TabIndex = 0;
 			this.m_GroupBoxSearch.TabStop = false;
+			// 
+			// buttonClear
+			// 
+			this.buttonClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+			this.buttonClear.Font = new System.Drawing.Font("Webdings", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+			this.buttonClear.ForeColor = System.Drawing.Color.White;
+			this.buttonClear.Location = new System.Drawing.Point(487, 10);
+			this.buttonClear.Name = "buttonClear";
+			this.buttonClear.Size = new System.Drawing.Size(29, 31);
+			this.buttonClear.TabIndex = 2;
+			this.buttonClear.Text = "r";
+			this.buttonClear.UseVisualStyleBackColor = false;
+			this.buttonClear.Click += new System.EventHandler(this.ButtonClearClick);
 			// 
 			// m_TextBoxFilter
 			// 
 			this.m_TextBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.m_TextBoxFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_TextBoxFilter.Location = new System.Drawing.Point(47, 13);
+			this.m_TextBoxFilter.Font = new System.Drawing.Font("Courier New", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_TextBoxFilter.Location = new System.Drawing.Point(41, 10);
 			this.m_TextBoxFilter.Name = "m_TextBoxFilter";
-			this.m_TextBoxFilter.Size = new System.Drawing.Size(463, 26);
+			this.m_TextBoxFilter.Size = new System.Drawing.Size(437, 31);
 			this.m_TextBoxFilter.TabIndex = 1;
 			this.m_TextBoxFilter.TextChanged += new System.EventHandler(this.TextBoxFilter_TextChanged);
 			// 
@@ -102,6 +117,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimizeBox = false;
 			this.Name = "FormFullNameList";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "FormFullNameList";
 			this.m_Panel.ResumeLayout(false);
 			this.m_GroupBoxSearch.ResumeLayout(false);
@@ -117,5 +133,6 @@
 		private System.Windows.Forms.TextBox m_TextBoxFilter;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox m_ListBox;
+		private System.Windows.Forms.Button buttonClear;
 	}
 }

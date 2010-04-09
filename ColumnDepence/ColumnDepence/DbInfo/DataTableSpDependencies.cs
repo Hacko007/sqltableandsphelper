@@ -11,12 +11,12 @@ public	class DataTableSpDependencies:DataTable
 		/// <summary>
 		/// Fill datagrid with inforamtion about SP's dependencies
 		/// </summary>
-		public void FillDependecies(string SpName)
+		public void FillDependecies(string spName)
 		{
 
 			try
 			{
-				if (SpName == "") return;
+				if (spName == "") return;
 				if (ConnectionFactory.OpenConnection() == false) return;
 
 				SqlCommand com = new SqlCommand("sp_depends", ConnectionFactory.Instance)
@@ -24,7 +24,7 @@ public	class DataTableSpDependencies:DataTable
 					CommandType = CommandType.StoredProcedure
 				};
 				com.Parameters.Add("@objname", SqlDbType.NVarChar, 517);
-				com.Parameters[0].Value = SpName;
+				com.Parameters[0].Value = spName;
 
 				using (SqlDataAdapter adapter = new SqlDataAdapter(com))
 				{					
@@ -41,7 +41,8 @@ public	class DataTableSpDependencies:DataTable
 					}
 				}
 			}
-			catch { }
+			catch
+			{ }
 			finally
 			{
 				ConnectionFactory.CloseConnection();

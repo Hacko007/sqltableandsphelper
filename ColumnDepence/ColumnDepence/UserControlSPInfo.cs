@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 using ColumnDepence.DbInfo;
+using System.Text;
+using ColumnDepence.Properties;
 
 namespace ColumnDepence
 {
@@ -178,7 +180,12 @@ namespace ColumnDepence
 			if (SpName == "") return;
 			if (ConnectionFactory.OpenConnection() == false) return;
 
-			const string sqlStr = "SELECT ROUTINE_DEFINITION FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME LIKE @SPSEARCH ";
+			StringBuilder sqlStrBuilder = new StringBuilder();
+			sqlStrBuilder.AppendLine("Declare @id int");
+			sqlStrBuilder.AppendLine("SELECT top 1 @id = id FROM syscomments WHERE colid=1 AND  [text] LIKE @SPSEARCH AND OBJECTPROPERTY(id, 'IsProcedure') = 1 ");
+			sqlStrBuilder.AppendLine("SELECT [text] FROM syscomments WHERE id= @id order by colid");
+			string sqlStr = sqlStrBuilder.ToString();
+
 
 			SqlCommand com = new SqlCommand(sqlStr, ConnectionFactory.Instance);
 			com.Parameters.Add("@SPSEARCH", SqlDbType.NVarChar);
@@ -186,15 +193,32 @@ namespace ColumnDepence
 
 			RichTextBoxDefinition.Text = "";
 
-			FormMain.StatusInfo1 = "Loading SP definition ...";
-			FormMain.StatusInfo2 = m_tryToLoadCounter + " try";
+			FormMain.StatusInfo1 = Resources.UserControlSpInfo_FillSpDefinition_Loading_SP_definition____;
+			FormMain.StatusInfo2 = m_tryToLoadCounter + Resources.UserControlSpInfo_FillSpDefinition__try;
 			Application.DoEvents();
 
 			try
 			{
-				object obj = com.ExecuteScalar();
-				if (obj != null)
-					RichTextBoxDefinition.Text = obj.ToString();
+				SqlDataReader reader = com.ExecuteReader();
+				if (reader == null)
+				{
+					return;
+				}
+				try
+				{
+					while (reader.Read())
+					{
+						RichTextBoxDefinition.Text += reader[0];
+						Application.DoEvents();
+					}
+				}
+				finally
+				{
+					// Always call Close when done reading.
+					reader.Close();
+					m_tryToLoadCounter = 1;
+				}
+
 			}
 			catch
 			{
@@ -239,13 +263,13 @@ namespace ColumnDepence
 				m_DataGridViewDepTables.Columns["type"].Visible = false;
 				m_DataGridViewDepTables.Columns["updated"].Visible = false;
 				m_DataGridViewDepTables.Columns["selected"].Visible = false;
-				m_DataGridViewDepTables.Columns["MyUpd"].HeaderText = "Updated";
-				m_DataGridViewDepTables.Columns["MySel"].HeaderText = "Selected";
-				m_DataGridViewDepTables.Columns["MyType"].HeaderText = "Type";
-				m_DataGridViewDepTables.Columns["name"].HeaderText = "Dependent Object";
+				m_DataGridViewDepTables.Columns["MyUpd"].HeaderText = Resources.UserControlSpInfo_InitCoulomnsInDvDepTables_Updated;
+				m_DataGridViewDepTables.Columns["MySel"].HeaderText = Resources.UserControlSpInfo_InitCoulomnsInDvDepTables_Selected;
+				m_DataGridViewDepTables.Columns["MyType"].HeaderText = Resources.UserControlSpInfo_InitCoulomnsInDvDepTables_Type;
+				m_DataGridViewDepTables.Columns["name"].HeaderText = Resources.UserControlSpInfo_InitCoulomnsInDvDepTables_Dependent_Object;
 				m_DataGridViewDepTables.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 				m_DataGridViewDepTables.Columns["name"].ContextMenuStrip = m_ContextMenuStripShowDefinition;
-				m_DataGridViewDepTables.Columns["column"].HeaderText = "Column";
+				m_DataGridViewDepTables.Columns["column"].HeaderText = Resources.UserControlSpInfo_InitCoulomnsInDvDepTables_Column;
 				m_DataGridViewDepTables.Columns["column"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
 				// ReSharper restore PossibleNullReferenceException
 			}catch{}
@@ -286,7 +310,7 @@ namespace ColumnDepence
 				          		Text = SpName
 				          	};
 				m_toolStripButtonClose.Visible = false;
-				m_toolStripButtonShowAsToolBox.Text = "Show as tab page";
+				m_toolStripButtonShowAsToolBox.Text = Resources.UserControlSpInfo_ToolStripButtonShowAsToolBox_Click_Show_as_tab_page;
 				Dock = DockStyle.Fill;
 				m_Toolbox.Controls.Add(this);
 				m_Toolbox.FormBorderStyle = FormBorderStyle.SizableToolWindow;
@@ -360,7 +384,7 @@ namespace ColumnDepence
 			{
 				m_toolStripButtonFindNext.Enabled = false;
 				m_ToolStripButtonFindPrevious.Enabled = false;
-				FormMain.StatusInfo1 = "Syntax highligting";
+				FormMain.StatusInfo1 = Resources.UserControlSpInfo_SyntaxHighLight_Syntax_highligting;
 				Application.DoEvents();
 				RichTextBoxDefinition.ApplySyntaxHighlighting();
 				FormMain.StatusInfo1 = "";
