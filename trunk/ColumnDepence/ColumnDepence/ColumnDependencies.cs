@@ -3,6 +3,7 @@ using System.Data;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using ColumnDepence.DbInfo;
+using ColumnDepence.Properties;
 
 namespace ColumnDepence
 {
@@ -26,14 +27,14 @@ namespace ColumnDepence
 			AfterConnect();
 			FormMain = this;
 
-			m_UserControlFullNameListSPNames.NameSelected += delegate(object obj, EventArgs er)
-			{
+			m_UserControlFullNameListSPNames.NameSelected += delegate
+			                                                 	{
 				m_textBox_SpSearch.Text = m_UserControlFullNameListSPNames.SelectedName;
 				CreateSpTabPage(m_textBox_SpSearch.Text.Trim());
 			};
 
-			m_UserControlFullNameListTableNames .NameSelected += delegate(object obj, EventArgs er)
-			{
+			m_UserControlFullNameListTableNames .NameSelected += delegate
+			                                                     	{
 				m_TextBoxTableName.Text = m_UserControlFullNameListTableNames.SelectedName;
 				GetAllTableRows();
 			};
@@ -114,9 +115,9 @@ namespace ColumnDepence
 
 		public void FillAutoCompleteCustomSource()
 		{
-			/// 
-			/// Table auto complete
-			/// 
+			// 
+			// Table auto complete
+			// 
 			string sqlStr = @"SELECT DISTINCT TB.TABLE_NAME  FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TB  ORDER BY TB.TABLE_NAME";
 
 			DataSet ds = FillDataSet(sqlStr);
@@ -136,9 +137,9 @@ namespace ColumnDepence
 				m_TextBoxTableName.AutoCompleteCustomSource = tabStrs;
 			}
 
-			/// 
-			/// SP auto complete
-			/// 
+			// 
+			// SP auto complete
+			// 
 
 			sqlStr = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE='PROCEDURE' ORDER BY ROUTINE_NAME";
 			ds = FillDataSet(sqlStr);
@@ -372,7 +373,7 @@ namespace ColumnDepence
 		}
 
 		#region TabControl ContexMenu Actions
-		private void closeAllTabsButThisToolStripMenuItem_Click(object sender, EventArgs e)
+		private void CloseAllTabsButThisToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			foreach (TabPage item in tabControl_TableInfo.TabPages)
 			{
@@ -383,12 +384,12 @@ namespace ColumnDepence
 			}
 		}
 
-		private void closeAllTabsToolStripMenuItem_Click(object sender, EventArgs e)
+		private void CloseAllTabsToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			tabControl_TableInfo.TabPages.Clear();
 		}
 
-		private void closeActiveTabToolStripMenuItem_Click(object sender, EventArgs e)
+		private void CloseActiveTabToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			tabControl_TableInfo.TabPages.Remove(tabControl_TableInfo.SelectedTab);
 		}
@@ -396,7 +397,7 @@ namespace ColumnDepence
 
 		private void ColumnDependencies_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			Properties.Settings.Default.Save();
+			Settings.Default.Save();
 		}
 
 		private void ColumnDependencies_KeyPress(object sender, KeyPressEventArgs e)
@@ -405,17 +406,17 @@ namespace ColumnDepence
 		}
 		
 
-		private void Button_SPDef_Click(object sender, EventArgs e)
+		private void ButtonSpDefClick(object sender, EventArgs e)
 		{
 			CreateSpTabPage(m_textBox_SpSearch.Text.Trim());
 		}
 
-		private void m_userControlHistoryList_Tables_SelectedIndexChanged(object sender, string value)
+		private void UserControlHistoryListTablesSelectedIndexChanged(object sender, string value)
 		{
 			m_TextBoxTableName.Text = value.Trim();
 		}
 
-		private void m_userControlHistoryList_Sp_SelectedIndexChanged(object sender, string value)
+		private void UserControlHistoryListSpSelectedIndexChanged(object sender, string value)
 		{
 			m_textBox_SpSearch.Text = value.Trim().Replace("dba.", "");
 		}
@@ -451,7 +452,7 @@ namespace ColumnDepence
 					break;
 				case Keys.F6:
 					m_tabControl_Search.SelectedTab = m_tabPage_SpSearch;
-					Button_SPDef_Click(m_button_SpDef, EventArgs.Empty);
+					ButtonSpDefClick(m_button_SpDef, EventArgs.Empty);
 					break;
 				case Keys.F9:
 					m_UserControlConnection.Focus();
@@ -503,11 +504,11 @@ namespace ColumnDepence
 		{
 			if (ConnectionFactory.Instance == null)
 			{
-				Text = " DB Info ";
+				Text = Resources.ColumnDependencies_SetTitle__DB_Info_;
 			}
 			else
 			{
-				Text = " DB Info  -   " + ConnectionFactory.ShortConnectionName;
+				Text = Resources.ColumnDependencies_SetTitle__DB_Info______ + ConnectionFactory.ShortConnectionName;
 			}
 		}
 

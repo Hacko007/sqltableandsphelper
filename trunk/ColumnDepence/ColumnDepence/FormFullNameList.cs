@@ -13,7 +13,7 @@ namespace ColumnDepence
 		public FormFullNameList()
 		{
 			InitializeComponent();
-			this.DialogResult = DialogResult.None; 
+			DialogResult = DialogResult.None; 
 			m_StringList = new List<string>();
 		}
 
@@ -44,20 +44,17 @@ namespace ColumnDepence
 			Screen screen = Screen.FromControl(this);
 			int optimalSizeHight = (StringList.Count * m_ListBox.ItemHeight) + 100;
 			optimalSizeHight = Math.Min(screen.WorkingArea.Height - 50, optimalSizeHight);
-			this.Height = optimalSizeHight;
-			this.CenterToScreen();
+			Height = optimalSizeHight;
+			CenterToScreen();
 		}
 
 
-		private void ApplyFilter()
+		internal void ApplyFilter()
 		{
-			//m_ListBox.SelectedIndexChanged -= ListBox_SelectedIndexChanged;
 			string searchStr = m_TextBoxFilter.Text.Trim().ToLowerInvariant();
 			if (searchStr == String.Empty)
 			{
 				m_ListBox.DataSource = m_StringList;
-			//	m_ListBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
-
 				return;
 			}
 
@@ -65,9 +62,6 @@ namespace ColumnDepence
 								 where name.ToLowerInvariant().Contains(searchStr)
 								 select name).ToList();
 			m_ListBox.DataSource = list;
-
-			//m_ListBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
-
 		}
 
 		private void TextBoxFilter_TextChanged(object sender, EventArgs e)
@@ -115,6 +109,12 @@ namespace ColumnDepence
 					e.Handled = false;
 					break;
 			}
+		}
+
+		private void ButtonClearClick(object sender, EventArgs e)
+		{
+			m_TextBoxFilter.Text = String.Empty;
+			m_TextBoxFilter.Focus();
 		}
 
 		

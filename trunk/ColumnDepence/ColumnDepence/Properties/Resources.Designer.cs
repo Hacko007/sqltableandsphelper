@@ -67,6 +67,24 @@ namespace ColumnDepence.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to  DB Info .
+        /// </summary>
+        public static string ColumnDependencies_SetTitle__DB_Info_ {
+            get {
+                return ResourceManager.GetString("ColumnDependencies_SetTitle__DB_Info_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  DB Info  -   .
+        /// </summary>
+        public static string ColumnDependencies_SetTitle__DB_Info______ {
+            get {
+                return ResourceManager.GetString("ColumnDependencies_SetTitle__DB_Info______", resourceCulture);
+            }
+        }
+        
         public static System.Drawing.Bitmap FilterByWholeRow {
             get {
                 object obj = ResourceManager.GetObject("FilterByWholeRow", resourceCulture);
@@ -196,6 +214,87 @@ namespace ColumnDepence.Properties {
             get {
                 object obj = ResourceManager.GetObject("ToolBoxImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  try.
+        /// </summary>
+        public static string UserControlSpInfo_FillSpDefinition__try {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_FillSpDefinition__try", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading SP definition ....
+        /// </summary>
+        public static string UserControlSpInfo_FillSpDefinition_Loading_SP_definition____ {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_FillSpDefinition_Loading_SP_definition____", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column.
+        /// </summary>
+        public static string UserControlSpInfo_InitCoulomnsInDvDepTables_Column {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_InitCoulomnsInDvDepTables_Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependent Object.
+        /// </summary>
+        public static string UserControlSpInfo_InitCoulomnsInDvDepTables_Dependent_Object {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_InitCoulomnsInDvDepTables_Dependent_Object", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected.
+        /// </summary>
+        public static string UserControlSpInfo_InitCoulomnsInDvDepTables_Selected {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_InitCoulomnsInDvDepTables_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string UserControlSpInfo_InitCoulomnsInDvDepTables_Type {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_InitCoulomnsInDvDepTables_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated.
+        /// </summary>
+        public static string UserControlSpInfo_InitCoulomnsInDvDepTables_Updated {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_InitCoulomnsInDvDepTables_Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Syntax highligting.
+        /// </summary>
+        public static string UserControlSpInfo_SyntaxHighLight_Syntax_highligting {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_SyntaxHighLight_Syntax_highligting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show as tab page.
+        /// </summary>
+        public static string UserControlSpInfo_ToolStripButtonShowAsToolBox_Click_Show_as_tab_page {
+            get {
+                return ResourceManager.GetString("UserControlSpInfo_ToolStripButtonShowAsToolBox_Click_Show_as_tab_page", resourceCulture);
             }
         }
     }

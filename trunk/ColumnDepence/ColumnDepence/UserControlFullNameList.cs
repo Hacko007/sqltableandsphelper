@@ -9,11 +9,12 @@ namespace ColumnDepence
 	public enum FullNameListType
 	{
 		TableNames,
-		SPNames
+		SpNames
 	}
 
 	public partial class UserControlFullNameList : UserControl
 	{
+		private FormFullNameList m_FormFullNameList;
 		public event EventHandler NameSelected;
 
 		public UserControlFullNameList()
@@ -36,14 +37,18 @@ namespace ColumnDepence
 			{
 				InitStringList();
 			}
-			FormFullNameList form = new FormFullNameList();
-			form.StringList = StringList;
-			form.NameSelected += delegate(object obj, EventArgs er)
+			if(m_FormFullNameList == null || m_FormFullNameList.Disposing)
 			{
-				SelectedName = form.SelectedName;
-				RaiseNameSelected();
-			};
-			form.ShowDialog(this.ParentForm);			
+				m_FormFullNameList = new FormFullNameList () ;
+				m_FormFullNameList.NameSelected += delegate
+				{
+					SelectedName = m_FormFullNameList.SelectedName;
+					RaiseNameSelected();
+				};
+				m_FormFullNameList.StringList = StringList;
+			}
+			m_FormFullNameList.ApplyFilter();
+			m_FormFullNameList.ShowDialog(ParentForm);			
 		}
 
 		private void InitStringList()
@@ -58,9 +63,9 @@ namespace ColumnDepence
 			{
 				sqlStr = "SELECT ROUTINE_NAME as Name FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE='PROCEDURE' ORDER BY ROUTINE_NAME";
 			}
-			/// 
-			/// Table auto complete
-			/// 
+			// 
+			// Table auto complete
+			// 
 
 			DataTable dt = TableInfo.FillDataTable("Names", sqlStr, new DataTable());
 

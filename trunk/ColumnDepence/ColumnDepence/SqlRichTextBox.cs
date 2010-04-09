@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -111,14 +112,14 @@ namespace ColumnDepence
 		private void SyntaxHighLight()
 		{
 			SuspendLayout();
-			/// 
-			/// Backup the users current selection point.
-			/// 
+			// 
+			// Backup the users current selection point.
+			// 
 			int selectionStart = SelectionStart;
 			int selectionLength = SelectionLength;
-			/// 
-			/// Split the text into tokens.
-			/// 
+			// 
+			// Split the text into tokens.
+			// 
 			Regex r = new Regex(@"(/\*+(?:[^*/][.]*)*\*+/)|([ \t{}();\n,])|(--.*\n)",
 								RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 			string[] tokens = r.Split(Text);
@@ -129,15 +130,15 @@ namespace ColumnDepence
 
 			foreach (string token in tokens)
 			{
-				/// Set the token's default color and font.
+				// Set the token's default color and font.
 				SelectionStart = index;
 				SelectionLength = token.Length;
 				SelectionColor = Color.Black;
 				SelectionFont = fontRegular;
 
-				/// 
-				/// One line comments
-				/// 
+				// 
+				// One line comments
+				// 
 				if (token.StartsWith("--"))
 				{
 					SelectionColor = Color.Gray;
@@ -145,9 +146,9 @@ namespace ColumnDepence
 					index += token.Length;
 					continue;
 				}
-				/// 
-				/// Multi line comments
-				/// 
+				// 
+				// Multi line comments
+				// 
 				if (token.StartsWith("/*"))
 				{
 					SelectionColor = Color.Gray;
@@ -155,9 +156,9 @@ namespace ColumnDepence
 					index += token.Length;
 					continue;
 				}
-				/// 
-				/// Variable
-				/// 
+				// 
+				// Variable
+				// 
 				if (token.StartsWith("@"))
 				{
 					SelectionColor = Color.DarkBlue;
@@ -165,36 +166,34 @@ namespace ColumnDepence
 					index += token.Length;
 					continue;
 				}
-				/// 
-				/// Check whether the token is a keyword. 
-				/// 
+				// 
+				// Check whether the token is a keyword. 
+				// 
 				bool colored = SetColorOnWord(token, m_SqlKeywords, Color.Blue);
-				/// 
-				/// Check whether the token is a types. 
-				/// 
+				// 
+				// Check whether the token is a types. 
+				// 
 				if (!colored)
 					colored = SetColorOnWord(token, m_SqlTypes, Color.DarkGreen);
-				/// 
-				/// SQL keywords
-				/// 
+				// 
+				// SQL keywords
+				// 
 				if (!colored)
 					SetColorOnWord(token, m_SqlBasicKeywords, Color.Green);
 
 				index += token.Length;
 			}
-			///
-			///  Restore the users current selection point. 
-			/// 
+			//
+			//  Restore the users current selection point. 
+			// 
 			SelectionStart = selectionStart;
 			SelectionLength = selectionLength;
 		}
 
 		private bool SetColorOnWord(string token, string[] keywords, Color color)
 		{
-			for (int i = 0; i < keywords.Length; i++)
+			if (keywords.Any(t => t == token.ToLower()))
 			{
-				if (keywords[i] != token.ToLower()) continue;
-
 				SelectionColor = color;
 				SelectionFont = m_FontBold;
 				return true;
@@ -202,6 +201,7 @@ namespace ColumnDepence
 
 			return false;
 		}
+
 		#endregion SyntaxHighLight
 
 
@@ -261,7 +261,7 @@ namespace ColumnDepence
 
 				LastFindIndex = Find(searchString, startingFrom, RichTextBoxFinds.None);
 
-				/// Add color
+				// Add color
 				if (LastFindIndex >= 0)
 				{
 					SelectionStart = LastFindIndex;
@@ -337,55 +337,5 @@ namespace ColumnDepence
 
 		#endregion Move to next selected
 
-
-		#region Colorize Xml
-
-		private void DoAppendTextGUI(string text)
-		{
-			//m_richTxtMessageReceived.Text =text;
-
-			if ( m_BackgroundWorkerColorizeXml.IsBusy == false)
-			{
-			//	m_BackgroundWorkerColorizeXml.RunWorkerAsync(richTxtMessageReceived.Rtf);
-			}
-		}
-
-		private BackgroundWorker m_BackgroundWorkerColorizeXml = new BackgroundWorker();
-
-		private void InitBackgroundWorker()
-		{
-			m_BackgroundWorkerColorizeXml.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
-			m_BackgroundWorkerColorizeXml.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
-		}
-		void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
-			BackgroundWorker worker = sender as BackgroundWorker;
-			e.Result = ColorizeXml(e.Argument.ToString(), worker, e);
-		}
-
-		void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			//richTxtMessageReceived.Rtf = e.Result.ToString();
-		}
-
-		private string ColorizeXml(string strRTF, BackgroundWorker worker, DoWorkEventArgs e)
-		{
-			Application.DoEvents();
-			int iCTableStart = strRTF.IndexOf("colortbl;");
-			int iRTFLoc = strRTF.IndexOf("\\rtf");
-			int iInsertLoc = strRTF.IndexOf('{', iRTFLoc);
-			if (iInsertLoc == -1) iInsertLoc = strRTF.IndexOf('}', iRTFLoc) - 1;
-			strRTF = strRTF.Insert(iInsertLoc,
-				"{\\colortbl ;\\red128\\green0\\blue0;\\red0\\green128\\blue0;\\red0\\green0\\blue255;}");
-			Application.DoEvents();
-			strRTF = strRTF.Replace("<", @"\cf3\b0<");
-			Application.DoEvents();
-			strRTF = strRTF.Replace(">", @">\cf1\b ");
-			Application.DoEvents();
-			strRTF = Regex.Replace(strRTF, "([\\w:]+)=\"([^\"]*)\"", "$1=\"" + @"\cf1\b " + "$2" + @"\cf3\b0 """);
-			Application.DoEvents();
-			return strRTF;
-		}
-		#endregion Colorize Xml
 	}
 }
