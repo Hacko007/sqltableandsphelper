@@ -132,7 +132,8 @@ namespace ColumnDepence
 					{
 						tabStrs.Add(row[0].ToString());
 					}
-					catch { }
+					catch
+					{ }
 				}
 				m_TextBoxTableName.AutoCompleteCustomSource = tabStrs;
 			}
@@ -521,6 +522,32 @@ namespace ColumnDepence
 		{
 			GetTableDefinition();
 		}
+
+		#region TabPage click history managment
+		private void TabControlTableInfoTabIndexChanged(object sender, EventArgs e)
+		{
+			ClosingTabOrder.Remove(tabControl_TableInfo.SelectedTab);
+		}
+
+		private void TabControlTableInfoControlAdded(object sender, ControlEventArgs e)
+		{
+			ClosingTabOrder.AddFirst(e.Control  as TabPage);
+		}
+
+		private void TabControlTableInfoControlRemoved(object sender, ControlEventArgs e)
+		{
+			ClosingTabOrder.Remove(e.Control  as TabPage);
+			if (ClosingTabOrder.First != null)
+				tabControl_TableInfo.SelectedTab = ClosingTabOrder.First.Value;
+
+		}
+
+		private void TabControlTableInfoSelectedIndexChanged(object sender, EventArgs e)
+		{
+			ClosingTabOrder.Remove(tabControl_TableInfo.SelectedTab);
+			ClosingTabOrder.AddFirst(tabControl_TableInfo.SelectedTab);
+		}
+		#endregion
 
 	}
 }
