@@ -182,8 +182,9 @@ namespace ColumnDepence
 
 			StringBuilder sqlStrBuilder = new StringBuilder();
 			sqlStrBuilder.AppendLine("Declare @id int");
-			sqlStrBuilder.AppendLine("SELECT top 1 @id = id FROM syscomments WHERE colid=1 AND  [text] LIKE @SPSEARCH AND OBJECTPROPERTY(id, 'IsProcedure') = 1 ");
-			sqlStrBuilder.AppendLine("SELECT [text] FROM syscomments WHERE id= @id order by colid");
+			sqlStrBuilder.AppendLine("Declare @name nvarchar(255)");
+			sqlStrBuilder.AppendLine("select top 1 @id =id, @name = name from sys.sysobjects where name like 	@SPSEARCH 	AND xtype in ('F','P')	");			
+			sqlStrBuilder.AppendLine("SELECT @name as name,[text] FROM syscomments WHERE id= @id order by colid");
 			string sqlStr = sqlStrBuilder.ToString();
 
 
@@ -208,7 +209,8 @@ namespace ColumnDepence
 				{
 					while (reader.Read())
 					{
-						RichTextBoxDefinition.Text += reader[0];
+						SpName = reader["name"].ToString() ;
+						RichTextBoxDefinition.Text += reader["text"];
 						Application.DoEvents();
 					}
 				}
