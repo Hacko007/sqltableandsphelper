@@ -183,14 +183,18 @@ namespace ColumnDepence
 			StringBuilder sqlStrBuilder = new StringBuilder();
 			sqlStrBuilder.AppendLine("Declare @id int");
 			sqlStrBuilder.AppendLine("Declare @name nvarchar(255)");
-			sqlStrBuilder.AppendLine("select top 1 @id =id, @name = name from sys.sysobjects where name like 	@SPSEARCH 	AND xtype in ('F','P')	");			
+			
+			sqlStrBuilder.AppendLine("if exists(select id from sys.sysobjects where name like @SPSEARCH 	AND xtype in ('F','P') )");
+			sqlStrBuilder.AppendLine("Begin select top 1 @id =id, @name = name  from sys.sysobjects where name like 	@SPSEARCH 	AND xtype in ('F','P')	END	");
+			sqlStrBuilder.AppendLine("ELSE BEGIN select top 1 id, name from sys.sysobjects where name like 	'%' + @SPSEARCH + '%' 	AND xtype in ('F','P')	END");			
+			
 			sqlStrBuilder.AppendLine("SELECT @name as name,[text] FROM syscomments WHERE id= @id order by colid");
 			string sqlStr = sqlStrBuilder.ToString();
 
 
 			SqlCommand com = new SqlCommand(sqlStr, ConnectionFactory.Instance);
 			com.Parameters.Add("@SPSEARCH", SqlDbType.NVarChar);
-			com.Parameters["@SPSEARCH"].Value = "%" + SpName + "%";
+			com.Parameters["@SPSEARCH"].Value = SpName ;
 
 			RichTextBoxDefinition.Text = "";
 
