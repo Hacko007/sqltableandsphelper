@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ColumnDepence.DbInfo;
+using System.Diagnostics;
 
 namespace ColumnDepence
 {
@@ -822,6 +823,12 @@ namespace ColumnDepence
 				filterData.Add(cell.OwningColumn.DataPropertyName, cell.Value);
 			}
 			RaiseOpenTableTab(TableInfo.TableName, false, filterData);
+		}
+
+		private void DataGridViewValues_DataError(object sender, DataGridViewDataErrorEventArgs e)
+		{
+			e.Cancel = false;
+			Debug.WriteLine(e.Exception);
 		}
 
 	}
