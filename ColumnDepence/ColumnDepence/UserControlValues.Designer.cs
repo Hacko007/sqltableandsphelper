@@ -154,6 +154,7 @@ namespace ColumnDepence
 			this.m_DataGridViewValues.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.DataGridViewValues_UserDeletingRow);
 			this.m_DataGridViewValues.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DataGridViewValues_MouseUp);
 			this.m_DataGridViewValues.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewValues_CellEndEdit);
+			this.m_DataGridViewValues.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataGridViewValues_DataError);
 			// 
 			// m_contextMenuStripShownColumns
 			// 
@@ -164,7 +165,7 @@ namespace ColumnDepence
             this.m_ShowRowInfoToolStripMenuItem,
             this.m_ToolStripMenuItemFilterOnSelectedCells});
 			this.m_contextMenuStripShownColumns.Name = "m_contextMenuStripShownColumns";
-			this.m_contextMenuStripShownColumns.Size = new System.Drawing.Size(190, 120);
+			this.m_contextMenuStripShownColumns.Size = new System.Drawing.Size(190, 98);
 			this.m_contextMenuStripShownColumns.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripShownColumns_Opening);
 			// 
 			// m_showallClumnsToolStripMenuItem
