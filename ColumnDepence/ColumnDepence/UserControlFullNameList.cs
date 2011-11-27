@@ -70,15 +70,15 @@ namespace ColumnDepence
 			DataTable dt = TableInfo.FillDataTable("Names", sqlStr, new DataTable());
 
 			StringList = new List<string>();
-			foreach (DataRow row in dt.Rows)
-			{
-				try
-				{
-					StringList.Add(row[0].ToString());
-				}
-				catch { }
-			}
-
+		    if (dt != null)
+		        foreach (DataRow row in dt.Rows)
+		        {
+		            try
+		            {
+		                StringList.Add(row[0].ToString());
+		            }
+		            catch { }
+		        }
 		}
 
 		private void RaiseNameSelected() {

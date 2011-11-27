@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColumnDepence", "ColumnDepence\ColumnDepence.csproj", "{C85B72A6-5185-41C4-A313-EBD156822CE4}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DbInfoSetup", "DbInfoSetup\DbInfoSetup.vdproj", "{E1EEE2BC-F673-4E4C-98A0-F413AEC05E4B}"
