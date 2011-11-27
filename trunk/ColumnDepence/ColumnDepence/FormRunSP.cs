@@ -35,9 +35,9 @@ namespace ColumnDepence
 		/// </summary>
 		private void ExecuteSp()
 		{
-			/// 
-			/// Create Command
-			/// 
+			// 
+			// Create Command
+			// 
 			SqlCommand cmd = new SqlCommand(SpInfo.SpName, ConnectionFactory.Instance)
 			                 	{CommandType = CommandType.StoredProcedure};
 
@@ -62,9 +62,9 @@ namespace ColumnDepence
 					cmd.Parameters.AddWithValue(paramName, row.Cells[m_ColumnValue.Index].Value);
 				}				
 			}
-			/// 
-			/// Execute command
-			/// 
+			// 
+			// Execute command
+			// 
 			DataSetResult = new DataSet();
 			using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
 			{
@@ -99,9 +99,9 @@ namespace ColumnDepence
 			}
 
 
-			/// 
-			/// Place result on window
-			/// 
+			// 
+			// Place result on window
+			// 
 			m_TableLayoutPanel.RowCount = DataSetResult.Tables.Count;
 			m_TableLayoutPanel.RowStyles.Clear();
 			m_TableLayoutPanel.Controls.Clear();
@@ -112,16 +112,16 @@ namespace ColumnDepence
 			{
 				
 				m_TableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, percentage ));
-
-				m_TableLayoutPanel.Controls.Add(
-					new DataGridView
-						{
-							DataSource = table,
-							Width = Width,
-							Dock = DockStyle.Fill,
-							AllowUserToAddRows = false,
-							AllowUserToDeleteRows = false
-						}, 0, rowNr);
+			    var dataGrid = new DataGridView
+			                       {
+			                           DataSource = table,
+			                           Width = Width,
+			                           Dock = DockStyle.Fill,
+			                           AllowUserToAddRows = false,
+			                           AllowUserToDeleteRows = false
+			                       };
+                dataGrid.DataError += delegate (object sender,DataGridViewDataErrorEventArgs o)  {};
+				m_TableLayoutPanel.Controls.Add(dataGrid, 0, rowNr);
 				rowNr++;
 			}
 			m_SplitContainer.Panel2Collapsed = false;
