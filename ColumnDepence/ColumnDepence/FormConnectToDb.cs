@@ -1,255 +1,273 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
-using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ColumnDepence
 {
-	public partial class FormConnectToDb : Form
-	{
-		public FormConnectToDb()
-		{
-			InitializeComponent();
-			m_ConnectionHistorySetting = new StackSetting
-			                             	{
-			                             		SettingName = "ConnectionHistory"
-			                             	};
-			m_DatabaseHistrory = new StackSetting
-			{
-				SettingName = "DatabaseHistory"
-			};
+  public partial class FormConnectToDb : Form
+  {
+    public FormConnectToDb()
+    {
+      InitializeComponent();
+      m_ConnectionHistorySetting = new StackSetting
+                                     {
+                                       SettingName =StackSetting.StackConnectionHistory
+                                     };
+      m_DatabaseHistrory = new StackSetting
+                             {
+                               SettingName = StackSetting.StackDatabaseHistory
+                             };
 
-			FillConnectionHistoryList();
-			FillComboBoxDatabase();
-			SetupWindowsAuthorization();
-		}
+      FillConnectionHistoryList();
+      FillComboBoxDatabaseHistory();
+      SetupWindowsAuthorization();
+    }
 
 
-		public ColumnDependencies FormMain
-		{
-			get { return ColumnDependencies.FormMain; }
-		}
+    public ColumnDependencies FormMain
+    {
+      get { return ColumnDependencies.FormMain; }
+    }
 
-		public string GetConnectionString()
-		{
-			return GetConnectionString(10000);
-		}
+    public string GetConnectionString()
+    {
+      return GetConnectionString(10000);
+    }
 
-		private string GetConnectionString(int timeout)
-		{
-			SqlConnectionStringBuilder connBulider =
-				new SqlConnectionStringBuilder
-					{
-						DataSource = m_comboBoxServerName.Text.Trim(),
-						InitialCatalog = m_comboBoxDatabase.Text.Trim(),
-						ConnectTimeout = timeout
-					};
+    private string GetConnectionString(int timeout)
+    {
+      SqlConnectionStringBuilder connBulider =
+        new SqlConnectionStringBuilder
+          {
+            DataSource = m_comboBoxServerName.Text.Trim(),
+            InitialCatalog = m_comboBoxDatabase.Text.Trim(),
+            ConnectTimeout = timeout
+          };
 
-			if (m_checkBoxWindowsAuth.Checked)
-			{
-				connBulider.IntegratedSecurity = true;								
-			}
-			else
-			{
-				connBulider.IntegratedSecurity = false;
-				connBulider.UserID = m_comboBoxUserName.Text.Trim();
-				connBulider.Password = m_txtPasswordMsSql.Text.Trim();
-			}
-			return connBulider.ConnectionString;
-		}
+      if (m_checkBoxWindowsAuth.Checked)
+      {
+        connBulider.IntegratedSecurity = true;
+      }
+      else
+      {
+        connBulider.IntegratedSecurity = false;
+        connBulider.UserID = m_comboBoxUserName.Text.Trim();
+        connBulider.Password = m_txtPasswordMsSql.Text.Trim();
+      }
+      return connBulider.ConnectionString;
+    }
 
-		private void UpdateConnectionHistory()
-		{
+    private void UpdateConnectionHistory()
+    {
+      if (ConnectionFactory.ConnectionString == null)
+      {
+        return;
+      }
 
-			if (ConnectionFactory.ConnectionString == null) return;
+      m_ConnectionHistorySetting.AddValue(ConnectionFactory.ConnectionString);
+      FillConnectionHistoryList();
+    }
 
-			m_ConnectionHistorySetting.AddValue(ConnectionFactory.ConnectionString);
-			FillConnectionHistoryList();
-		}
+    private void FillConnectionHistoryList()
+    {
+      try
+      {
+        var connectionCollection = m_ConnectionHistorySetting.DataSource
+          .Select(item => new ConnectionStringItem {SqlConnectionString = item})
+          .ToList();
 
-		private void FillConnectionHistoryList()
-		{
-			try
-			{
-				var connectionCollection = m_ConnectionHistorySetting.DataSource
-					.Select(item => new ConnectionStringItem {SqlConnectionString = item})					
-					.ToList();
-				
-				/// Take only distinct servers-userId values
-				Dictionary<string,ConnectionStringItem> conCollDistinct =new Dictionary<string, ConnectionStringItem>();				
-				foreach (ConnectionStringItem connectionStringItem in connectionCollection)
-				{
-					if(conCollDistinct.ContainsKey(connectionStringItem.DisplayDbOnly.ToUpper() ))	continue;					
-					conCollDistinct.Add(connectionStringItem.DisplayDbOnly.ToUpper(), connectionStringItem);
-				}
-				m_comboBoxConnectionHistory.SelectedValueChanged -= ComboBoxConnectionHistory_SelectedValueChanged;
-				m_comboBoxConnectionHistory.DataSource = conCollDistinct.Values.ToList();
-				m_comboBoxConnectionHistory.DisplayMember = "DisplayDbOnly";
-				m_comboBoxConnectionHistory.SelectedValueChanged += ComboBoxConnectionHistory_SelectedValueChanged;
+        // Take only distinct servers-userId values
+        Dictionary<string, ConnectionStringItem> conCollDistinct = new Dictionary<string, ConnectionStringItem>();
+        foreach (ConnectionStringItem connectionStringItem in connectionCollection)
+        {
+          if (conCollDistinct.ContainsKey(connectionStringItem.DisplayDbOnly.ToUpper()))
+          {
+            continue;
+          }
+          conCollDistinct.Add(connectionStringItem.DisplayDbOnly.ToUpper(), connectionStringItem);
+        }
+        m_comboBoxConnectionHistory.SelectedValueChanged -= ComboBoxConnectionHistory_SelectedValueChanged;
+        m_comboBoxConnectionHistory.DataSource = conCollDistinct.Values.ToList();
+        m_comboBoxConnectionHistory.DisplayMember = "DisplayDbOnly";
+        m_comboBoxConnectionHistory.SelectedValueChanged += ComboBoxConnectionHistory_SelectedValueChanged;
+      }
+      catch
+      {
+      }
+    }
 
-			}
-			catch { }
+    /// <summary>
+    ///   Fill saved list with databases.
+    /// </summary>
+    private void FillComboBoxDatabaseHistory()
+    {
+      try
+      {
+        string selected = m_comboBoxDatabase.Text;
+        m_comboBoxDatabase.AutoCompleteSource = AutoCompleteSource.ListItems;
+        m_comboBoxDatabase.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+        if (m_DatabaseHistrory != null && m_DatabaseHistrory.DataSource != null)
+        {
+          m_comboBoxDatabase.DataSource = m_DatabaseHistrory.DataSource;
+        }
 
-		}
-		private void FillComboBoxDatabase()
-		{
-			try
-			{
-				
-				string selected = m_comboBoxDatabase.Text;
-				m_comboBoxDatabase.AutoCompleteSource = AutoCompleteSource.ListItems;
-				m_comboBoxDatabase.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-				if (m_DatabaseHistrory != null && m_DatabaseHistrory.DataSource != null)
-					m_comboBoxDatabase.DataSource = m_DatabaseHistrory.DataSource;
+        m_comboBoxDatabase.Text = selected;
+      }
+      catch
+      {
+      }
+    }
 
-				m_comboBoxDatabase.Text = selected;
-			}
-			catch 
-			{
-			}
-		}
+    public bool Connect()
+    {
+      try
+      {
+        SqlConnection conn = new SqlConnection {ConnectionString = GetConnectionString(5)};
 
-		public bool Connect()
-		{
-			try
-			{
-				SqlConnection conn = new SqlConnection { ConnectionString = GetConnectionString(5) };
+        conn.Open();
 
-				conn.Open();
+        ConnectionFactory.ConnectionString = GetConnectionString(10000);
+        UpdateConnectionHistory();
+        FormMain.AfterConnect();
+        return true;
+      }
+      catch
+      {
+        return false;
+      }
+    }
 
-				ConnectionFactory.ConnectionString = GetConnectionString(10000);				
-				UpdateConnectionHistory();
-				FormMain.AfterConnect();				
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
-		}
+    private void FillTextBoxSuggestions()
+    {
+      // Database names
+      RefreshDatabaseList();
+      DataSet ds;
+      string sqlStr;
 
-		private void FillTextBoxSuggestions()
-		{
+      // Servers names
+      sqlStr = "select name from  sys.servers ";
+      ds = FormMain.FillDataSet(sqlStr);
 
-			/// Database names
-			string sqlStr = "select name from  sys.databases ";
-			DataSet ds = FormMain.FillDataSet(sqlStr);
+      if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+      {
+        DataTable dt = ds.Tables[0];
+        AutoCompleteStringCollection tabStrs = new AutoCompleteStringCollection();
+        foreach (DataRow row in dt.Rows)
+        {
+          try
+          {
+            tabStrs.Add(row[0].ToString());
+          }
+          catch
+          {
+          }
+        }
 
-			if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-			{
-				DataTable dt = ds.Tables[0];
-				m_DatabaseHistrory.Clear();
-				foreach (DataRow row in dt.Rows)
-				{
-					try
-					{						
-						m_DatabaseHistrory.AddValue(row[0].ToString());
-					}
-					catch { }
-				}
+        string selected = m_comboBoxServerName.Text;
+        m_comboBoxServerName.AutoCompleteSource = AutoCompleteSource.ListItems;
+        m_comboBoxServerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+        m_comboBoxServerName.DataSource = tabStrs;
+        m_comboBoxServerName.Text = selected;
+      }
+    }
 
-				FillComboBoxDatabase();
+    private void RefreshDatabaseList()
+    {
+      string sqlStr = "select name from  sys.databases ";
+      DataSet ds = FormMain.FillDataSet(sqlStr);
 
-			}
+      if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+      {
+        DataTable dt = ds.Tables[0];
+        m_DatabaseHistrory.Clear();
+        foreach (DataRow row in dt.Rows)
+        {
+          try
+          {
+            m_DatabaseHistrory.AddValue(row[0].ToString());
+          }
+          catch
+          {
+          }
+        }
 
-			/// Servers names
-			sqlStr = "select name from  sys.servers ";
-			ds = FormMain.FillDataSet(sqlStr);
+        FillComboBoxDatabaseHistory();
+      }
+    }
 
-			if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-			{
-				DataTable dt = ds.Tables[0];
-				AutoCompleteStringCollection tabStrs = new AutoCompleteStringCollection();
-				foreach (DataRow row in dt.Rows)
-				{
-					try
-					{
-						tabStrs.Add(row[0].ToString());
-					}
-					catch { }
-				}
+    private void SetupWindowsAuthorization()
+    {
+      m_comboBoxUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
+      m_txtPasswordMsSql.Enabled = !m_checkBoxWindowsAuth.Checked;
+      m_LabelUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
+      m_LabelPassword.Enabled = !m_checkBoxWindowsAuth.Checked;
+    }
 
-				string selected = m_comboBoxServerName.Text;
-				m_comboBoxServerName.AutoCompleteSource = AutoCompleteSource.ListItems;
-				m_comboBoxServerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-				m_comboBoxServerName.DataSource = tabStrs;
-				m_comboBoxServerName.Text = selected;
+    private void ApplySelectedConnection()
+    {
+      try
+      {
+        if (m_comboBoxConnectionHistory.SelectedItem == null)
+        {
+          return;
+        }
 
-			}
+        SqlConnectionStringBuilder b =
+          ((ConnectionStringItem) m_comboBoxConnectionHistory.SelectedItem).SqlConnectionStringBuilder;
 
-		}
+        m_comboBoxServerName.Text = b.DataSource;
+        m_comboBoxUserName.Text = b.UserID;
+        m_txtPasswordMsSql.Text = b.Password;
+        m_checkBoxWindowsAuth.Checked = b.IntegratedSecurity;
+        m_comboBoxDatabase.Text = b["Initial Catalog"].ToString();
+        ButtonConnect_Click(this, EventArgs.Empty);
+      }
+      catch
+      {
+      }
+    }
 
-		private void SetupWindowsAuthorization()
-		{
-			m_comboBoxUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
-			m_txtPasswordMsSql.Enabled = !m_checkBoxWindowsAuth.Checked;
-			m_LabelUserName.Enabled = !m_checkBoxWindowsAuth.Checked;
-			m_LabelPassword.Enabled = !m_checkBoxWindowsAuth.Checked;
-		}
+    #region Events
 
-		private void ApplySelectedConnection()
-		{
-			try
-			{
-				if (m_comboBoxConnectionHistory.SelectedItem == null) return;
+    private void ButtonConnect_Click(object sender, EventArgs e)
+    {
+      if (Connect())
+      {
+        if (m_comboBoxDatabase.Text.Trim() != "")
+        {
+          DialogResult = DialogResult.OK;
+        }
+        else
+        {
+          FillTextBoxSuggestions();
+        }
+      }
+      else
+      {
+        m_labelInfo.Text = @"Faild to connect!";
+      }
+    }
 
-				SqlConnectionStringBuilder b =
-					((ConnectionStringItem)m_comboBoxConnectionHistory.SelectedItem).SqlConnectionStringBuilder;
+    private void ComboBoxConnectionHistory_SelectedValueChanged(object sender, EventArgs e)
+    {
+      ApplySelectedConnection();
+    }
 
-				m_comboBoxServerName.Text = b.DataSource;
-				m_comboBoxUserName.Text = b.UserID;
-				m_txtPasswordMsSql.Text = b.Password;
-				m_checkBoxWindowsAuth.Checked = b.IntegratedSecurity;
-				m_comboBoxDatabase.Text = b["Initial Catalog"].ToString();
-				ButtonConnect_Click(this, EventArgs.Empty);
-			}
-			catch
-			{
-			}
-		}
 
-		#region Events
+    private void CheckBoxWindowsAuth_CheckedChanged(object sender, EventArgs e)
+    {
+      SetupWindowsAuthorization();
+    }
 
-		private void ButtonConnect_Click(object sender, EventArgs e)
-		{
-			if (Connect()) {
-				if (m_comboBoxDatabase.Text.Trim() != "")
-				{
-					DialogResult = DialogResult.OK;
-				}
-				else
-				{
-					FillTextBoxSuggestions();
-				}
-			}
-			else
-			{
-				m_labelInfo.Text = "Faild to connect!";
-			}
-		}
+    private void ButtonRefreshDbNames_Click(object sender, EventArgs e)
+    {
+      Connect();
+      RefreshDatabaseList();
+    }
 
-		private void ComboBoxConnectionHistory_SelectedValueChanged(object sender, EventArgs e)
-		{
-			ApplySelectedConnection();
-		}
-
-	
-
-		private void CheckBoxWindowsAuth_CheckedChanged(object sender, EventArgs e)
-		{
-			SetupWindowsAuthorization();
-		}
-
-		
-
-		private void Controls_Leave(object sender, EventArgs e)
-		{
-
-		}
-		
-		#endregion
-
-	}
+    #endregion
+  }
 }

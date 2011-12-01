@@ -184,8 +184,6 @@
 		private System.Windows.Forms.DataGridView m_dataGridViewValue;
 		private System.Windows.Forms.Label m_labelTabName;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn columnNameDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn columnValueDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
 		private System.Windows.Forms.Panel m_panelTop;
 		private System.Windows.Forms.DataGridViewTextBoxColumn m_ColumnName;

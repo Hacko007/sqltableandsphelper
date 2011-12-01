@@ -133,6 +133,12 @@
     <Compile Include="FormFullNameList.Designer.cs">
       <DependentUpon>FormFullNameList.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormQuery.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormQuery.Designer.cs">
+      <DependentUpon>FormQuery.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormRunSP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,6 +173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormFullNameList.resx">
       <DependentUpon>FormFullNameList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormQuery.resx">
+      <DependentUpon>FormQuery.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormRunSP.resx">
       <DependentUpon>FormRunSP.cs</DependentUpon>
@@ -354,6 +363,14 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\1322752321_grid.png" />
+    <Content Include="Resources\1322752536_stock_filter-data-by-criteria.png" />
+    <Content Include="Resources\1322752798_text_align_justify.png" />
+    <Content Include="Resources\1322752951_connect.png" />
+    <Content Include="Resources\1322753919_stock_form-time-field.png" />
+    <Content Include="Resources\1322755043_stock_page-number.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

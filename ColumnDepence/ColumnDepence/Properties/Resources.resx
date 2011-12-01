@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="CloseImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\toolStripButton_CloseTab.Image1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -189,37 +189,56 @@ WHERE  (sys.columns.is_identity = 1) AND (sys.tables.name =@TABSEARCH )</value>
   <data name="Reload" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Reload.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-	<data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Updated">
-		<value xml:space="preserve">Updated</value>
-	</data>
-	<data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Selected">
-		<value xml:space="preserve">Selected</value>
-	</data>
-	<data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Type">
-		<value xml:space="preserve">Type</value>
-	</data>
-	<data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Dependent_Object">
-		<value xml:space="preserve">Dependent Object</value>
-	</data>
-	<data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Column">
-		<value xml:space="preserve">Column</value>
-	</data>
-	<data name="UserControlSpInfo_ToolStripButtonShowAsToolBox_Click_Show_as_tab_page">
-		<value xml:space="preserve">Show as tab page</value>
-	</data>
-	<data name="UserControlSpInfo_SyntaxHighLight_Syntax_highligting">
-		<value xml:space="preserve">Syntax highligting</value>
-	</data>
-	<data name="UserControlSpInfo_FillSpDefinition_Loading_SP_definition____">
-		<value xml:space="preserve">Loading SP definition ...</value>
-	</data>
-	<data name="UserControlSpInfo_FillSpDefinition__try">
-		<value><![CDATA[ try]]></value>
-	</data>
-	<data name="ColumnDependencies_SetTitle__DB_Info_">
-		<value><![CDATA[ DB Info ]]></value>
-	</data>
-	<data name="ColumnDependencies_SetTitle__DB_Info______">
-		<value><![CDATA[ DB Info  -   ]]></value>
-	</data>
+  <data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Selected" xml:space="preserve">
+    <value>Selected</value>
+  </data>
+  <data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Dependent_Object" xml:space="preserve">
+    <value>Dependent Object</value>
+  </data>
+  <data name="UserControlSpInfo_InitCoulomnsInDvDepTables_Column" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="UserControlSpInfo_ToolStripButtonShowAsToolBox_Click_Show_as_tab_page" xml:space="preserve">
+    <value>Show as tab page</value>
+  </data>
+  <data name="UserControlSpInfo_SyntaxHighLight_Syntax_highligting" xml:space="preserve">
+    <value>Syntax highligting</value>
+  </data>
+  <data name="UserControlSpInfo_FillSpDefinition_Loading_SP_definition____" xml:space="preserve">
+    <value>Loading SP definition ...</value>
+  </data>
+  <data name="UserControlSpInfo_FillSpDefinition__try" xml:space="preserve">
+    <value> try</value>
+  </data>
+  <data name="ColumnDependencies_SetTitle__DB_Info_" xml:space="preserve">
+    <value> DB Info </value>
+  </data>
+  <data name="ColumnDependencies_SetTitle__DB_Info______" xml:space="preserve">
+    <value> DB Info  -   </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Connect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1322752951_connect.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="filter_data_by_criteria" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1322752536_stock_filter-data-by-criteria.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Number" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1322755043_stock_page-number.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="text_align_justify" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1322752798_text_align_justify.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Time" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1322753919_stock_form-time-field.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1322752321_grid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1322752321_grid.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

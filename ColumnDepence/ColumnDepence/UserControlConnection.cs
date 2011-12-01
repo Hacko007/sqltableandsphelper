@@ -11,7 +11,7 @@ namespace ColumnDepence
 		public UserControlConnection()
 		{
 			InitializeComponent();
-			m_connectionHistorySetting = new StackSetting {SettingName = "ConnectionHistory"};
+			m_connectionHistorySetting = new StackSetting {SettingName = StackSetting.StackConnectionHistory };
 
 			FillConnectionHistoryList();
 		}

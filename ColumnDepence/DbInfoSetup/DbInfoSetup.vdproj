@@ -122,7 +122,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "Version" = "8:3.5.21022"
+                "FrameworkVersion" = "8:.NETFramework,Version=v3.5"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=76617"
                 }
@@ -186,14 +186,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Db Info Helper"
-        "ProductCode" = "8:{371E4D2C-5CA9-44F2-A337-7FCE841BFE63}"
-        "PackageCode" = "8:{37F6088F-2786-4DED-AB4B-AD9EA9879E32}"
+        "ProductCode" = "8:{3231C727-9177-4A60-912A-756D621F25DE}"
+        "PackageCode" = "8:{E1624D2F-7981-4560-822D-3EF92AF76528}"
         "UpgradeCode" = "8:{630AC0FA-2571-414C-92A1-553D0575200A}"
+        "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.1.0"
         "Manufacturer" = "8:Mithat Hackovic"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
