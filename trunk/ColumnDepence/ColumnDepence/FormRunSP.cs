@@ -120,7 +120,7 @@ namespace ColumnDepence
 			                           AllowUserToAddRows = false,
 			                           AllowUserToDeleteRows = false
 			                       };
-                dataGrid.DataError += delegate (object sender,DataGridViewDataErrorEventArgs o)  {};
+                dataGrid.DataError += delegate {};
 				m_TableLayoutPanel.Controls.Add(dataGrid, 0, rowNr);
 				rowNr++;
 			}
