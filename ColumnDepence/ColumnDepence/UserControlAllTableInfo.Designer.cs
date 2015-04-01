@@ -1,6 +1,8 @@
 ﻿using System.Windows.Forms;
 
-namespace ColumnDepence
+using hackovic.DbInfo.DbInfo;
+
+namespace hackovic.DbInfo
 {
 	partial class UserControlAllTableInfo
 	{
@@ -35,7 +37,7 @@ namespace ColumnDepence
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-			ColumnDepence.DbInfo.TableInfo tableInfo1 = new ColumnDepence.DbInfo.TableInfo();
+			TableInfo tableInfo1 = new TableInfo();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlAllTableInfo));
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -56,7 +58,7 @@ namespace ColumnDepence
 			this.m_DataGridViewColumns = new System.Windows.Forms.DataGridView();
 			this.m_Label7 = new System.Windows.Forms.Label();
 			this.m_SplitContainerLeft = new System.Windows.Forms.SplitContainer();
-			this.m_userControlValues = new ColumnDepence.UserControlValues();
+			this.m_userControlValues = new UserControlValues();
 			this.m_DataGridViewColumnConstrains = new System.Windows.Forms.DataGridView();
 			this.m_Label9 = new System.Windows.Forms.Label();
 			this.m_Label10 = new System.Windows.Forms.Label();
@@ -512,7 +514,7 @@ namespace ColumnDepence
 			// 
 			// m_ToolStripButtonLoadDef
 			// 
-			this.m_ToolStripButtonLoadDef.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+            this.m_ToolStripButtonLoadDef.Image = global::hackovic.DbInfo.Properties.Resources.LoadDefinitionImage;
 			this.m_ToolStripButtonLoadDef.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonLoadDef.Name = "m_ToolStripButtonLoadDef";
 			this.m_ToolStripButtonLoadDef.Size = new System.Drawing.Size(108, 22);
@@ -525,7 +527,7 @@ namespace ColumnDepence
 			this.m_ToolStripSplitButtonLoadMain.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_LoadAllValuesToolStripMenuItem,
             this.m_LoadTop300ToolStripMenuItem});
-			this.m_ToolStripSplitButtonLoadMain.Image = global::ColumnDepence.Properties.Resources.Reload;
+            this.m_ToolStripSplitButtonLoadMain.Image = global::hackovic.DbInfo.Properties.Resources.Reload;
 			this.m_ToolStripSplitButtonLoadMain.ImageTransparentColor = System.Drawing.Color.White;
 			this.m_ToolStripSplitButtonLoadMain.Name = "m_ToolStripSplitButtonLoadMain";
 			this.m_ToolStripSplitButtonLoadMain.Size = new System.Drawing.Size(119, 22);
@@ -534,7 +536,7 @@ namespace ColumnDepence
 			// 
 			// m_LoadAllValuesToolStripMenuItem
 			// 
-			this.m_LoadAllValuesToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.Reload;
+            this.m_LoadAllValuesToolStripMenuItem.Image = global::hackovic.DbInfo.Properties.Resources.Reload;
 			this.m_LoadAllValuesToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.White;
 			this.m_LoadAllValuesToolStripMenuItem.Name = "m_LoadAllValuesToolStripMenuItem";
 			this.m_LoadAllValuesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
@@ -570,7 +572,7 @@ namespace ColumnDepence
 			// m_ToolStripButtonCloseTab
 			// 
 			this.m_ToolStripButtonCloseTab.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-			this.m_ToolStripButtonCloseTab.Image = global::ColumnDepence.Properties.Resources.CloseImage;
+            this.m_ToolStripButtonCloseTab.Image = global::hackovic.DbInfo.Properties.Resources.CloseImage;
 			this.m_ToolStripButtonCloseTab.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonCloseTab.Name = "m_ToolStripButtonCloseTab";
 			this.m_ToolStripButtonCloseTab.Size = new System.Drawing.Size(79, 22);
@@ -580,7 +582,7 @@ namespace ColumnDepence
 			// m_ToolStripButtonToolBox
 			// 
 			this.m_ToolStripButtonToolBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-			this.m_ToolStripButtonToolBox.Image = global::ColumnDepence.Properties.Resources.ToolBoxImage;
+            this.m_ToolStripButtonToolBox.Image = global::hackovic.DbInfo.Properties.Resources.ToolBoxImage;
 			this.m_ToolStripButtonToolBox.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonToolBox.Name = "m_ToolStripButtonToolBox";
 			this.m_ToolStripButtonToolBox.Size = new System.Drawing.Size(116, 22);
@@ -606,7 +608,7 @@ namespace ColumnDepence
 			// 
 			// m_showDefinitionToolStripMenuItem
 			// 
-			this.m_showDefinitionToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+            this.m_showDefinitionToolStripMenuItem.Image = global::hackovic.DbInfo.Properties.Resources.LoadDefinitionImage;
 			this.m_showDefinitionToolStripMenuItem.Name = "m_showDefinitionToolStripMenuItem";
 			this.m_showDefinitionToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.m_showDefinitionToolStripMenuItem.Text = "Show Definition";
@@ -614,7 +616,7 @@ namespace ColumnDepence
 			// 
 			// m_showTableToolStripMenuItem
 			// 
-			this.m_showTableToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
+            this.m_showTableToolStripMenuItem.Image = global::hackovic.DbInfo.Properties.Resources.LoadAllValues;
 			this.m_showTableToolStripMenuItem.Name = "m_showTableToolStripMenuItem";
 			this.m_showTableToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.m_showTableToolStripMenuItem.Text = "Show Table Values";
@@ -629,7 +631,7 @@ namespace ColumnDepence
 			// 
 			// m_ToolStripMenuItemShowDefinition
 			// 
-			this.m_ToolStripMenuItemShowDefinition.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+            this.m_ToolStripMenuItemShowDefinition.Image = global::hackovic.DbInfo.Properties.Resources.LoadDefinitionImage;
 			this.m_ToolStripMenuItemShowDefinition.Name = "m_ToolStripMenuItemShowDefinition";
 			this.m_ToolStripMenuItemShowDefinition.Size = new System.Drawing.Size(158, 22);
 			this.m_ToolStripMenuItemShowDefinition.Text = "Show Definition";

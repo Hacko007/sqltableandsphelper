@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	public partial class FormSelectShownColumns : Form
 	{

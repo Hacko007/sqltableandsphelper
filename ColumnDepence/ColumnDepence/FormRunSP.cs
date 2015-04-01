@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
-using ColumnDepence.DbInfo;
-using System.Data.SqlClient;
 
-namespace ColumnDepence
+using hackovic.DbInfo.DbInfo;
+
+namespace hackovic.DbInfo
 {
 	public partial class FormRunSp : Form
 	{

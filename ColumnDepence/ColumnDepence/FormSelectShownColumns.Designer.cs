@@ -1,4 +1,4 @@
-﻿namespace ColumnDepence
+﻿namespace hackovic.DbInfo
 {
 	partial class FormSelectShownColumns
 	{

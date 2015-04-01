@@ -6,336 +6,360 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
-	public class SqlRichTextBox : RichTextBox
-	{
-		public event EventHandler FindTextCompleted;
-		public event EventHandler SyntaxHighlightCompleted;
+    public class SqlRichTextBox : RichTextBox
+    {
+        public SqlRichTextBox()
+        {
+            m_BackgroundWorkerSyntaxHighlight = new BackgroundWorker();
+            m_BackgroundWorkerSyntaxHighlight.DoWork += BackgroundWorkerSyntaxHighlightDoWork;
+            m_BackgroundWorkerSyntaxHighlight.RunWorkerCompleted += BackgroundWorkerSyntaxHighlightRunWorkerCompleted;
+            m_BackgroundWorkerSyntaxHighlight.WorkerSupportsCancellation = true;
 
-		#region Private Variables
+            m_BackgroundWorkerFindText = new BackgroundWorker();
+            m_BackgroundWorkerFindText.DoWork += BackgroundWorkerFindTextDoWork;
+            m_BackgroundWorkerFindText.RunWorkerCompleted += BackgroundWorkerFindTextRunWorkerCompleted;
+            m_BackgroundWorkerFindText.WorkerSupportsCancellation = true;
 
-		private readonly Dictionary<int, int> m_FindedTextIndex;
-		private int m_CurrentSelectionIndex;
+            m_FontBold = new Font("Courier New", 10, FontStyle.Bold);
+            m_FindedTextIndex = new Dictionary<int, int>();
+            CurrentSelectionIndex = 0;
+            LastFindIndex = 0;
+        }
 
-		private readonly BackgroundWorker m_BackgroundWorkerSyntaxHighlight;
-		private readonly BackgroundWorker m_BackgroundWorkerFindText;
-		private readonly String[] m_SqlKeywords = {
-		                                          	"and", "select", "where", "from", "into", "insert", "or", "output",
-		                                          	"exists", "not", "update", "values", "delete", "inner", "left", "join",
-		                                          	"order", "by", "having", "out", "in", "asc", "desc"
-		                                          };
+        public event EventHandler FindTextCompleted;
+        public event EventHandler SyntaxHighlightCompleted;
 
-		private readonly String[] m_SqlBasicKeywords = {
-		                                               	"end", "begin", "if", "goto", "set", "execute", "as", "else",
-		                                               	"declare", "null", "case", "then", "on", "exec", "use", "return",
-		                                               	"create", "table", "transaction", "commit", "rollback", "drop", "go",
-		                                               	"while", "next", "open", "for", "cursor", "fetch", "close", "cast",
-		                                               	"primary", "key", "rowcount", "procedure", "nocount","index"
-		                                               };
+        private void InvokeSyntaxHighlightCompleted()
+        {
+            if (SyntaxHighlightCompleted != null)
+            {
+                SyntaxHighlightCompleted(this, EventArgs.Empty);
+            }
+        }
 
-		private readonly String[] m_SqlTypes = {
-		                                       	"int", "nvarchar", "nchar", "bit", "datetime", "date", "char", "collate",
-		                                       	"float", "xml"
-		                                       };
+        private void InvokeFindTextCompleted()
+        {
+            if (FindTextCompleted != null)
+            {
+                FindTextCompleted(this, EventArgs.Empty);
+            }
+        }
 
-		private readonly Font m_FontBold;
+        #region Private Variables
 
-		#endregion
+        private readonly Dictionary<int, int> m_FindedTextIndex;
+        private int m_CurrentSelectionIndex;
 
-		public SqlRichTextBox()
-		{
-			m_BackgroundWorkerSyntaxHighlight = new BackgroundWorker();
-			m_BackgroundWorkerSyntaxHighlight.DoWork += BackgroundWorkerSyntaxHighlightDoWork;
-			m_BackgroundWorkerSyntaxHighlight.RunWorkerCompleted += BackgroundWorkerSyntaxHighlightRunWorkerCompleted;
-			m_BackgroundWorkerSyntaxHighlight.WorkerSupportsCancellation = true;
-			
-			m_BackgroundWorkerFindText = new BackgroundWorker();
-			m_BackgroundWorkerFindText.DoWork += BackgroundWorkerFindTextDoWork;
-			m_BackgroundWorkerFindText.RunWorkerCompleted += BackgroundWorkerFindTextRunWorkerCompleted;
-			m_BackgroundWorkerFindText.WorkerSupportsCancellation = true;
+        private readonly BackgroundWorker m_BackgroundWorkerSyntaxHighlight;
+        private readonly BackgroundWorker m_BackgroundWorkerFindText;
 
-			m_FontBold = new Font("Courier New", 10, FontStyle.Bold);
-			m_FindedTextIndex = new Dictionary<int, int>();
-			CurrentSelectionIndex = 0;
-			LastFindIndex = 0;			
-		}
+        private readonly String[] m_SqlKeywords =
+        {
+            "and", "select", "where", "from", "into", "insert", "or", "output",
+            "exists", "not", "update", "values", "delete", "inner", "left", "join",
+            "order", "by", "having", "out", "in", "asc", "desc"
+        };
 
-		private void InvokeSyntaxHighlightCompleted()
-		{
-			if (SyntaxHighlightCompleted != null)
-				SyntaxHighlightCompleted(this, EventArgs.Empty);
-		}
+        private readonly String[] m_SqlBasicKeywords =
+        {
+            "end", "begin", "if", "goto", "set", "execute", "as", "else",
+            "declare", "null", "case", "then", "on", "exec", "use", "return",
+            "create", "table", "transaction", "commit", "rollback", "drop", "go",
+            "while", "next", "open", "for", "cursor", "fetch", "close", "cast",
+            "primary", "key", "rowcount", "procedure", "nocount", "index"
+        };
 
-		private void InvokeFindTextCompleted()
-		{
-			if (FindTextCompleted != null)
-				FindTextCompleted(this, EventArgs.Empty);
-		}
+        private readonly String[] m_SqlTypes =
+        {
+            "int", "nvarchar", "nchar", "bit", "datetime", "date", "char", "collate",
+            "float", "xml"
+        };
 
-		#region SyntaxHighLight
-		void BackgroundWorkerSyntaxHighlightRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			ResumeLayout();
-			InvokeSyntaxHighlightCompleted();
-		}
+        private readonly Font m_FontBold;
 
+        #endregion
 
-		public void ApplySyntaxHighlighting()
-		{
-			if (m_BackgroundWorkerSyntaxHighlight.IsBusy) return;
+        #region SyntaxHighLight
 
-			m_BackgroundWorkerSyntaxHighlight.RunWorkerAsync();
-		}
+        void BackgroundWorkerSyntaxHighlightRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ResumeLayout();
+            InvokeSyntaxHighlightCompleted();
+        }
 
-		private void BackgroundWorkerSyntaxHighlightDoWork(object sender, DoWorkEventArgs e)
-		{
-			SyntaxHighLightSafe();
-		}
+        public void ApplySyntaxHighlighting()
+        {
+            if (m_BackgroundWorkerSyntaxHighlight.IsBusy)
+            {
+                return;
+            }
 
-		private void SyntaxHighLightSafe()
-		{
-			if (InvokeRequired)
-			{
-				Invoke(new MethodInvoker(SyntaxHighLight));
-			}
-			else
-			{
-				SyntaxHighLight();
-			}
-		}
+            m_BackgroundWorkerSyntaxHighlight.RunWorkerAsync();
+        }
 
+        private void BackgroundWorkerSyntaxHighlightDoWork(object sender, DoWorkEventArgs e)
+        {
+            SyntaxHighLightSafe();
+        }
 
-		/// <summary>
-		/// Apply syntax highlighting on SP's definition
-		/// </summary>
-		private void SyntaxHighLight()
-		{
-			SuspendLayout();
-			// 
-			// Backup the users current selection point.
-			// 
-			int selectionStart = SelectionStart;
-			int selectionLength = SelectionLength;
-			// 
-			// Split the text into tokens.
-			// 
-			Regex r = new Regex(@"(/\*+(?:[^*/][.]*)*\*+/)|([ \t{}();\n,])|(--.*\n)",
-								RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-			string[] tokens = r.Split(Text);
-			int index = 0;
+        private void SyntaxHighLightSafe()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(SyntaxHighLight));
+            }
+            else
+            {
+                SyntaxHighLight();
+            }
+        }
 
-			Font fontRegular = new Font("Courier New", 10, FontStyle.Regular);
-			Font fontForComments = new Font("Arial", 10, FontStyle.Regular);
+        /// <summary>
+        ///     Apply syntax highlighting on SP's definition
+        /// </summary>
+        private void SyntaxHighLight()
+        {
+            SuspendLayout();
+            // 
+            // Backup the users current selection point.
+            // 
+            var selectionStart = SelectionStart;
+            var selectionLength = SelectionLength;
+            // 
+            // Split the text into tokens.
+            // 
+            var r = new Regex(@"(/\*+(?:[^*/][.]*)*\*+/)|([ \t{}();\n,])|(--.*\n)",
+                RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+            var tokens = r.Split(Text);
+            var index = 0;
 
-			foreach (string token in tokens)
-			{
-				// Set the token's default color and font.
-				SelectionStart = index;
-				SelectionLength = token.Length;
-				SelectionColor = Color.Black;
-				SelectionFont = fontRegular;
+            var fontRegular = new Font("Courier New", 10, FontStyle.Regular);
+            var fontForComments = new Font("Arial", 10, FontStyle.Regular);
 
-				// 
-				// One line comments
-				// 
-				if (token.StartsWith("--"))
-				{
-					SelectionColor = Color.Gray;
-					SelectionFont = fontForComments;
-					index += token.Length;
-					continue;
-				}
-				// 
-				// Multi line comments
-				// 
-				if (token.StartsWith("/*"))
-				{
-					SelectionColor = Color.Gray;
-					SelectionFont = fontForComments;
-					index += token.Length;
-					continue;
-				}
-				// 
-				// Variable
-				// 
-				if (token.StartsWith("@"))
-				{
-					SelectionColor = Color.DarkBlue;
-					SelectionFont = m_FontBold;
-					index += token.Length;
-					continue;
-				}
-				// 
-				// Check whether the token is a keyword. 
-				// 
-				bool colored = SetColorOnWord(token, m_SqlKeywords, Color.Blue);
-				// 
-				// Check whether the token is a types. 
-				// 
-				if (!colored)
-					colored = SetColorOnWord(token, m_SqlTypes, Color.DarkGreen);
-				// 
-				// SQL keywords
-				// 
-				if (!colored)
-					SetColorOnWord(token, m_SqlBasicKeywords, Color.Green);
+            foreach (var token in tokens)
+            {
+                // Set the token's default color and font.
+                SelectionStart = index;
+                SelectionLength = token.Length;
+                SelectionColor = Color.Black;
+                SelectionFont = fontRegular;
 
-				index += token.Length;
-			}
-			//
-			//  Restore the users current selection point. 
-			// 
-			SelectionStart = selectionStart;
-			SelectionLength = selectionLength;
-		}
+                // 
+                // One line comments
+                // 
+                if (token.StartsWith("--"))
+                {
+                    SelectionColor = Color.Gray;
+                    SelectionFont = fontForComments;
+                    index += token.Length;
+                    continue;
+                }
+                // 
+                // Multi line comments
+                // 
+                if (token.StartsWith("/*"))
+                {
+                    SelectionColor = Color.Gray;
+                    SelectionFont = fontForComments;
+                    index += token.Length;
+                    continue;
+                }
+                // 
+                // Variable
+                // 
+                if (token.StartsWith("@"))
+                {
+                    SelectionColor = Color.DarkBlue;
+                    SelectionFont = m_FontBold;
+                    index += token.Length;
+                    continue;
+                }
+                // 
+                // Check whether the token is a keyword. 
+                // 
+                var colored = SetColorOnWord(token, m_SqlKeywords, Color.Blue);
+                // 
+                // Check whether the token is a types. 
+                // 
+                if (!colored)
+                {
+                    colored = SetColorOnWord(token, m_SqlTypes, Color.DarkGreen);
+                }
+                // 
+                // SQL keywords
+                // 
+                if (!colored)
+                {
+                    SetColorOnWord(token, m_SqlBasicKeywords, Color.Green);
+                }
 
-		private bool SetColorOnWord(string token, string[] keywords, Color color)
-		{
-			if (keywords.Any(t => t == token.ToLower()))
-			{
-				SelectionColor = color;
-				SelectionFont = m_FontBold;
-				return true;
-			}
+                index += token.Length;
+            }
+            //
+            //  Restore the users current selection point. 
+            // 
+            SelectionStart = selectionStart;
+            SelectionLength = selectionLength;
+        }
 
-			return false;
-		}
+        private bool SetColorOnWord(string token, string[] keywords, Color color)
+        {
+            if (keywords.Any(t => t == token.ToLower()))
+            {
+                SelectionColor = color;
+                SelectionFont = m_FontBold;
+                return true;
+            }
 
-		#endregion SyntaxHighLight
+            return false;
+        }
 
+        #endregion SyntaxHighLight
 
-		#region Find Text
-		public void FindText(string searchString)
-		{
-			m_BackgroundWorkerFindText.CancelAsync();
+        #region Find Text
 
-			SelectAll();
-			SelectionBackColor = Color.White;
+        public void FindText(string searchString)
+        {
+            m_BackgroundWorkerFindText.CancelAsync();
 
-			Application.DoEvents();
+            SelectAll();
+            SelectionBackColor = Color.White;
 
-			if (searchString.Trim().Length < 2)
-			{
-				LastFindIndex = 0;
-				return;
-			}
+            Application.DoEvents();
 
-			if (m_BackgroundWorkerFindText.IsBusy == false)
-				m_BackgroundWorkerFindText.RunWorkerAsync(searchString);
+            if (searchString.Trim().Length < 2)
+            {
+                LastFindIndex = 0;
+                return;
+            }
 
-		}
+            if (m_BackgroundWorkerFindText.IsBusy == false)
+            {
+                m_BackgroundWorkerFindText.RunWorkerAsync(searchString);
+            }
+        }
 
+        private int LastFindIndex { get; set; }
 
-		private int LastFindIndex { get; set; }
-		private void BackgroundWorkerFindTextDoWork(object sender, DoWorkEventArgs e)
-		{
-			m_FindedTextIndex.Clear();
-			CurrentSelectionIndex = 0;
+        private void BackgroundWorkerFindTextDoWork(object sender, DoWorkEventArgs e)
+        {
+            m_FindedTextIndex.Clear();
+            CurrentSelectionIndex = 0;
 
-			if (InvokeRequired)
-			{
-				Invoke(new FindTextDelegate(FindText), new object[] { e.Argument.ToString(), 0, true, sender as BackgroundWorker, e });
-			}
-			else
-			{
-				FindText(e.Argument.ToString(), 0, true, sender as BackgroundWorker, e);
-			}
-		}
-		void BackgroundWorkerFindTextRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			InvokeFindTextCompleted();
-		}
-		
-		private delegate void FindTextDelegate(string searchString, int startingFrom, bool scrollToString, BackgroundWorker worker, DoWorkEventArgs e);
+            if (InvokeRequired)
+            {
+                Invoke(new FindTextDelegate(FindText), e.Argument.ToString(), 0, true, sender as BackgroundWorker, e);
+            }
+            else
+            {
+                FindText(e.Argument.ToString(), 0, true, sender as BackgroundWorker, e);
+            }
+        }
 
-		private void FindText(string searchString, int startingFrom, bool scrollToString, BackgroundWorker worker, DoWorkEventArgs e)
-		{
-			try
-			{
-				if (worker.CancellationPending)
-				{
-					e.Cancel = true;
-					return;
-				}
+        void BackgroundWorkerFindTextRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            InvokeFindTextCompleted();
+        }
 
-				LastFindIndex = Find(searchString, startingFrom, RichTextBoxFinds.None);
+        private delegate void FindTextDelegate(
+            string searchString, int startingFrom, bool scrollToString, BackgroundWorker worker, DoWorkEventArgs e);
 
-				// Add color
-				if (LastFindIndex >= 0)
-				{
-					SelectionStart = LastFindIndex;
-					SelectionLength = searchString.Length;
-					SelectionBackColor = Color.LightGreen;
-					if (scrollToString)
-						ScrollToCaret();
+        private void FindText(string searchString, int startingFrom, bool scrollToString, BackgroundWorker worker,
+            DoWorkEventArgs e)
+        {
+            try
+            {
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
 
-					m_FindedTextIndex.Add(m_FindedTextIndex.Count, LastFindIndex);
-					FindText(searchString, LastFindIndex + 1, false, worker, e);
-				}
-			}
-			catch { }
-		}
-		#endregion Find Text
+                LastFindIndex = Find(searchString, startingFrom, RichTextBoxFinds.None);
 
-		#region Move to next selected
+                // Add color
+                if (LastFindIndex >= 0)
+                {
+                    SelectionStart = LastFindIndex;
+                    SelectionLength = searchString.Length;
+                    SelectionBackColor = Color.LightGreen;
+                    if (scrollToString)
+                    {
+                        ScrollToCaret();
+                    }
 
+                    m_FindedTextIndex.Add(m_FindedTextIndex.Count, LastFindIndex);
+                    FindText(searchString, LastFindIndex + 1, false, worker, e);
+                }
+            }
+            catch
+            {
+            }
+        }
 
-		private int CurrentSelectionIndex
-		{
-			get { return m_CurrentSelectionIndex; }
-			set
-			{
-				m_CurrentSelectionIndex = value;
-				if (m_CurrentSelectionIndex >= m_FindedTextIndex.Count)
-					m_CurrentSelectionIndex = m_FindedTextIndex.Count - 1;
+        #endregion Find Text
 
-				if (m_CurrentSelectionIndex < 0)
-					m_CurrentSelectionIndex = 0;
-			}
-		}
+        #region Move to next selected
 
-		public void ScrollToNext()
-		{
-			if (m_FindedTextIndex == null || m_FindedTextIndex.Count == 0 || CurrentSelectionIndex >= m_FindedTextIndex.Count || CurrentSelectionIndex < 0)
-				return;
+        private int CurrentSelectionIndex
+        {
+            get { return m_CurrentSelectionIndex; }
+            set
+            {
+                m_CurrentSelectionIndex = value;
+                if (m_CurrentSelectionIndex >= m_FindedTextIndex.Count)
+                {
+                    m_CurrentSelectionIndex = m_FindedTextIndex.Count - 1;
+                }
 
-			SelectionStart = m_FindedTextIndex[CurrentSelectionIndex++];
-			ScrollToCaret();
-		}
-		public void ScrollToPrevious()
-		{
-			if (m_FindedTextIndex == null || m_FindedTextIndex.Count == 0 || CurrentSelectionIndex >= m_FindedTextIndex.Count || CurrentSelectionIndex < 0)
-				return;
+                if (m_CurrentSelectionIndex < 0)
+                {
+                    m_CurrentSelectionIndex = 0;
+                }
+            }
+        }
 
-			SelectionStart = m_FindedTextIndex[CurrentSelectionIndex--];
-			ScrollToCaret();
-		}
+        public void ScrollToNext()
+        {
+            if (m_FindedTextIndex == null || m_FindedTextIndex.Count == 0 || CurrentSelectionIndex >= m_FindedTextIndex.Count ||
+                CurrentSelectionIndex < 0)
+            {
+                return;
+            }
 
-		public bool IsTextFounded
-		{
-			get
-			{
-				return (m_FindedTextIndex.Count > 0);
-			}
-		}
+            SelectionStart = m_FindedTextIndex[CurrentSelectionIndex++];
+            ScrollToCaret();
+        }
 
-		public bool PositionedAtFirst
-		{
-			get
-			{
-				return (CurrentSelectionIndex == 0);
-			}
-		}
-		public bool PositionedAtLast
-		{
-			get
-			{
-				return (CurrentSelectionIndex == (m_FindedTextIndex.Count - 1));
-			}
-		}
+        public void ScrollToPrevious()
+        {
+            if (m_FindedTextIndex == null || m_FindedTextIndex.Count == 0 || CurrentSelectionIndex >= m_FindedTextIndex.Count ||
+                CurrentSelectionIndex < 0)
+            {
+                return;
+            }
 
-		#endregion Move to next selected
+            SelectionStart = m_FindedTextIndex[CurrentSelectionIndex--];
+            ScrollToCaret();
+        }
 
-	}
+        public bool IsTextFounded
+        {
+            get { return (m_FindedTextIndex.Count > 0); }
+        }
+
+        public bool PositionedAtFirst
+        {
+            get { return (CurrentSelectionIndex == 0); }
+        }
+
+        public bool PositionedAtLast
+        {
+            get { return (CurrentSelectionIndex == (m_FindedTextIndex.Count - 1)); }
+        }
+
+        #endregion Move to next selected
+    }
 }

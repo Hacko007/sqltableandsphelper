@@ -1,7 +1,7 @@
-﻿using System.Data.SqlClient;
-using System.Data;
+﻿using System.Data;
+using System.Data.SqlClient;
 
-namespace ColumnDepence.DbInfo
+namespace hackovic.DbInfo.DbInfo
 {
 	/// <summary>
 	/// </summary>

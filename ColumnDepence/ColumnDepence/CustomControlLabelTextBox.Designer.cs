@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	partial class CustomControlLabelTextBox
 	{

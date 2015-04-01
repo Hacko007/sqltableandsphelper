@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using ColumnDepence.DbInfo;
 
-namespace ColumnDepence
+using hackovic.DbInfo.DbInfo;
+
+namespace hackovic.DbInfo
 {
 	public enum FullNameListType
 	{
@@ -53,16 +54,9 @@ namespace ColumnDepence
 
 		private void InitStringList()
 		{
-
-			string sqlStr;
-			if (FullNameListType == FullNameListType.TableNames)
-			{
-				sqlStr = @"SELECT DISTINCT TB.TABLE_NAME As Name FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TB  ORDER BY TB.TABLE_NAME";
-			}
-			else
-			{
-				sqlStr = "SELECT ROUTINE_NAME as Name FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE='PROCEDURE' ORDER BY ROUTINE_NAME";
-			}
+		    var sqlStr = FullNameListType == FullNameListType.TableNames
+		        ? @"SELECT DISTINCT TB.TABLE_NAME As Name FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TB  ORDER BY TB.TABLE_NAME"
+		        : "SELECT ROUTINE_NAME as Name FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE='PROCEDURE' ORDER BY ROUTINE_NAME";
 			// 
 			// Table auto complete
 			// 

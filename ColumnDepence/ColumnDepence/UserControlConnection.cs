@@ -2,169 +2,185 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
-	public partial class UserControlConnection : UserControl
-	{
-		private readonly StackSetting m_connectionHistorySetting;
+    public partial class UserControlConnection : UserControl
+    {
+        private readonly StackSetting m_connectionHistorySetting;
 
-		public UserControlConnection()
-		{
-			InitializeComponent();
-			m_connectionHistorySetting = new StackSetting {SettingName = StackSetting.StackConnectionHistory };
+        public UserControlConnection()
+        {
+            InitializeComponent();
+            m_connectionHistorySetting = new StackSetting { SettingName = StackSetting.StackConnectionHistory };
 
-			FillConnectionHistoryList();
-		}
+            FillConnectionHistoryList();
+        }
 
-		public ColumnDependencies FormMain
-		{
-			get{ return ColumnDependencies.FormMain; }
-		}
+        public ColumnDependencies FormMain
+        {
+            get { return ColumnDependencies.FormMain; }
+        }
 
+        private void UpdateConnectionHistory()
+        {
+            if (ConnectionFactory.ConnectionString == null)
+            {
+                return;
+            }
 
-		private void UpdateConnectionHistory() {
+            m_connectionHistorySetting.AddValue(ConnectionFactory.ConnectionString);
+            FillConnectionHistoryList();
+        }
 
-			if (ConnectionFactory.ConnectionString == null) return;
+        private void FillConnectionHistoryList()
+        {
+            try
+            {
+                var connectionCollection =
+                    m_connectionHistorySetting.DataSource.Select(item => new ConnectionStringItem { SqlConnectionString = item })
+                        .ToList();
+                m_comboBoxConnectionHistory.DataSource = connectionCollection;
+                m_comboBoxConnectionHistory.DisplayMember = "Display";
+            }
+            catch
+            {
+            }
+        }
 
-			m_connectionHistorySetting.AddValue(ConnectionFactory.ConnectionString);
-			FillConnectionHistoryList();						
-		}	
-		
-		private void FillConnectionHistoryList()
-		{
-			try
-			{
-				var connectionCollection = m_connectionHistorySetting.DataSource.Select(item => new ConnectionStringItem { SqlConnectionString = item }).ToList();
-				m_comboBoxConnectionHistory.DataSource = connectionCollection;
-				m_comboBoxConnectionHistory.DisplayMember = "Display";
-			}
-			catch { }
-			
-		}
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.F9:
+                    ButtonConnect_Click(null, EventArgs.Empty);
+                    break;
+                default:
+                    if (keyData == Keys.Return && ContainsFocus)
+                    {
+                        foreach (Control control in Controls)
+                        {
+                            if (control.ContainsFocus)
+                            {
+                                return FocusNextTextBox(control);
+                            }
+                        }
+                    }
+                    break;
+            }
 
+            return base.ProcessDialogKey(keyData);
+        }
 
-		protected override bool ProcessDialogKey(Keys keyData)
-		{
-			switch (keyData)
-			{
-				case Keys.F9:
-					ButtonConnect_Click(null, EventArgs.Empty);
-					break;
-				default:
-					if (keyData == Keys.Return && ContainsFocus)
-					{
-						foreach (Control control in Controls)
-						{
-							if (control.ContainsFocus)
-							{
-							 return	FocusNextTextBox(control);
-							}
-						}
+        bool FocusNextTextBox(Control ctrl)
+        {
+            if (ctrl == null || (ctrl is Button))
+            {
+                return false;
+            }
 
-					}
-					break;
-			}
+            if (ctrl.Focused)
+            {
+                var next = GetNextControl(ctrl, true);
+                if (next == null)
+                {
+                    return false;
+                }
+                next.Focus();
+                if (next is TextBox)
+                {
+                    return true;
+                }
 
-			return base.ProcessDialogKey(keyData);
-		}
+                return FocusNextTextBox(next);
+            }
+            foreach (Control control in  ctrl.Controls)
+            {
+                if (control.ContainsFocus)
+                {
+                    return FocusNextTextBox(control);
+                }
+            }
+            return false;
+        }
 
-		bool FocusNextTextBox(Control ctrl)
-		{
-			if(ctrl == null || (ctrl is Button)) return false;
-			
-			if(ctrl.Focused)
-			{
-				Control next = GetNextControl(ctrl, true);
-				if(next ==null) return false;
-				next.Focus();
-				if (next is TextBox) return true; 
+        private void CreeateNewConnection()
+        {
+            var form = new FormConnectToDb();
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                UpdateConnectionHistory();
+            }
+        }
 
-				return FocusNextTextBox(next);
-			}
-			foreach (Control control in  ctrl.Controls)
-			{				
-				if (control.ContainsFocus)
-				{
-					return FocusNextTextBox(control);
-				}
-			}
-			return false;
-		}
+        private void Connect()
+        {
+            if (m_comboBoxConnectionHistory.SelectedItem == null)
+            {
+                return;
+            }
+            try
+            {
+                ConnectionFactory.ConnectionString =
+                    ((ConnectionStringItem)m_comboBoxConnectionHistory.SelectedItem).SqlConnectionString;
+                if (ConnectionFactory.OpenConnection())
+                {
+                    FormMain.SetTitle();
+                    FormMain.AfterConnect();
+                }
+                else
+                {
+                    if (ConnectionFactory.ConnectionString != null)
+                    {
+                        m_connectionHistorySetting.Remove(ConnectionFactory.ConnectionString);
+                        FillConnectionHistoryList();
+                    }
 
-		private void CreeateNewConnection()
-		{
-			FormConnectToDb form = new FormConnectToDb();
-			if (form.ShowDialog(this) == DialogResult.OK)
-			{
-				UpdateConnectionHistory();
-			}
-		}
+                    MessageBox.Show("Connection faild", "Connecting to " + ConnectionFactory.ShortConnectionName,
+                        MessageBoxButtons.OK);
+                }
+            }
+            catch
+            {
+            }
+        }
 
-		private void Connect()
-		{
-			if (m_comboBoxConnectionHistory.SelectedItem == null) return;
-			try
-			{
-				ConnectionFactory.ConnectionString = ((ConnectionStringItem)m_comboBoxConnectionHistory.SelectedItem).SqlConnectionString;
-				if (ConnectionFactory.OpenConnection())
-				{
-					FormMain.SetTitle();
-					FormMain.AfterConnect();
-				}
-				else
-				{
-					if (ConnectionFactory.ConnectionString != null)
-					{
-						m_connectionHistorySetting.Remove(ConnectionFactory.ConnectionString);
-						FillConnectionHistoryList();
-					}
+        private void RemoveSelectedConnection()
+        {
+            if (m_connectionHistorySetting == null || m_comboBoxConnectionHistory.SelectedIndex < 0)
+            {
+                return;
+            }
 
-					MessageBox.Show("Connection faild", "Connecting to " + ConnectionFactory.ShortConnectionName, MessageBoxButtons.OK);
-				}
-			}
-			catch { }
-		}
+            try
+            {
+                m_connectionHistorySetting.Remove(m_comboBoxConnectionHistory.SelectedIndex);
+                FillConnectionHistoryList();
+            }
+            catch
+            {
+            }
+        }
 
-		private void RemoveSelectedConnection()
-		{
-			if (m_connectionHistorySetting == null || m_comboBoxConnectionHistory.SelectedIndex < 0) return;
+        #region Events
 
-			try
-			{
-				m_connectionHistorySetting.Remove(m_comboBoxConnectionHistory.SelectedIndex);
-				FillConnectionHistoryList();
-			}
-			catch
-			{
-			}
-		}
+        private void ButtonConnect_Click(object sender, EventArgs e)
+        {
+            Connect();
+        }
 
+        private void ButtonNewConnection_Click(object sender, EventArgs e)
+        {
+            CreeateNewConnection();
+        }
 
+        /// <summary>
+        ///     Remove selected connection history
+        /// </summary>
+        private void ButtonRemove_Click(object sender, EventArgs e)
+        {
+            RemoveSelectedConnection();
+        }
 
-		#region Events
-		private void ButtonConnect_Click(object sender, EventArgs e)
-		{
-			Connect();
-		}
-
-		
-		private void ButtonNewConnection_Click(object sender, EventArgs e)
-		{
-			CreeateNewConnection();
-		}
-
-		
-		/// <summary>
-		/// Remove selected connection history
-		/// </summary>		
-		private void ButtonRemove_Click(object sender, EventArgs e)
-		{
-			RemoveSelectedConnection();
-		}
-
-
-		#endregion 
-
-		
-	}
+        #endregion
+    }
 }

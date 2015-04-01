@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	public class ColumnFilter
 	{
@@ -267,6 +267,7 @@ namespace ColumnDepence
 				{
 					filter += string.Format(" ({0} = '{1}') OR", ColumnName, item);
 				}
+
 				if (filter.Length > 3)
 				{
 					filter = filter.Substring(0, filter.Length - 3); //remove last OR

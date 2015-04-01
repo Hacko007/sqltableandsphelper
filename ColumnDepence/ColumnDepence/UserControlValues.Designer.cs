@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	partial class UserControlValues
 	{
@@ -196,7 +196,7 @@ namespace ColumnDepence
 			// 
 			// m_ToolStripMenuItemFilterOnSelectedCells
 			// 
-			this.m_ToolStripMenuItemFilterOnSelectedCells.Image = global::ColumnDepence.Properties.Resources.FilterByWholeRow;
+            this.m_ToolStripMenuItemFilterOnSelectedCells.Image = global::hackovic.DbInfo.Properties.Resources.FilterByWholeRow;
 			this.m_ToolStripMenuItemFilterOnSelectedCells.ImageTransparentColor = System.Drawing.Color.Black;
 			this.m_ToolStripMenuItemFilterOnSelectedCells.Name = "m_ToolStripMenuItemFilterOnSelectedCells";
 			this.m_ToolStripMenuItemFilterOnSelectedCells.Size = new System.Drawing.Size(189, 22);
@@ -266,7 +266,7 @@ namespace ColumnDepence
 			// 
 			// m_removeFiltersToolStripMenuItem
 			// 
-			this.m_removeFiltersToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.CloseImage;
+            this.m_removeFiltersToolStripMenuItem.Image = global::hackovic.DbInfo.Properties.Resources.CloseImage;
 			this.m_removeFiltersToolStripMenuItem.Name = "m_removeFiltersToolStripMenuItem";
 			this.m_removeFiltersToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
 			this.m_removeFiltersToolStripMenuItem.Text = "Remove filters";

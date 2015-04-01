@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.SqlClient;
 using System.Data;
-using ColumnDepence.DbInfo;
+using System.Data.SqlClient;
+using System.Text;
 
-namespace ColumnDepence
+using hackovic.DbInfo.DbInfo;
+
+namespace hackovic.DbInfo
 {
 	public class DataRowEditHelper
 	{
@@ -23,14 +22,9 @@ namespace ColumnDepence
 
 				sqlColumns.Append(string.Format("[{0}] ,", col.ColumnName));
 				sqlValues.Append(string.Format("@{0} ,", col.ColumnName));
-				if (rowView.Row.HasVersion(DataRowVersion.Proposed))
-				{
-					sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed]));
-				}
-				else
-				{
-					sqlCmd.Parameters.Add(new SqlParameter("@" + col.ColumnName, DBNull.Value));
-				}
+			    sqlCmd.Parameters.Add(rowView.Row.HasVersion(DataRowVersion.Proposed)
+			        ? new SqlParameter("@" + col.ColumnName, rowView.Row[col, DataRowVersion.Proposed])
+			        : new SqlParameter("@" + col.ColumnName, DBNull.Value));
 			}
 			if (sqlColumns.Length > 0)
 			{
@@ -50,7 +44,7 @@ namespace ColumnDepence
 				return null;
 			}
 
-			sqlCmd.CommandText = "INSERT INTO " + rowView.Row.Table.TableName + " (" + sqlColumns.ToString() + ") Values( " + sqlValues.ToString() + ")";
+			sqlCmd.CommandText = string.Format("INSERT INTO {0} ({1}) Values( {2})", rowView.Row.Table.TableName, sqlColumns, sqlValues);
 			return sqlCmd;
 		}
 		

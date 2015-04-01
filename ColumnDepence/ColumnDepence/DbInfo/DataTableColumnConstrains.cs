@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
+﻿using System.Data;
 
-namespace ColumnDepence.DbInfo
+namespace hackovic.DbInfo.DbInfo
 {
 	public class  DataTableColumnConstrains  : DataTable
 	{
@@ -71,8 +67,8 @@ namespace ColumnDepence.DbInfo
 			ColumnColumnName = new DataColumn("Column", typeof(string));
 			ColumnConstraint = new DataColumn("Constraint", typeof(string));
 			ColumnType = new DataColumn("Type", typeof(string));
-			this.Columns.Clear();
-			this.Columns.AddRange(new DataColumn[] { ColumnColumnName, ColumnConstraint, ColumnType });
+			Columns.Clear();
+			Columns.AddRange(new[] { ColumnColumnName, ColumnConstraint, ColumnType });
 		}
 	}
 }

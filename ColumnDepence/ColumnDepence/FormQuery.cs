@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
   public partial class FormQuery : Form
   {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ColumnDepence.DbInfo
+namespace hackovic.DbInfo.DbInfo
 {
 	public enum TableRelation { 
 		None,

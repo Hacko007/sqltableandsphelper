@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	partial class UserControlSpInfo
 	{
@@ -53,7 +52,7 @@ namespace ColumnDepence
 			this.m_toolStripButtonFindNext = new System.Windows.Forms.ToolStripButton();
 			this.m_toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.m_toolStripLabelConnection = new System.Windows.Forms.ToolStripLabel();
-			this.m_RichTextBoxDefinition = new ColumnDepence.SqlRichTextBox();
+			this.m_RichTextBoxDefinition = new SqlRichTextBox();
 			this.m_SplitContainerMain.Panel1.SuspendLayout();
 			this.m_SplitContainerMain.Panel2.SuspendLayout();
 			this.m_SplitContainerMain.SuspendLayout();
@@ -163,7 +162,7 @@ namespace ColumnDepence
 			// 
 			// m_showDefinitionToolStripMenuItem
 			// 
-			this.m_showDefinitionToolStripMenuItem.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+            this.m_showDefinitionToolStripMenuItem.Image = global::hackovic.DbInfo.Properties.Resources.LoadDefinitionImage;
 			this.m_showDefinitionToolStripMenuItem.Name = "m_showDefinitionToolStripMenuItem";
 			this.m_showDefinitionToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
 			this.m_showDefinitionToolStripMenuItem.Text = "Show Definition";
@@ -192,7 +191,7 @@ namespace ColumnDepence
 			// m_toolStripButtonClose
 			// 
 			this.m_toolStripButtonClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-			this.m_toolStripButtonClose.Image = global::ColumnDepence.Properties.Resources.CloseImage;
+            this.m_toolStripButtonClose.Image = global::hackovic.DbInfo.Properties.Resources.CloseImage;
 			this.m_toolStripButtonClose.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_toolStripButtonClose.Name = "m_toolStripButtonClose";
 			this.m_toolStripButtonClose.Size = new System.Drawing.Size(72, 22);
@@ -202,7 +201,7 @@ namespace ColumnDepence
 			// m_toolStripButtonShowAsToolBox
 			// 
 			this.m_toolStripButtonShowAsToolBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-			this.m_toolStripButtonShowAsToolBox.Image = global::ColumnDepence.Properties.Resources.ToolBoxImage;
+            this.m_toolStripButtonShowAsToolBox.Image = global::hackovic.DbInfo.Properties.Resources.ToolBoxImage;
 			this.m_toolStripButtonShowAsToolBox.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_toolStripButtonShowAsToolBox.Name = "m_toolStripButtonShowAsToolBox";
 			this.m_toolStripButtonShowAsToolBox.Size = new System.Drawing.Size(109, 22);
@@ -212,7 +211,7 @@ namespace ColumnDepence
 			// m_toolStripButtonShowParamInfo
 			// 
 			this.m_toolStripButtonShowParamInfo.CheckOnClick = true;
-			this.m_toolStripButtonShowParamInfo.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+            this.m_toolStripButtonShowParamInfo.Image = global::hackovic.DbInfo.Properties.Resources.LoadDefinitionImage;
 			this.m_toolStripButtonShowParamInfo.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_toolStripButtonShowParamInfo.Name = "m_toolStripButtonShowParamInfo";
 			this.m_toolStripButtonShowParamInfo.Size = new System.Drawing.Size(116, 22);
@@ -221,7 +220,7 @@ namespace ColumnDepence
 			// 
 			// m_ToolStripButtonExecSp
 			// 
-			this.m_ToolStripButtonExecSp.Image = global::ColumnDepence.Properties.Resources.m_ToolStripButtonExecSp_Image;
+            this.m_ToolStripButtonExecSp.Image = global::hackovic.DbInfo.Properties.Resources.m_ToolStripButtonExecSp_Image;
 			this.m_ToolStripButtonExecSp.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonExecSp.Name = "m_ToolStripButtonExecSp";
 			this.m_ToolStripButtonExecSp.Size = new System.Drawing.Size(81, 22);

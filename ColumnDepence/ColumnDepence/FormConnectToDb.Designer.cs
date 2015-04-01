@@ -1,4 +1,4 @@
-﻿namespace ColumnDepence
+﻿namespace hackovic.DbInfo
 {
 	partial class FormConnectToDb
 	{
@@ -80,13 +80,13 @@
       // 
       // m_txtPasswordMsSql
       // 
-      this.m_txtPasswordMsSql.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ColumnDepence.Properties.Settings.Default, "LastUsedPassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.m_txtPasswordMsSql.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::hackovic.DbInfo.Properties.Settings.Default, "LastUsedPassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.m_txtPasswordMsSql.Location = new System.Drawing.Point(94, 143);
       this.m_txtPasswordMsSql.Name = "m_txtPasswordMsSql";
       this.m_txtPasswordMsSql.PasswordChar = '*';
       this.m_txtPasswordMsSql.Size = new System.Drawing.Size(214, 20);
       this.m_txtPasswordMsSql.TabIndex = 7;
-      this.m_txtPasswordMsSql.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedPassword;
+      this.m_txtPasswordMsSql.Text = global::hackovic.DbInfo.Properties.Settings.Default.LastUsedPassword;
       // 
       // m_LabelPassword
       // 
@@ -110,39 +110,39 @@
       // 
       // m_comboBoxServerName
       // 
-      this.m_comboBoxServerName.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ColumnDepence.Properties.Settings.Default, "LastUsedServer", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.m_comboBoxServerName.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::hackovic.DbInfo.Properties.Settings.Default, "LastUsedServer", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.m_comboBoxServerName.FormattingEnabled = true;
       this.m_comboBoxServerName.Location = new System.Drawing.Point(74, 54);
       this.m_comboBoxServerName.Name = "m_comboBoxServerName";
       this.m_comboBoxServerName.Size = new System.Drawing.Size(234, 21);
       this.m_comboBoxServerName.TabIndex = 2;
-      this.m_comboBoxServerName.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedServer;
+      this.m_comboBoxServerName.Text = global::hackovic.DbInfo.Properties.Settings.Default.LastUsedServer;
       // 
       // m_comboBoxUserName
       // 
-      this.m_comboBoxUserName.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ColumnDepence.Properties.Settings.Default, "LastUsedUsername", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.m_comboBoxUserName.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::hackovic.DbInfo.Properties.Settings.Default, "LastUsedUsername", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.m_comboBoxUserName.FormattingEnabled = true;
       this.m_comboBoxUserName.Location = new System.Drawing.Point(94, 116);
       this.m_comboBoxUserName.Name = "m_comboBoxUserName";
       this.m_comboBoxUserName.Size = new System.Drawing.Size(214, 21);
       this.m_comboBoxUserName.TabIndex = 5;
-      this.m_comboBoxUserName.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedUsername;
+      this.m_comboBoxUserName.Text = global::hackovic.DbInfo.Properties.Settings.Default.LastUsedUsername;
       // 
       // m_comboBoxDatabase
       // 
-      this.m_comboBoxDatabase.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ColumnDepence.Properties.Settings.Default, "LastUsedDatabase", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.m_comboBoxDatabase.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::hackovic.DbInfo.Properties.Settings.Default, "LastUsedDatabase", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.m_comboBoxDatabase.FormattingEnabled = true;
       this.m_comboBoxDatabase.Location = new System.Drawing.Point(74, 186);
       this.m_comboBoxDatabase.Name = "m_comboBoxDatabase";
       this.m_comboBoxDatabase.Size = new System.Drawing.Size(234, 21);
       this.m_comboBoxDatabase.TabIndex = 9;
-      this.m_comboBoxDatabase.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedDatabase;
+      this.m_comboBoxDatabase.Text = global::hackovic.DbInfo.Properties.Settings.Default.LastUsedDatabase;
       // 
       // m_checkBoxWindowsAuth
       // 
       this.m_checkBoxWindowsAuth.AutoSize = true;
-      this.m_checkBoxWindowsAuth.Checked = global::ColumnDepence.Properties.Settings.Default.LastUsedIntegratedSecurity;
-      this.m_checkBoxWindowsAuth.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ColumnDepence.Properties.Settings.Default, "LastUsedIntegratedSecurity", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.m_checkBoxWindowsAuth.Checked = global::hackovic.DbInfo.Properties.Settings.Default.LastUsedIntegratedSecurity;
+      this.m_checkBoxWindowsAuth.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::hackovic.DbInfo.Properties.Settings.Default, "LastUsedIntegratedSecurity", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.m_checkBoxWindowsAuth.Location = new System.Drawing.Point(15, 93);
       this.m_checkBoxWindowsAuth.Name = "m_checkBoxWindowsAuth";
       this.m_checkBoxWindowsAuth.Size = new System.Drawing.Size(163, 17);

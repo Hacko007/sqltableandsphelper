@@ -1,4 +1,4 @@
-﻿namespace ColumnDepence
+﻿namespace hackovic.DbInfo
 {
   partial class FormQuery
   {
@@ -42,7 +42,7 @@
       this.m_ToolStripButtonOutputDataGrid = new System.Windows.Forms.ToolStripButton();
       this.m_ToolStripButtonOutputText = new System.Windows.Forms.ToolStripButton();
       this.m_SplitContainerMain = new System.Windows.Forms.SplitContainer();
-      this.m_sqlRichTextBox = new ColumnDepence.SqlRichTextBox();
+      this.m_sqlRichTextBox = new SqlRichTextBox();
       this.m_TableLayoutPanelResult = new System.Windows.Forms.TableLayoutPanel();
       this.m_StatusStrip.SuspendLayout();
       this.m_ToolStrip.SuspendLayout();
@@ -65,21 +65,21 @@
       // 
       // m_StatusConnection
       // 
-      this.m_StatusConnection.Image = global::ColumnDepence.Properties.Resources.Connect;
+      this.m_StatusConnection.Image = global::hackovic.DbInfo.Properties.Resources.Connect;
       this.m_StatusConnection.Name = "m_StatusConnection";
       this.m_StatusConnection.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
       this.m_StatusConnection.Size = new System.Drawing.Size(36, 17);
       // 
       // m_StatusTime
       // 
-      this.m_StatusTime.Image = global::ColumnDepence.Properties.Resources.Time;
+      this.m_StatusTime.Image = global::hackovic.DbInfo.Properties.Resources.Time;
       this.m_StatusTime.Name = "m_StatusTime";
       this.m_StatusTime.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
       this.m_StatusTime.Size = new System.Drawing.Size(36, 17);
       // 
       // m_StatuNrRows
       // 
-      this.m_StatuNrRows.Image = global::ColumnDepence.Properties.Resources.Number;
+      this.m_StatuNrRows.Image = global::hackovic.DbInfo.Properties.Resources.Number;
       this.m_StatuNrRows.Name = "m_StatuNrRows";
       this.m_StatuNrRows.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
       this.m_StatuNrRows.Size = new System.Drawing.Size(36, 17);
@@ -102,7 +102,7 @@
       // 
       // toolStripLabel1
       // 
-      this.toolStripLabel1.Image = global::ColumnDepence.Properties.Resources.Connect;
+      this.toolStripLabel1.Image = global::hackovic.DbInfo.Properties.Resources.Connect;
       this.toolStripLabel1.Name = "toolStripLabel1";
       this.toolStripLabel1.Size = new System.Drawing.Size(77, 22);
       this.toolStripLabel1.Text = "Connection";
@@ -121,7 +121,7 @@
       // 
       // m_ToolStripButtonExecute
       // 
-      this.m_ToolStripButtonExecute.Image = global::ColumnDepence.Properties.Resources.m_ToolStripButtonExecSp_Image;
+      this.m_ToolStripButtonExecute.Image = global::hackovic.DbInfo.Properties.Resources.m_ToolStripButtonExecSp_Image;
       this.m_ToolStripButtonExecute.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.m_ToolStripButtonExecute.Name = "m_ToolStripButtonExecute";
       this.m_ToolStripButtonExecute.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
@@ -140,7 +140,7 @@
       this.m_ToolStripButtonOutputDataGrid.CheckOnClick = true;
       this.m_ToolStripButtonOutputDataGrid.CheckState = System.Windows.Forms.CheckState.Checked;
       this.m_ToolStripButtonOutputDataGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.m_ToolStripButtonOutputDataGrid.Image = global::ColumnDepence.Properties.Resources._1322752321_grid;
+      this.m_ToolStripButtonOutputDataGrid.Image = global::hackovic.DbInfo.Properties.Resources._1322752321_grid;
       this.m_ToolStripButtonOutputDataGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.m_ToolStripButtonOutputDataGrid.Name = "m_ToolStripButtonOutputDataGrid";
       this.m_ToolStripButtonOutputDataGrid.Size = new System.Drawing.Size(23, 22);
@@ -150,7 +150,7 @@
       // 
       this.m_ToolStripButtonOutputText.CheckOnClick = true;
       this.m_ToolStripButtonOutputText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.m_ToolStripButtonOutputText.Image = global::ColumnDepence.Properties.Resources.text_align_justify;
+      this.m_ToolStripButtonOutputText.Image = global::hackovic.DbInfo.Properties.Resources.text_align_justify;
       this.m_ToolStripButtonOutputText.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.m_ToolStripButtonOutputText.Name = "m_ToolStripButtonOutputText";
       this.m_ToolStripButtonOutputText.Size = new System.Drawing.Size(23, 22);

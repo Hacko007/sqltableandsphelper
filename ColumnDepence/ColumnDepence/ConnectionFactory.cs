@@ -1,8 +1,9 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using ColumnDepence.Properties;
 
-namespace ColumnDepence
+using hackovic.DbInfo.Properties;
+
+namespace hackovic.DbInfo
 {
 	/// <summary>
 	/// Singlton for applications Sql Connection

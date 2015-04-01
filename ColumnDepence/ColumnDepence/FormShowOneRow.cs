@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
-using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Text;
+using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	public partial class FormShowOneRow : Form
 	{
@@ -209,7 +209,7 @@ namespace ColumnDepence
 					!row[1, DataRowVersion.Proposed].Equals(row[1, DataRowVersion.Original]))
 				{
 					sql.Append(string.Format("[{0}] = @{0} ,", row[0]));
-					sqlCmd.Parameters.Add(new SqlParameter("@" + row[0].ToString(), row[1, DataRowVersion.Proposed]));
+					sqlCmd.Parameters.Add(new SqlParameter("@" + row[0], row[1, DataRowVersion.Proposed]));
 				}
 
 				if (row[1, DataRowVersion.Original] is DBNull)
@@ -219,7 +219,7 @@ namespace ColumnDepence
 				else
 				{
 					sqlWhere.Append(string.Format(" ([{0}] = @Original_{0}) AND", row[0]));
-					sqlCmd.Parameters.Add(new SqlParameter("@Original_" + row[0].ToString(), row[1, DataRowVersion.Original]));
+					sqlCmd.Parameters.Add(new SqlParameter("@Original_" + row[0], row[1, DataRowVersion.Original]));
 				}
 			}
 			if (sql.Length > 0)

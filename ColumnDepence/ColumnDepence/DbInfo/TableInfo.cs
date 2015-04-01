@@ -1,8 +1,7 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace ColumnDepence.DbInfo
+namespace hackovic.DbInfo.DbInfo
 {
 	public class TableInfo
 	{
@@ -49,10 +48,10 @@ namespace ColumnDepence.DbInfo
 
 		private DataTable GetIdentityColumns()
 		{
-			return (DataTable)FillDataTable(
-					TableName,
-					Properties.Resources.SqlGetIdentityColumns,
-					new DataTable());
+			return FillDataTable(
+			    TableName,
+			    Properties.Resources.SqlGetIdentityColumns,
+			    new DataTable());
 		}
 
 		private void LoadColumnConstrains() {

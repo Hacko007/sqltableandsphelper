@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
   public partial class FormConnectToDb : Form
   {
@@ -144,12 +144,10 @@ namespace ColumnDepence
     {
       // Database names
       RefreshDatabaseList();
-      DataSet ds;
-      string sqlStr;
 
-      // Servers names
-      sqlStr = "select name from  sys.servers ";
-      ds = FormMain.FillDataSet(sqlStr);
+        // Servers names
+      const string sqlStr = "select name from  sys.servers ";
+      var ds = FormMain.FillDataSet(sqlStr);
 
       if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
       {
@@ -176,7 +174,7 @@ namespace ColumnDepence
 
     private void RefreshDatabaseList()
     {
-      string sqlStr = "select name from  sys.databases ";
+      const string sqlStr = "select name from  sys.databases ";
       DataSet ds = FormMain.FillDataSet(sqlStr);
 
       if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	partial class ColumnDependencies
 	{
@@ -52,11 +52,11 @@ namespace ColumnDepence
       this.m_statusStrip_Main = new System.Windows.Forms.StatusStrip();
       this.m_toolStripStatusLabel_First = new System.Windows.Forms.ToolStripStatusLabel();
       this.m_toolStripStatusLabel_Second = new System.Windows.Forms.ToolStripStatusLabel();
-      this.m_UserControlFullNameListTableNames = new ColumnDepence.UserControlFullNameList();
-      this.m_userControlHistoryList_Tables = new ColumnDepence.UserControlHistoryList();
-      this.m_UserControlFullNameListSPNames = new ColumnDepence.UserControlFullNameList();
-      this.m_userControlHistoryList_Sp = new ColumnDepence.UserControlHistoryList();
-      this.m_UserControlConnection = new ColumnDepence.UserControlConnection();
+      this.m_UserControlFullNameListTableNames = new UserControlFullNameList();
+      this.m_userControlHistoryList_Tables = new UserControlHistoryList();
+      this.m_UserControlFullNameListSPNames = new UserControlFullNameList();
+      this.m_userControlHistoryList_Sp = new UserControlHistoryList();
+      this.m_UserControlConnection = new UserControlConnection();
       this.m_GroupBoxSearch.SuspendLayout();
       this.m_tabControl_Search.SuspendLayout();
       this.m_tabPage_TabSearch.SuspendLayout();
@@ -111,7 +111,7 @@ namespace ColumnDepence
       // m_ButtonTabDef
       // 
       this.m_ButtonTabDef.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.m_ButtonTabDef.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+      this.m_ButtonTabDef.Image = global::hackovic.DbInfo.Properties.Resources.LoadDefinitionImage;
       this.m_ButtonTabDef.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_ButtonTabDef.Location = new System.Drawing.Point(481, 6);
       this.m_ButtonTabDef.Name = "m_ButtonTabDef";
@@ -124,7 +124,7 @@ namespace ColumnDepence
       // m_ButtonGetAllRows
       // 
       this.m_ButtonGetAllRows.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.m_ButtonGetAllRows.Image = global::ColumnDepence.Properties.Resources.LoadAllValues;
+      this.m_ButtonGetAllRows.Image = global::hackovic.DbInfo.Properties.Resources.LoadAllValues;
       this.m_ButtonGetAllRows.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_ButtonGetAllRows.Location = new System.Drawing.Point(684, 6);
       this.m_ButtonGetAllRows.Name = "m_ButtonGetAllRows";
@@ -138,13 +138,13 @@ namespace ColumnDepence
       // 
       this.m_TextBoxTableName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
       this.m_TextBoxTableName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-      this.m_TextBoxTableName.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ColumnDepence.Properties.Settings.Default, "LastUsedTable", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.m_TextBoxTableName.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::hackovic.DbInfo.Properties.Settings.Default, "LastUsedTable", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.m_TextBoxTableName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.m_TextBoxTableName.Location = new System.Drawing.Point(0, 4);
       this.m_TextBoxTableName.Name = "m_TextBoxTableName";
       this.m_TextBoxTableName.Size = new System.Drawing.Size(414, 31);
       this.m_TextBoxTableName.TabIndex = 0;
-      this.m_TextBoxTableName.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedTable;
+      this.m_TextBoxTableName.Text = global::hackovic.DbInfo.Properties.Settings.Default.LastUsedTable;
       this.m_TextBoxTableName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxTableName_KeyUp);
       // 
       // m_tabPage_SpSearch
@@ -164,7 +164,7 @@ namespace ColumnDepence
       // m_button_SpDef
       // 
       this.m_button_SpDef.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.m_button_SpDef.Image = global::ColumnDepence.Properties.Resources.LoadDefinitionImage;
+      this.m_button_SpDef.Image = global::hackovic.DbInfo.Properties.Resources.LoadDefinitionImage;
       this.m_button_SpDef.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_button_SpDef.Location = new System.Drawing.Point(490, 5);
       this.m_button_SpDef.Name = "m_button_SpDef";
@@ -178,13 +178,13 @@ namespace ColumnDepence
       // 
       this.m_textBox_SpSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
       this.m_textBox_SpSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-      this.m_textBox_SpSearch.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ColumnDepence.Properties.Settings.Default, "LastUsedSP", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.m_textBox_SpSearch.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::hackovic.DbInfo.Properties.Settings.Default, "LastUsedSP", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.m_textBox_SpSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.m_textBox_SpSearch.Location = new System.Drawing.Point(0, 5);
       this.m_textBox_SpSearch.Name = "m_textBox_SpSearch";
       this.m_textBox_SpSearch.Size = new System.Drawing.Size(418, 31);
       this.m_textBox_SpSearch.TabIndex = 0;
-      this.m_textBox_SpSearch.Text = global::ColumnDepence.Properties.Settings.Default.LastUsedSP;
+      this.m_textBox_SpSearch.Text = global::hackovic.DbInfo.Properties.Settings.Default.LastUsedSP;
       this.m_textBox_SpSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSpSearch_KeyUp);
       // 
       // m_tabPage_DbConnection
@@ -278,7 +278,7 @@ namespace ColumnDepence
       // 
       // m_UserControlFullNameListTableNames
       // 
-      this.m_UserControlFullNameListTableNames.FullNameListType = ColumnDepence.FullNameListType.TableNames;
+      this.m_UserControlFullNameListTableNames.FullNameListType = FullNameListType.TableNames;
       this.m_UserControlFullNameListTableNames.Location = new System.Drawing.Point(420, 6);
       this.m_UserControlFullNameListTableNames.Name = "m_UserControlFullNameListTableNames";
       this.m_UserControlFullNameListTableNames.SelectedName = null;
@@ -293,11 +293,11 @@ namespace ColumnDepence
       this.m_userControlHistoryList_Tables.SettingName = null;
       this.m_userControlHistoryList_Tables.Size = new System.Drawing.Size(22, 29);
       this.m_userControlHistoryList_Tables.TabIndex = 3;
-      this.m_userControlHistoryList_Tables.SelectedIndexChanged += new ColumnDepence.UserControlHistoryList.SelectedIndexChangedHandler(this.UserControlHistoryListTablesSelectedIndexChanged);
+      this.m_userControlHistoryList_Tables.SelectedIndexChanged += new UserControlHistoryList.SelectedIndexChangedHandler(this.UserControlHistoryListTablesSelectedIndexChanged);
       // 
       // m_UserControlFullNameListSPNames
       // 
-      this.m_UserControlFullNameListSPNames.FullNameListType = ColumnDepence.FullNameListType.SpNames;
+      this.m_UserControlFullNameListSPNames.FullNameListType = FullNameListType.SpNames;
       this.m_UserControlFullNameListSPNames.Location = new System.Drawing.Point(424, 5);
       this.m_UserControlFullNameListSPNames.Name = "m_UserControlFullNameListSPNames";
       this.m_UserControlFullNameListSPNames.SelectedName = null;
@@ -312,7 +312,7 @@ namespace ColumnDepence
       this.m_userControlHistoryList_Sp.SettingName = null;
       this.m_userControlHistoryList_Sp.Size = new System.Drawing.Size(22, 27);
       this.m_userControlHistoryList_Sp.TabIndex = 2;
-      this.m_userControlHistoryList_Sp.SelectedIndexChanged += new ColumnDepence.UserControlHistoryList.SelectedIndexChangedHandler(this.UserControlHistoryListSpSelectedIndexChanged);
+      this.m_userControlHistoryList_Sp.SelectedIndexChanged += new UserControlHistoryList.SelectedIndexChangedHandler(this.UserControlHistoryListSpSelectedIndexChanged);
       // 
       // m_UserControlConnection
       // 

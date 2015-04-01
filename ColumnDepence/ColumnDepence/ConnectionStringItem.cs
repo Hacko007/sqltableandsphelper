@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 
 	public class ConnectionStringItem 

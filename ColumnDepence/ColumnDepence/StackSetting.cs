@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Collections.Specialized;
-using ColumnDepence.Properties;
+using System.Linq;
 
-namespace ColumnDepence
+using hackovic.DbInfo.Properties;
+
+namespace hackovic.DbInfo
 {
   /// <summary>
   /// Save last used strings in StringCollection. 

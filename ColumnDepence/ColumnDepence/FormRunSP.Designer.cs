@@ -1,6 +1,6 @@
-﻿using ColumnDepence.DbInfo;
+﻿using hackovic.DbInfo.DbInfo;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	partial class FormRunSp
 	{
@@ -121,7 +121,7 @@ namespace ColumnDepence
 			// 
 			// m_toolStripButtonExec
 			// 
-			this.m_toolStripButtonExec.Image = global::ColumnDepence.Properties.Resources.m_ToolStripButtonExecSp_Image;
+            this.m_toolStripButtonExec.Image = global::hackovic.DbInfo.Properties.Resources.m_ToolStripButtonExecSp_Image;
 			this.m_toolStripButtonExec.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_toolStripButtonExec.Name = "m_toolStripButtonExec";
 			this.m_toolStripButtonExec.Size = new System.Drawing.Size(81, 22);
@@ -131,7 +131,7 @@ namespace ColumnDepence
 			// 
 			// m_ToolStripButtonClearInputValues
 			// 
-			this.m_ToolStripButtonClearInputValues.Image = global::ColumnDepence.Properties.Resources.CloseImage;
+            this.m_ToolStripButtonClearInputValues.Image = global::hackovic.DbInfo.Properties.Resources.CloseImage;
 			this.m_ToolStripButtonClearInputValues.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonClearInputValues.Name = "m_ToolStripButtonClearInputValues";
 			this.m_ToolStripButtonClearInputValues.Size = new System.Drawing.Size(79, 22);
@@ -147,7 +147,7 @@ namespace ColumnDepence
 			// m_ToolStripButtonClose
 			// 
 			this.m_ToolStripButtonClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-			this.m_ToolStripButtonClose.Image = global::ColumnDepence.Properties.Resources.CloseImage;
+            this.m_ToolStripButtonClose.Image = global::hackovic.DbInfo.Properties.Resources.CloseImage;
 			this.m_ToolStripButtonClose.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.m_ToolStripButtonClose.Name = "m_ToolStripButtonClose";
 			this.m_ToolStripButtonClose.Size = new System.Drawing.Size(53, 22);

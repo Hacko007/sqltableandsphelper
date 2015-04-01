@@ -1,22 +1,41 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColumnDepence", "ColumnDepence\ColumnDepence.csproj", "{C85B72A6-5185-41C4-A313-EBD156822CE4}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbInfo", "ColumnDepence\DbInfo.csproj", "{C85B72A6-5185-41C4-A313-EBD156822CE4}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DbInfoSetup", "DbInfoSetup\DbInfoSetup.vdproj", "{E1EEE2BC-F673-4E4C-98A0-F413AEC05E4B}"
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "DbInfoSetup", "DbHelperSetup\DbInfoSetup.isproj", "{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C85B72A6-5185-41C4-A313-EBD156822CE4}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{C85B72A6-5185-41C4-A313-EBD156822CE4}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{C85B72A6-5185-41C4-A313-EBD156822CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C85B72A6-5185-41C4-A313-EBD156822CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85B72A6-5185-41C4-A313-EBD156822CE4}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85B72A6-5185-41C4-A313-EBD156822CE4}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{C85B72A6-5185-41C4-A313-EBD156822CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C85B72A6-5185-41C4-A313-EBD156822CE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E1EEE2BC-F673-4E4C-98A0-F413AEC05E4B}.Debug|Any CPU.ActiveCfg = Debug
-		{E1EEE2BC-F673-4E4C-98A0-F413AEC05E4B}.Release|Any CPU.ActiveCfg = Release
+		{C85B72A6-5185-41C4-A313-EBD156822CE4}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{C85B72A6-5185-41C4-A313-EBD156822CE4}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.Debug|Any CPU.ActiveCfg = DVD-5
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.Debug|Any CPU.Build.0 = DVD-5
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.DVD-5|Any CPU.Build.0 = DVD-5
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.Release|Any CPU.ActiveCfg = SingleImage
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.Release|Any CPU.Build.0 = SingleImage
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{E08F84F5-71D8-4F2A-9EF8-8C593021E43A}.SingleImage|Any CPU.Build.0 = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

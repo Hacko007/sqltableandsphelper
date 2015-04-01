@@ -1,4 +1,4 @@
-﻿namespace ColumnDepence.DbInfo
+﻿namespace hackovic.DbInfo.DbInfo
 {
 	public class DataTableParentTables: DataTableReferencedColumnTable
 	{

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
-namespace ColumnDepence
+namespace hackovic.DbInfo
 {
 	public partial class CustomControlLabelTextBox : UserControl
 	{
