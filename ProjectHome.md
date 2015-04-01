@@ -1,0 +1,1 @@
+Show table and stored procedures definition, dapendencies and data.
